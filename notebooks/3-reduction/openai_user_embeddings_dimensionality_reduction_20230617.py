@@ -249,28 +249,26 @@ class ReductionPipeline:
 
 
 
-    @property
-    def results_dirpath(self):
-        #dirpath = os.path.join(RESULTS_DIRPATH, "youtube", f"length_{self.track_length}_mfcc_{self.n_mfcc}")
-        dirpath = self.results_dirname # f"results/{self.results_dirname}" # colab
+    def results_dirpath(self, groupby):
+        dirpath = os.path.join(self.results_dirname, groupby)  # f"groupby_{groupby}"
         os.makedirs(dirpath, exist_ok=True)
         return dirpath
 
-    @property
-    def embeddings_png_filepath(self):
-        return os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}.png")
 
-    @property
-    def embeddings_html_filepath(self):
-        return os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}.html")
+    def embeddings_png_filepath(self, groupby):
+        return os.path.join(self.results_dirpath(groupby), f"{self.reducer_name}_{self.n_components}.png")
 
-    @property
-    def centroids_png_filepath(self):
-        return os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids.png")
 
-    @property
-    def centroids_html_filepath(self):
-        return os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids.html")
+    def embeddings_html_filepath(self, groupby):
+        return os.path.join(self.results_dirpath(groupby), f"{self.reducer_name}_{self.n_components}.html")
+
+
+    def centroids_png_filepath(self, groupby):
+        return os.path.join(self.results_dirpath(groupby), f"{self.reducer_name}_{self.n_components}_centroids.png")
+
+
+    def centroids_html_filepath(self, groupby):
+        return os.path.join(self.results_dirpath(groupby), f"{self.reducer_name}_{self.n_components}_centroids.html")
 
 
     def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, title=None, subtitle=None, color=None, color_map=None):
@@ -297,8 +295,8 @@ class ReductionPipeline:
             fig.show()
 
         if fig and fig_save:
-            #fig.write_image(self.embeddings_png_filepath)
-            fig.write_html(self.embeddings_html_filepath)
+            #fig.write_image(self.embeddings_png_filepath(color))
+            fig.write_html(self.embeddings_html_filepath(color))
 
         return fig
 
@@ -337,7 +335,7 @@ class ReductionPipeline:
             fig.show()
 
         if fig and fig_save:
-            fig.write_html(self.centroids_html_filepath)
+            fig.write_html(self.centroids_html_filepath(groupby_col))
 
         return fig
 

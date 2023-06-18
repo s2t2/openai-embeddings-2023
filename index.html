@@ -109,14 +109,15 @@
 
         var methodsMap = {"pca": "PCA", "tsne": "T-SNE", "umap": "UMAP"}
         var inputsMap = {"profiles": "User Profiles", "tweets": "User Tweets"}
+        var groupsMap = {"bot_label": "Bot Status", "opinion_label": "Opinion Community", "q_label": "Qanon Status", "group_label": "Group"}
         //var table = document.getElementById("results-table")
         //var tableBody = table.tBodies[0]
 
         var tbody2 = document.querySelector("#results-table-2 tbody")
         var tbody3 = document.querySelector("#results-table-3 tbody")
 
-        function createRow(tbody, input_data, reduction_method, n_components) {
-            console.log("ROW:", input_data, reduction_method, n_components)
+        function createRow(tbody, input_data, reduction_method, n_components, groupby) {
+            console.log("ROW:", input_data, reduction_method, n_components, groupby)
 
             // Create a new row
             var row = document.createElement("tr")
@@ -137,15 +138,15 @@
             var embeddingsCell = document.createElement("td")
             //embeddingsCell.textContent = "results/____.html";
             var embeddingsLink = document.createElement("a")
-            embeddingsLink.href = `reduction_results/${input_data}/${reduction_method}_${n_components}.html`
-            embeddingsLink.textContent = "User Embeddings"
+            embeddingsLink.href = `reduction_results/${input_data}/${groupby}/${reduction_method}_${n_components}.html`
+            embeddingsLink.textContent = `${groupsMap[groupby]} Embeddings`
             embeddingsCell.appendChild(embeddingsLink)
             row.appendChild(embeddingsCell)
 
             var centroidsCell = document.createElement("td")
             var centroidsLink = document.createElement("a")
-            centroidsLink.href = `reduction_results/${input_data}/${reduction_method}_${n_components}_centroids.html`
-            centroidsLink.textContent = "User Group Centroids"
+            centroidsLink.href = `reduction_results/${input_data}/${groupby}/${reduction_method}_${n_components}_centroids.html`
+            centroidsLink.textContent = `${groupsMap[groupby]} Centroids`
             centroidsCell.appendChild(centroidsLink)
             row.appendChild(centroidsCell)
 
@@ -158,15 +159,17 @@
 
         var INPUT_DATA = ["profiles", "tweets"]
         var REDUCTION_METHODS = ["pca", "tsne", "umap"]
-        //var NUMS_COMPONENTS = [2,3]
+        var GROUPS = ["opinion_label", "bot_label", "q_label", "group_label"]
 
         INPUT_DATA.forEach(function(input_data){
         REDUCTION_METHODS.forEach(function(reduction_method){
+        GROUPS.forEach(function(groupby){
 
-            createRow(tbody2, input_data, reduction_method, 2)
+            createRow(tbody2, input_data, reduction_method, 2, groupby)
 
-            createRow(tbody3, input_data, reduction_method, 3)
+            createRow(tbody3, input_data, reduction_method, 3, groupby)
 
+        })
         })
         })
 
