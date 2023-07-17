@@ -17,3 +17,30 @@ For a balanced sample of 300 users and a small sample of their tweets, it looks 
 
 </a>
 
+
+## Setup
+
+```sh
+conda create -n openai-env python=3.10
+conda activate openai-env
+```
+
+```sh
+pip install -r requirements.txt
+```
+
+## Usage
+
+```sh
+python -m app.dataset
+```
+
+```sh
+python -m app.reduction_pipeline
+```
+
+## Testing
+
+```sh
+pytest
+```
