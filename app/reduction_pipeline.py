@@ -1,11 +1,15 @@
 
 
+# https://github.com/slundberg/shap/issues/2909
+# suppress umap warnings
+import warnings
+warnings.filterwarnings("ignore", message=".*The 'nopython' keyword.*")
+
 
 
 import os
 import numpy as np
 from functools import cached_property
-
 
 from pandas import DataFrame
 from sklearn.preprocessing import scale #, StandardScaler
@@ -25,19 +29,15 @@ FIG_SAVE = bool(os.getenv("FIG_SAVE", default="false") == "true")
 
 #LABEL_COLS = ["artist_name", "video_id", "audio_filename", "track_number", "track_length"]
 
-
-
 class ReductionPipeline:
-    def __init__(self, df, label_cols, y_col="artist_name", x_scale=X_SCALE,
+    def __init__(self, df, label_cols, x_scale=X_SCALE,
                         reducer_type="PCA", n_components=N_COMPONENTS,
                         results_dirpath=RESULTS_DIRPATH):
 
         self.df = df
         self.labels_df = self.df[label_cols]
         self.x = self.df.drop(columns=label_cols)
-        self.y = self.df[y_col]
         print("X:", self.x.shape)
-        print("Y:", len(self.y))
 
         self.x_scale = x_scale
         self.reducer_type = reducer_type
@@ -82,7 +82,7 @@ class ReductionPipeline:
             self.reducer = UMAP(n_components=self.n_components, random_state=99)
 
         self.embeddings = self.reducer.fit_transform(x)
-        print("EMBEDDINGS:", type(self.embeddings), self.embeddings.shape)
+        print("EMBEDDINGS:", self.embeddings.shape)
         self.embeddings_df = DataFrame(self.embeddings, columns=self.component_names)
         self.embeddings_df = self.embeddings_df.merge(self.labels_df, left_index=True, right_index=True)
 
@@ -92,7 +92,7 @@ class ReductionPipeline:
             print("SINGULAR VALS:", self.reducer.singular_values_)
 
             self.loadings = self.reducer.components_.T * np.sqrt(self.reducer.explained_variance_)
-            print("LOADINGS...", type(self.loadings), self.loadings.shape)
+            print("LOADINGS...", self.loadings.shape)
             self.loadings_df = DataFrame(self.loadings, columns=self.component_names)
             self.loadings_df.index = self.reducer.feature_names_in_
 
@@ -130,21 +130,28 @@ class ReductionPipeline:
         return os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids.html")
 
 
-    def plot_embeddings(self, color, hover_data, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None):
+    def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, color=None, color_map=None, hover_data=None):
         title = f"Dimensionality Reduction Results ({self.reducer_type} n_components={self.n_components})"
         if subtitle:
             title += f"<br><sup>{subtitle}</sup>"
 
         chart_params = dict(x="component_1", y="component_2",
             title=title, height=height,
-            color=color, #"artist_name",
-            hover_data=hover_data #["audio_filename", "track_number"]
+            #color=color, #"artist_name",
+            #hover_data=hover_data #["audio_filename", "track_number"]
         )
+        if color:
+            chart_params["color"] = color
+        if color_map:
+            chart_params["color_discrete_map"] = color_map
+        if hover_data:
+            chart_params["hover_data"] = hover_data
+
 
         fig = None
         if self.n_components == 2:
             fig = px.scatter(self.embeddings_df, **chart_params)
-        elif self.n_components ==3:
+        elif self.n_components == 3:
             chart_params["z"] = "component_3"
             fig = px.scatter_3d(self.embeddings_df, **chart_params)
 
@@ -158,30 +165,31 @@ class ReductionPipeline:
         return fig
 
 
-    def plot_embedding_centroids(self, color, text, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None):
-        title = f"Dimensionality Reduction Centroids ({self.reducer_type} n_components={self.n_components})"
+    def plot_centroids(self, groupby_col, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, title=None, subtitle=None, color_map=None):
+        title = title or f"Dimensionality Reduction Centroids ({self.reducer_type} n_components={self.n_components})"
         if subtitle:
             title += f"<br><sup>{subtitle}</sup>"
 
-        chart_params = dict(x="component_1", y="component_2",
-            title=title, height=height,
-            color=color, #"artist_name", # hover_data=["audio_filename", "track_number"]
-            text=text, # "artist_name"
-
+        chart_params = dict(x="component_1", y="component_2", height=height,
+            title=title, #hover_data=self.label_cols,
+            color=groupby_col, text=groupby_col
         )
+        if color_map:
+            chart_params["color_discrete_map"] = color_map
+
         agg_params = {"component_1": "mean", "component_2": "mean"}
 
         fig = None
         if self.n_components == 2:
-            centroids = self.embeddings_df.groupby(color).agg(agg_params)
-            centroids[color] = centroids.index
+            centroids = self.embeddings_df.groupby(groupby_col).agg(agg_params)
+            centroids[groupby_col] = centroids.index
             fig = px.scatter(centroids, **chart_params)
 
-        elif self.n_components ==3:
+        elif self.n_components == 3:
             chart_params["z"] = "component_3"
             agg_params["component_3"] = "mean"
-            centroids = self.embeddings_df.groupby(color).agg(agg_params)
-            centroids[color] = centroids.index
+            centroids = self.embeddings_df.groupby(groupby_col).agg(agg_params)
+            centroids[groupby_col] = centroids.index
             fig = px.scatter_3d(centroids, **chart_params)
 
         if fig:
@@ -194,7 +202,6 @@ class ReductionPipeline:
             fig.write_html(self.centroids_html_filepath)
 
         return fig
-
 
 
 
@@ -288,25 +295,26 @@ if __name__ == "__main__":
 
 
     from app.dataset import Dataset
+    from app.colors import BOT_COLORS_MAP
 
     ds = Dataset()
-    df = ds.df
 
-    print(df.shape)
-    print(df.head())
+    pca_pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols)
+    pca_pipeline.perform()
+    pca_pipeline.plot_embeddings(color="bot_label", color_map=BOT_COLORS_MAP,
+                                 #hover_data=["user_id", "bot_label"],
+                                 fig_show=True, fig_save=True
+                                )
 
-    #x = ds.x
-    #print("X MATRIX:")
-    #print(x.shape)
-
-    #labels = ds.labels
-    #print("LABELS:")
-    #print(labels.shape)
-
+    pca_pipeline.plot_centroids(groupby_col="bot_label", color_map=BOT_COLORS_MAP,
+                                 #hover_data=["user_id", "bot_label"],
+                                 fig_show=True, fig_save=True
+                                )
 
     breakpoint()
 
-    tuner = PCATuner(df, label_cols=ds.label_cols)
+
+    tuner = PCATuner(ds.df, label_cols=ds.label_cols)
     tuner.perform()
     tuner.plot_explained_variance()
     tuner.plot_scree()
