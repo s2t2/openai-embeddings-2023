@@ -6,7 +6,8 @@
 import os
 from functools import cached_property
 
-from pandas import read_csv
+from pandas import read_csv, DataFrame
+from sklearn.preprocessing import scale #, StandardScaler
 
 from app import DATA_DIRPATH
 
@@ -32,12 +33,25 @@ class Dataset():
         return read_csv(self.csv_filepath)
 
     @cached_property
+    def labels(self):
+        return self.df[self.label_cols].copy()
+
+    @cached_property
     def x(self):
         return self.df.drop(columns=self.label_cols).copy()
 
     @cached_property
-    def labels(self):
-        return self.df[[self.label_cols]].copy()
+    def x_scaled(self):
+        # mean centered, unit variance
+        x = scale(self.x)
+        # reconstruct x as a dataframe
+        df = DataFrame(x, columns=self.x.columns.tolist())
+        df.index = self.x.index
+        return df
+
+
+
+
 
 
 if __name__ == "__main__":
