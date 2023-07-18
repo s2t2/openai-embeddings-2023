@@ -18,7 +18,8 @@ LABEL_COLS = [
     'avg_toxicity', 'avg_fact_score', 'opinion_community', 'is_bot', 'is_q',
     'tweet_texts',
     'bom_cap', 'bom_astroturf', 'bom_fake_follower', 'bom_financial', 'bom_other',
-    'opinion_label', 'bot_label', 'q_label', 'group_label'
+    'opinion_label', 'bot_label', 'q_label', #'group_label'
+    'fourway_label', 'sixway_label'
 ]
 
 
@@ -30,7 +31,15 @@ class Dataset():
 
     @cached_property
     def df(self):
-        return read_csv(self.csv_filepath)
+        df = read_csv(self.csv_filepath)
+
+        df.rename(columns={"group_label": "sixway_label"}, inplace=True)
+        #print(df["sixway_label"].value_counts())
+
+        df["fourway_label"] = df["opinion_label"] + " " + df["bot_label"]
+        #print(df["fourway_label"].value_counts())
+
+        return df
 
     @cached_property
     def labels(self):

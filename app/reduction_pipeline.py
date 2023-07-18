@@ -27,8 +27,6 @@ X_SCALE = bool(os.getenv("X_SCALE", default="true") == "true")
 FIG_SHOW = bool(os.getenv("FIG_SHOW", default="false") == "true")
 FIG_SAVE = bool(os.getenv("FIG_SAVE", default="false") == "true")
 
-#LABEL_COLS = ["artist_name", "video_id", "audio_filename", "track_number", "track_length"]
-
 class ReductionPipeline:
     def __init__(self, df, label_cols, x_scale=X_SCALE,
                         reducer_type="PCA", n_components=N_COMPONENTS,
@@ -106,31 +104,7 @@ class ReductionPipeline:
             print("K-L DIVERGENCE:", self.reducer.kl_divergence_)
 
 
-
-    #@property
-    #def results_dirpath(self):
-    #    dirpath = os.path.join(RESULTS_DIRPATH, "youtube", f"length_{self.track_length}_mfcc_{self.n_mfcc}")
-    #    os.makedirs(dirpath, exist_ok=True)
-    #    return dirpath
-
-    @property
-    def embeddings_png_filepath(self):
-        return os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}.png")
-
-    @property
-    def embeddings_html_filepath(self):
-        return os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}.html")
-
-    @property
-    def centroids_png_filepath(self):
-        return os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids.png")
-
-    @property
-    def centroids_html_filepath(self):
-        return os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids.html")
-
-
-    def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, color=None, color_map=None, hover_data=None):
+    def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, color=None, color_map=None, hover_data=None, results_dirpath=None):
         title = f"Dimensionality Reduction Results ({self.reducer_type} n_components={self.n_components})"
         if subtitle:
             title += f"<br><sup>{subtitle}</sup>"
@@ -147,25 +121,26 @@ class ReductionPipeline:
         if hover_data:
             chart_params["hover_data"] = hover_data
 
-
-        fig = None
         if self.n_components == 2:
             fig = px.scatter(self.embeddings_df, **chart_params)
         elif self.n_components == 3:
             chart_params["z"] = "component_3"
             fig = px.scatter_3d(self.embeddings_df, **chart_params)
+        else:
+            return None
 
-        if fig and fig_show:
+        if fig_show:
             fig.show()
 
-        if fig and fig_save:
-            #fig.write_image(self.embeddings_png_filepath)
-            fig.write_html(self.embeddings_html_filepath)
+        if fig_save:
+            results_dirpath = results_dirpath or self.results_dirpath
+            embeddings_html_filepath = os.path.join(results_dirpath, f"{self.reducer_name}_{self.n_components}.html")
+            fig.write_html(embeddings_html_filepath)
 
         return fig
 
 
-    def plot_centroids(self, groupby_col, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, title=None, subtitle=None, color_map=None):
+    def plot_centroids(self, groupby_col, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, title=None, subtitle=None, color_map=None, results_dirpath=None):
         title = title or f"Dimensionality Reduction Centroids ({self.reducer_type} n_components={self.n_components})"
         if subtitle:
             title += f"<br><sup>{subtitle}</sup>"
@@ -179,27 +154,29 @@ class ReductionPipeline:
 
         agg_params = {"component_1": "mean", "component_2": "mean"}
 
-        fig = None
         if self.n_components == 2:
             centroids = self.embeddings_df.groupby(groupby_col).agg(agg_params)
             centroids[groupby_col] = centroids.index
             fig = px.scatter(centroids, **chart_params)
-
         elif self.n_components == 3:
             chart_params["z"] = "component_3"
             agg_params["component_3"] = "mean"
             centroids = self.embeddings_df.groupby(groupby_col).agg(agg_params)
             centroids[groupby_col] = centroids.index
             fig = px.scatter_3d(centroids, **chart_params)
+        else:
+            return None
 
-        if fig:
-            fig.update_traces(textposition='top center')
+        fig.update_traces(textposition="top center")
 
-        if fig and fig_show:
+        if fig_show:
             fig.show()
 
-        if fig and fig_save:
-            fig.write_html(self.centroids_html_filepath)
+        if fig_save:
+            results_dirpath = results_dirpath or self.results_dirpath
+            #centroids_png_filepath = os.path.join(results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids.png")
+            centroids_html_filepath = os.path.join(results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids.html")
+            fig.write_html(centroids_html_filepath)
 
         return fig
 
@@ -295,26 +272,32 @@ if __name__ == "__main__":
 
 
     from app.dataset import Dataset
-    from app.colors import BOT_COLORS_MAP
+    from app.colors import COLORS_MAP
 
     ds = Dataset()
 
     pca_pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols)
     pca_pipeline.perform()
-    pca_pipeline.plot_embeddings(color="bot_label", color_map=BOT_COLORS_MAP,
+    for groupby_col in ["bot_label", "fourway_label", "sixway_label"]:
+        color_map = COLORS_MAP[groupby_col]
+
+        results_dirpath = os.path.join(RESULTS_DIRPATH, groupby_col)
+        os.makedirs(results_dirpath, exist_ok=True)
+
+        pca_pipeline.plot_embeddings(color=groupby_col, color_map=color_map,
                                  #hover_data=["user_id", "bot_label"],
-                                 fig_show=True, fig_save=True
+                                 #fig_show=True, fig_save=True,
+                                 results_dirpath=results_dirpath
                                 )
 
-    pca_pipeline.plot_centroids(groupby_col="bot_label", color_map=BOT_COLORS_MAP,
+        pca_pipeline.plot_centroids(groupby_col=groupby_col, color_map=color_map,
                                  #hover_data=["user_id", "bot_label"],
-                                 fig_show=True, fig_save=True
+                                 #fig_show=True, fig_save=True
+                                 results_dirpath=results_dirpath
                                 )
 
-    breakpoint()
-
-
-    tuner = PCATuner(ds.df, label_cols=ds.label_cols)
-    tuner.perform()
-    tuner.plot_explained_variance()
-    tuner.plot_scree()
+    #breakpoint()
+    #tuner = PCATuner(ds.df, label_cols=ds.label_cols)
+    #tuner.perform()
+    #tuner.plot_explained_variance()
+    #tuner.plot_scree()

@@ -37,7 +37,9 @@ python -m app.dataset
 
 ```sh
 python -m app.reduction_pipeline
-# FIG_SHOW=true FIG_SAVE=true python -m app.reduction_pipeline
+
+N_COMPONENTS=2 FIG_SHOW=true FIG_SAVE=true python -m app.reduction_pipeline
+N_COMPONENTS=3 FIG_SHOW=true FIG_SAVE=true python -m app.reduction_pipeline
 ```
 
 ## Testing

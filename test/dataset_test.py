@@ -6,10 +6,10 @@ N_USERS = 7566
 N_EMBEDS = 1536 # number of embeddings returned by openai
 
 def test_dataset(ds):
-    assert ds.df.shape == (N_USERS, 1558)
+    assert ds.df.shape == (N_USERS, 1559)
 
 def test_labels(ds):
-    assert ds.labels.shape == (N_USERS, 22)
+    assert ds.labels.shape == (N_USERS, 23)
 
 def test_x(ds):
     assert ds.x.shape == (N_USERS, N_EMBEDS)
