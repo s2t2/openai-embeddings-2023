@@ -1,90 +1,100 @@
 
 
-#import numpy as np
-#from pandas import read_csv
-#from pytest import fixture
-
+import numpy as np
 
 from app.reduction_pipeline import ReductionPipeline
-from conftest import N_USERS
+from conftest import N_USERS, N_FEATURES
 
 
-def test_pca_pipeline(ds):
+def verify_embeddings(pipeline):
+    """A helper method for testing the embeddings for a given pipeline. Assumes two components were used."""
 
-    pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols,
-                                 reducer_type="PCA", n_components=2)
-    pipeline.perform()
-
-    # just the embeddings resulting from PCA
-    embeddings = pipeline.embeddings
-    assert embeddings.shape == (N_USERS, 2)
-
-    # embeddings resulting from PCA, plus label columns (for easier analysis and charting later)
-    embeddings_df = pipeline.embeddings_df
-    assert embeddings_df.shape == (7566, 25)
-    assert embeddings_df.columns.tolist() == [
-        'component_1', 'component_2',
-        'user_id', 'created_on', 'screen_name_count', 'screen_names', 'status_count', 'rt_count',
-        'rt_pct', 'avg_toxicity', 'avg_fact_score',
+    n_components = pipeline.n_components
+    component_names = pipeline.component_names
+    label_cols = [
+        'user_id', 'created_on', 'screen_name_count', 'screen_names',
+        'status_count', 'rt_count', 'rt_pct', 'avg_toxicity', 'avg_fact_score',
         'opinion_community', 'is_bot', 'is_q',
         'tweet_texts',
         'bom_cap', 'bom_astroturf','bom_fake_follower', 'bom_financial', 'bom_other',
         'opinion_label', 'bot_label', 'q_label', 'fourway_label', 'sixway_label'
     ]
+    expected_cols = component_names + label_cols # joining these together dynamically to allow us to test different number of components / avoid hard coding 1 and 2 only
+    n_cols = len(expected_cols)
+
+    # embeddings resulting from dimensionality reduction (no labels)
+    embeddings = pipeline.embeddings
+    assert embeddings.shape == (N_USERS, n_components)
+
+    # embeddings resulting from dimensionality reduction (plus labels)
+    embeddings_df = pipeline.embeddings_df
+    assert embeddings_df.shape == (N_USERS, n_cols)
+    assert embeddings_df.columns.tolist() == expected_cols
+
+def verify_pca_explainability(pipeline, dataset):
+    """A helper method for testing the explainability metrics returned by PCA specifically."""
+
+    n_components = pipeline.n_components # 2
+    component_names = pipeline.component_names # ["component_1", "component_2"]
+    pca = pipeline.reducer
+
+    explained_var = pca.explained_variance_.tolist()
+    assert len(explained_var) == n_components
+
+    explained_var_ratios = pca.explained_variance_ratio_.tolist()
+    assert len(explained_var_ratios) == n_components
+    # the values are between 0 and 1, sorted in descending order
+    assert explained_var_ratios == sorted(explained_var_ratios, reverse=True)
+    assert min(explained_var_ratios) > 0 and max(explained_var_ratios) <= 1
+
+    singular_vals = pca.singular_values_.tolist()
+    assert len(singular_vals) == n_components
+
+    feature_names = pca.feature_names_in_.tolist()
+    assert len(feature_names) == N_FEATURES
+    assert feature_names == dataset.feature_names
+
+    loadings = pipeline.loadings
+    assert loadings.shape == (N_FEATURES, n_components)
+    assert loadings.min() > -1 and loadings.max() < 1
+
+    loadings_df = pipeline.loadings_df
+    assert loadings_df.columns.tolist() == component_names
+    assert loadings_df.index.tolist() == feature_names
+
+    feature_importances = pipeline.feature_importances
+    # returns the top ten features and their importances, for each component
+    # these represent the absolute magnitude of importances, not direction up or down
+    #> {
+    #>     'component_1': {'26': 0.684083389074209,'267': 0.6889728933226322,'286': 0.702036938280094,'361': 0.7620002964420207,'397': 0.7290441887904475,'484': 0.7225299547443916,'519': 0.781550378345577,'640': 0.6720619483492493,'657': 0.6835787634568226,'970': 0.6861974623404744},
+    #>     'component_2': {'1015': 0.44419697955251625,'1104': 0.44413654720670565,'1311': 0.42051099405700815,'194': 0.4899146795868501,'197': 0.4179642454260487,'228': 0.484664720736489,'426': 0.4181673919111419,'5': 0.4161947777000336,'578': 0.428198251700284,'711': 0.41623196143027624}
+    #> }
+    assert list(feature_importances.keys()) == component_names
+    for _, important_features in feature_importances.items():
+        important_feature_names = important_features.keys()
+        assert len(important_feature_names) == 10
+        importances = important_features.values()
+        assert len(importances) == 10
+        assert min(importances) > 0 and max(importances) < 1
+
+def verify_tsne_explainability(pipeline):
+    kl_divergence = pipeline.reducer.kl_divergence_
+    assert kl_divergence >= 0
 
 
+def test_pca_pipeline(ds):
+    pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols, reducer_type="PCA", n_components=2)
+    pipeline.perform()
+    verify_embeddings(pipeline)
+    verify_pca_explainability(pipeline, ds)
 
+def test_tsne_pipeline(ds):
+    pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols, reducer_type="T-SNE", n_components=2)
+    pipeline.perform()
+    verify_embeddings(pipeline)
+    verify_tsne_explainability(pipeline)
 
-
-
-
-
-#def test_tsne_pipeline(features_df):
-#    pipeline = ReductionPipeline(features_df, reducer_type="T-SNE", n_components=2)
-#    pipeline.perform()
-#    verify_embeddings(pipeline)
-#
-#
-#def test_umap_pipeline(features_df):
-#    pipeline = ReductionPipeline(features_df, reducer_type="UMAP", n_components=2)
-#    pipeline.perform()
-#    verify_embeddings(pipeline)
-#
-
-#def test_pca_explainability(audio_features_df):
-#    feature_names = ['tempo', 'chroma_stft_mean', 'chroma_stft_var', 'rms_mean', 'rms_var', 'spectral_centroid_mean', 'spectral_centroid_var', 'spectral_bandwidth_mean', 'spectral_bandwidth_var', 'spectral_rolloff_mean', 'spectral_rolloff_var', 'zero_crossing_rate_mean', 'zero_crossing_rate_var', 'tonnetz_mean', 'tonnetz_var', 'mfcc_1_mean', 'mfcc_1_var', 'mfcc_2_mean', 'mfcc_2_var', 'mfcc_3_mean', 'mfcc_3_var', 'mfcc_4_mean', 'mfcc_4_var', 'mfcc_5_mean', 'mfcc_5_var', 'mfcc_6_mean', 'mfcc_6_var', 'mfcc_7_mean', 'mfcc_7_var', 'mfcc_8_mean', 'mfcc_8_var', 'mfcc_9_mean', 'mfcc_9_var', 'mfcc_10_mean', 'mfcc_10_var', 'mfcc_11_mean', 'mfcc_11_var', 'mfcc_12_mean', 'mfcc_12_var', 'mfcc_13_mean', 'mfcc_13_var']
-#
-#    pipeline = ReductionPipeline(audio_features_df, reducer_type="PCA", n_components=2)
-#    pipeline.perform()
-#    verify_embeddings(pipeline)
-#
-#    pca = pipeline.reducer
-#    assert np.allclose(pca.explained_variance_.tolist(), [8.980046729035566, 7.014918995282904])
-#    assert np.allclose(pca.explained_variance_ratio_.tolist(), [0.21890505388738124, 0.17100147326771628])
-#    assert np.allclose(pca.singular_values_.tolist(), [127.73701463028492, 112.89866170344553])
-#    assert pca.feature_names_in_.tolist() == feature_names
-#
-#    loadings = pipeline.loadings
-#    assert loadings.shape == (41, 2)
-#    assert loadings.min() > -1
-#    assert loadings.max() < 1
-#    loadings_df = pipeline.loadings_df
-#    assert loadings_df.columns.tolist() == ["component_1", "component_2"]
-#    assert loadings_df.index.tolist() == feature_names
-#
-#    # these represent the absolute magnitude of importances, not direction up or down
-#    feature_importances = pipeline.feature_importances
-#
-#    c1 = feature_importances["component_1"]
-#    assert list(c1.keys()) == ['mfcc_8_var', 'mfcc_7_var', 'mfcc_6_var', 'mfcc_9_var', 'mfcc_10_var', 'mfcc_4_var', 'mfcc_5_var', 'spectral_centroid_var', 'mfcc_11_var', 'mfcc_2_var']
-#    #assert np.allclose(list(c1.values()), [0.805443354102087,0.7973620573318918,0.79285956726038,0.7860296338757697,0.7663541218866315,0.756703823949484,0.7230504963967018,0.7110909325450872,0.6849105101981539,0.6737980228824214])
-#
-#    c2 = feature_importances["component_2"]
-#    assert list(c2.keys()) == ['spectral_bandwidth_mean','spectral_rolloff_mean','spectral_centroid_mean','mfcc_2_mean','chroma_stft_mean','mfcc_1_mean','tonnetz_var','mfcc_8_mean','mfcc_10_mean','zero_crossing_rate_mean']
-#    #assert np.allclose(list(c2.values()), [0.8539164806642479, 0.8464210286829734, 0.8184160145817183, 0.8120671323088787, 0.743604778175382, 0.6886499046288507, 0.642432984513275, 0.5722250679251756, 0.5581507671324493, 0.5227770916583789])
-#
-#
-#
-#
-#
-#
+def test_umap_pipeline(ds):
+    pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols, reducer_type="UMAP", n_components=2)
+    pipeline.perform()
+    verify_embeddings(pipeline)

@@ -23,6 +23,7 @@ import plotly.express as px
 
 from app import RESULTS_DIRPATH
 
+REDUCER_TYPE = os.getenv("REDUCER_TYPE", default="PCA") # "PCA", "T-SNE", "UMAP"
 N_COMPONENTS = int(os.getenv("N_COMPONENTS", default="2"))
 X_SCALE = bool(os.getenv("X_SCALE", default="true") == "true")
 FIG_SHOW = bool(os.getenv("FIG_SHOW", default="false") == "true")
@@ -30,7 +31,7 @@ FIG_SAVE = bool(os.getenv("FIG_SAVE", default="false") == "true")
 
 class ReductionPipeline:
     def __init__(self, df, label_cols, x_scale=X_SCALE,
-                        reducer_type="PCA", n_components=N_COMPONENTS,
+                        reducer_type=REDUCER_TYPE, n_components=N_COMPONENTS,
                         results_dirpath=RESULTS_DIRPATH):
 
         self.df = df

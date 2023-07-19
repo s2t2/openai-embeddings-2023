@@ -20,18 +20,26 @@ For a balanced sample of 300 users and a small sample of their tweets, it looks 
 
 ## Setup
 
+Create and/or activate virtual environment:
+
 ```sh
 conda create -n openai-env python=3.10
 conda activate openai-env
 ```
 
+Install package dependencies:
+
 ```sh
 pip install -r requirements.txt
 ```
 
+Obtain a copy of the "botometer_sample_openai_tweet_embeddings_20230704.csv.gz" CSV file, and store it in the "data/text-embedding-ada-002" directory in this repo. This file is ignored from version control.
+
 ## Usage
 
 ### Dataset Loading
+
+Demonstrate ability to load the dataset:
 
 ```sh
 python -m app.dataset
@@ -39,16 +47,21 @@ python -m app.dataset
 
 ### Dimensionality Reduction
 
-PCA Pipeline performs PCA using specified number of components:
+Perform PCA (or another reduction method) using specified number of components:
 
 ```sh
 python -m app.reduction_pipeline
 
 N_COMPONENTS=2 FIG_SHOW=true FIG_SAVE=true python -m app.reduction_pipeline
 N_COMPONENTS=3 FIG_SHOW=true FIG_SAVE=true python -m app.reduction_pipeline
+
+# other methods:
+REDUCER_TYPE="T-SNE" python -m app.reduction_pipeline
+REDUCER_TYPE="UMAP" python -m app.reduction_pipeline
 ```
 
-PCA Tuner calculates explained variance for each number of components, up to a specified max:
+
+Use PCA to calculate explained variance for each number of components, up to a specified max (to help understand the ideal number of components to use):
 
 ```sh
 python -m app.pca_tuner

@@ -58,6 +58,11 @@ class Dataset():
         df.index = self.x.index
         return df
 
+    @cached_property
+    def feature_names(self):
+        # FYI - PCA get_feature_names_out only works if the feature names are strings
+        # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+        return [str(colname) for colname in self.x.columns.tolist()]
 
 
 

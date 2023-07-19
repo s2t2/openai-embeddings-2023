@@ -33,10 +33,11 @@ class PCATuner:
     def perform(self):
         self.results = []
 
-        # if we have lots of columns / features, we might want to abbreviate the search space and override with a max value
+        # if we have lots of columns / features, we might want to abbreviate the search space and override with a max value, otherwise search over all available features
         max_components = self.max_components or len(self.feature_names)
         # get the explained variance for each n up to the max number of components to search over
         for n_components in range(1, max_components+1):
+            # we need to use PCA specifically because unlike other methods it gives us the explainability metrics
             pipeline = ReductionPipeline(df=self.df, label_cols=self.label_cols,
                                          reducer_type="PCA", n_components=n_components)
             pipeline.perform()
