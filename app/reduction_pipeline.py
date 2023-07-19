@@ -182,15 +182,23 @@ class ReductionPipeline:
 
 
 
+MAX_COMPONENTS = os.getenv("MAX_COMPONENTS")
+
 class PCATuner:
 
-    def __init__(self, features_df, label_cols=[], results_dirpath=RESULTS_DIRPATH):
-        self.features_df = features_df
+    def __init__(self, df, label_cols=[], results_dirpath=RESULTS_DIRPATH, max_components=MAX_COMPONENTS):
+        self.df = df
 
-        self.label_cols = label_cols # todo: get this more dynamically
-        self.feature_names = self.features_df.drop(columns=self.label_cols).columns.tolist()
+        self.label_cols = label_cols
+        self.feature_names = self.df.drop(columns=self.label_cols).columns.tolist()
+
+        if max_components:
+            max_components = int(max_components)
+        self.max_components = max_components
 
         self.results_dirpath = results_dirpath
+        os.makedirs(self.results_dirpath, exist_ok=True)
+
         self.results = None
         self.results_df = None
 
@@ -198,8 +206,12 @@ class PCATuner:
     def perform(self):
         self.results = []
 
-        for n_components in range(1, len(self.feature_names)+1):
-            pipeline = ReductionPipeline(self.features_df, reducer_type="PCA", n_components=n_components)
+        # if we have lots of columns / features, we might want to abbreviate the search space and override with a max value
+        max_components = self.max_components or len(self.feature_names)
+        # get the explained variance for each n up to the max number of components to search over
+        for n_components in range(1, max_components+1):
+            pipeline = ReductionPipeline(df=self.df, label_cols=self.label_cols,
+                                         reducer_type="PCA", n_components=n_components)
             pipeline.perform()
 
             pca = pipeline.reducer
@@ -217,14 +229,9 @@ class PCATuner:
 
 
 
-    #@property
-    #def results_dirpath(self):
-    #    dirpath = os.path.join(RESULTS_DIRPATH, "youtube", f"length_{self.track_length}_mfcc_{self.n_mfcc}")
-    #    os.makedirs(dirpath, exist_ok=True)
-    #    return dirpath
 
 
-    def plot_explained_variance(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None):
+    def plot_explained_variance(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, results_dirpath=None):
         title = f"Total Explained Variance by Number of Components (PCA)"
         if subtitle:
             title += f"<br><sup>{subtitle}</sup>"
@@ -237,12 +244,13 @@ class PCATuner:
             fig.show()
 
         if fig_save:
-            image_filepath = os.path.join(self.results_dirpath, "pca-explained-variance.png")
+            results_dirpath = results_dirpath or self.results_dirpath
+            image_filepath = os.path.join(results_dirpath, "pca-explained-variance.png")
             fig.write_image(image_filepath)
         #return fig
 
 
-    def plot_scree(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None):
+    def plot_scree(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, results_dirpath=None):
         eigenvals = self.results_df.sort_values(by=["n_components"], ascending=False).iloc[0]["eigenvals"]
         print("EIGENVALS:", eigenvals)
 
@@ -262,7 +270,8 @@ class PCATuner:
             fig.show()
 
         if fig_save:
-            image_filepath = os.path.join(self.results_dirpath, "pca-scree.png")
+            results_dirpath = results_dirpath or self.results_dirpath
+            image_filepath = os.path.join(results_dirpath, "pca-scree.png")
             fig.write_image(image_filepath)
         #return fig
 
@@ -276,28 +285,32 @@ if __name__ == "__main__":
 
     ds = Dataset()
 
-    pca_pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols)
-    pca_pipeline.perform()
-    for groupby_col in ["bot_label", "fourway_label", "sixway_label"]:
-        color_map = COLORS_MAP[groupby_col]
+    will_reduce = bool((input("Reduce ('Y' or 'N')? ") or "Y").upper() == "Y")
+    if will_reduce:
+        pca_pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols)
+        pca_pipeline.perform()
+        for groupby_col in ["bot_label", "fourway_label", "sixway_label"]:
+            color_map = COLORS_MAP[groupby_col]
 
-        results_dirpath = os.path.join(RESULTS_DIRPATH, groupby_col)
-        os.makedirs(results_dirpath, exist_ok=True)
+            results_dirpath = os.path.join(RESULTS_DIRPATH, groupby_col)
+            os.makedirs(results_dirpath, exist_ok=True)
 
-        pca_pipeline.plot_embeddings(color=groupby_col, color_map=color_map,
-                                 #hover_data=["user_id", "bot_label"],
-                                 #fig_show=True, fig_save=True,
-                                 results_dirpath=results_dirpath
-                                )
+            pca_pipeline.plot_embeddings(color=groupby_col, color_map=color_map,
+                                    #hover_data=["user_id", "bot_label"],
+                                    #fig_show=True, fig_save=True,
+                                    results_dirpath=results_dirpath
+                                    )
 
-        pca_pipeline.plot_centroids(groupby_col=groupby_col, color_map=color_map,
-                                 #hover_data=["user_id", "bot_label"],
-                                 #fig_show=True, fig_save=True
-                                 results_dirpath=results_dirpath
-                                )
+            pca_pipeline.plot_centroids(groupby_col=groupby_col, color_map=color_map,
+                                    #hover_data=["user_id", "bot_label"],
+                                    #fig_show=True, fig_save=True
+                                    results_dirpath=results_dirpath
+                                    )
 
-    #breakpoint()
-    #tuner = PCATuner(ds.df, label_cols=ds.label_cols)
-    #tuner.perform()
-    #tuner.plot_explained_variance()
-    #tuner.plot_scree()
+    will_tune = bool((input("Tune? ('Y' or 'N')? ") or "Y").upper() == "Y")
+    if will_tune:
+        #breakpoint()
+        tuner = PCATuner(df=ds.df, label_cols=ds.label_cols)
+        tuner.perform()
+        tuner.plot_explained_variance()
+        tuner.plot_scree()
