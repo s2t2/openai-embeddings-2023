@@ -5,7 +5,7 @@ from pandas import DataFrame
 import plotly.express as px
 
 from app import RESULTS_DIRPATH
-from app.reduction_pipeline import ReductionPipeline, FIG_SAVE, FIG_SHOW
+from app.reduction.pipeline import ReductionPipeline, FIG_SAVE, FIG_SHOW
 
 
 MAX_COMPONENTS = os.getenv("MAX_COMPONENTS")

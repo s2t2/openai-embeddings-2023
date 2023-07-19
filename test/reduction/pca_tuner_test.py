@@ -2,7 +2,7 @@
 
 
 
-from app.pca_tuner import PCATuner
+from app.reduction.pca_tuner import PCATuner
 from conftest import N_FEATURES
 
 def test_pca_tuner(ds):

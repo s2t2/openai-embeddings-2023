@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from app.reduction_pipeline import ReductionPipeline
+from app.reduction.pipeline import ReductionPipeline
 from conftest import N_USERS, N_FEATURES
 
 

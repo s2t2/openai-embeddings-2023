@@ -77,7 +77,11 @@ class ReductionPipeline:
         if self.reducer_type == "PCA":
             self.reducer = PCA(n_components=self.n_components, random_state=99)
         elif self.reducer_type == "T-SNE":
-            self.reducer = TSNE(n_components=self.n_components, random_state=99)
+            # https://stackoverflow.com/questions/66592804/t-sne-can-not-convert-high-dimension-data-to-more-than-4-dimension
+            # https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html
+            # ValueError: 'n_components' should be inferior to 4 for the barnes_hut algorithm
+            tsne_method = "exact" if self.n_components >= 4 else "barnes_hut"
+            self.reducer = TSNE(n_components=self.n_components, random_state=99, method=tsne_method)
         elif self.reducer_type == "UMAP":
             self.reducer = UMAP(n_components=self.n_components, random_state=99)
 
