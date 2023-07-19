@@ -53,7 +53,7 @@ class TSNETuner():
                 "kl_divergence": pipeline.reducer.kl_divergence_,
             })
         self.results_df = DataFrame(self.results)
-        print(self.results_df[["n_components", "explained_variance"]].head())
+        print(self.results_df[["n_components", "kl_divergence"]].head())
 
 
     def plot_kl_divergence(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, results_dirpath=None):
