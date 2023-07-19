@@ -31,11 +31,15 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Dataset Loading
+
 ```sh
 python -m app.dataset
 ```
 
-PCA Pipeline (using specified number of components):
+### Dimensionality Reduction
+
+PCA Pipeline performs PCA using specified number of components:
 
 ```sh
 python -m app.reduction_pipeline
@@ -44,13 +48,16 @@ N_COMPONENTS=2 FIG_SHOW=true FIG_SAVE=true python -m app.reduction_pipeline
 N_COMPONENTS=3 FIG_SHOW=true FIG_SAVE=true python -m app.reduction_pipeline
 ```
 
-PCA Tuner (get explained variance for each number of components, up to a specified max):
+PCA Tuner calculates explained variance for each number of components, up to a specified max:
 
 ```sh
-python -m app.reduction_pipeline
+python -m app.pca_tuner
 
-MAX_COMPONENTS=250 FIG_SHOW=true FIG_SAVE=true python -m app.reduction_pipeline
+MAX_COMPONENTS=250 FIG_SHOW=true FIG_SAVE=true python -m app.pca_tuner
 ```
+
+
+
 
 ## Testing
 

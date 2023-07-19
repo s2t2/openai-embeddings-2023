@@ -3,35 +3,40 @@
 #import numpy as np
 #from pandas import read_csv
 #from pytest import fixture
-#
-#from app.reduction_pipeline import ReductionPipeline, PCATuner
+
+
+from app.reduction_pipeline import ReductionPipeline
+from conftest import N_USERS
+
+
+def test_pca_pipeline(ds):
+
+    pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols,
+                                 reducer_type="PCA", n_components=2)
+    pipeline.perform()
+
+    # just the embeddings resulting from PCA
+    embeddings = pipeline.embeddings
+    assert embeddings.shape == (N_USERS, 2)
+
+    # embeddings resulting from PCA, plus label columns (for easier analysis and charting later)
+    embeddings_df = pipeline.embeddings_df
+    assert embeddings_df.shape == (7566, 25)
+    assert embeddings_df.columns.tolist() == [
+        'component_1', 'component_2',
+        'user_id', 'created_on', 'screen_name_count', 'screen_names', 'status_count', 'rt_count',
+        'rt_pct', 'avg_toxicity', 'avg_fact_score',
+        'opinion_community', 'is_bot', 'is_q',
+        'tweet_texts',
+        'bom_cap', 'bom_astroturf','bom_fake_follower', 'bom_financial', 'bom_other',
+        'opinion_label', 'bot_label', 'q_label', 'fourway_label', 'sixway_label'
+    ]
 
 
 
 
-#def test_pca_tuner(tweets_df):
-#
-#    tuner = PCATuner(tweets_df, label_cols=TWEET_LABEL_COLS)
-#
-#    assert "perform" in dir(tuner)
-#    assert "plot_explained_variance" in dir(tuner)
-#    assert "plot_scree" in dir(tuner)
 
 
-#def verify_embeddings(pipeline):
-#    embeddings = pipeline.embeddings
-#    assert embeddings.shape == (1818, 2)
-#    embeddings_df = pipeline.embeddings_df
-#    #assert embeddings_df.columns.tolist() == ['component_1', 'component_2', 'artist_name', 'video_id', 'audio_filename', 'track_number', 'track_length']
-#
-
-#def test_pca_pipeline(features_df):
-#    #feature_names = []
-#
-#    pipeline = ReductionPipeline(features_df, reducer_type="PCA", n_components=2)
-#    pipeline.perform()
-#    verify_embeddings(pipeline)
-#
 
 
 #def test_tsne_pipeline(features_df):
