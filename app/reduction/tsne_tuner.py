@@ -12,7 +12,7 @@ MAX_COMPONENTS = os.getenv("MAX_COMPONENTS")
 
 
 class TSNETuner():
-    """FYI: T-SNE gets slow when n_components > 4
+    """FYI: T-SNE gets slow when n_components >= 4
 
     K-L divergence measures difference between two distributions, where the
         value is 0 when the two distributions are equal.
