@@ -200,7 +200,7 @@ if __name__ == "__main__":
     pca_pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols)
     pca_pipeline.perform()
 
-    for groupby_col in ["bot_label", "fourway_label", "sixway_label"]:
+    for groupby_col in ["opinion_label"]: #["bot_label", "fourway_label", "sixway_label"]:
         color_map = COLORS_MAP[groupby_col]
 
         results_dirpath = os.path.join(RESULTS_DIRPATH, groupby_col)
