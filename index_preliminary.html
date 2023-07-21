@@ -15,7 +15,7 @@
     <div class="container">
         <h1>OpenAI Embeddings 2023</h1>
 
-        <p class="lead">Can ChatGPT help detect Twitter bots, based on their tweet content?</h2>
+        <h2>Twitter User Similarity Mapping</h2>
 
         <h3>Dimensionality Reduction Results</h3>
 
@@ -59,8 +59,9 @@
                     <table class="table" id="results-table-2">
                         <thead>
                             <tr>
-                                <th>Num Components</th>
+                                <th>Input Data</th>
                                 <th>Reduction Method</th>
+                                <th>Num Components</th>
                                 <th>Embeddings</th>
                                 <th>Centroids</th>
                             </tr>
@@ -79,8 +80,9 @@
                     <table class="table" id="results-table-3">
                         <thead>
                             <tr>
-                                <th>Num Components</th>
+                                <th>Input Data</th>
                                 <th>Reduction Method</th>
+                                <th>Num Components</th>
                                 <th>Embeddings</th>
                                 <th>Centroids</th>
                             </tr>
@@ -106,40 +108,44 @@
 
 
         var methodsMap = {"pca": "PCA", "tsne": "T-SNE", "umap": "UMAP"}
-        var groupsMap = {"bot_label": "Bot Status", "opinion_label": "Opinion Community", "q_label": "Qanon Status", "fourway_label": "Four Group Label", "sixway_label": "Six Group Label"}
+        var inputsMap = {"profiles": "User Profiles", "tweets": "User Tweets"}
+        var groupsMap = {"bot_label": "Bot Status", "opinion_label": "Opinion Community", "q_label": "Qanon Status", "group_label": "Group"}
         //var table = document.getElementById("results-table")
         //var tableBody = table.tBodies[0]
 
         var tbody2 = document.querySelector("#results-table-2 tbody")
         var tbody3 = document.querySelector("#results-table-3 tbody")
 
-        function createRow(tbody, reduction_method, n_components, groupby) {
-            console.log("ROW:", reduction_method, n_components, groupby)
+        function createRow(tbody, input_data, reduction_method, n_components, groupby) {
+            console.log("ROW:", input_data, reduction_method, n_components, groupby)
 
             // Create a new row
             var row = document.createElement("tr")
 
             // Create a new cell for each column and add the data to it
-
-            var numComponentsCell = document.createElement("td")
-            numComponentsCell.textContent = n_components;
-            row.appendChild(numComponentsCell);
+            var inputDataCell = document.createElement("td")
+            inputDataCell.textContent = inputsMap[input_data]
+            row.appendChild(inputDataCell)
 
             var reductionMethodCell = document.createElement("td")
             reductionMethodCell.textContent = methodsMap[reduction_method]
             row.appendChild(reductionMethodCell)
 
+            var numComponentsCell = document.createElement("td")
+            numComponentsCell.textContent = n_components;
+            row.appendChild(numComponentsCell);
+
             var embeddingsCell = document.createElement("td")
             //embeddingsCell.textContent = "results/____.html";
             var embeddingsLink = document.createElement("a")
-            embeddingsLink.href = `results/${groupby}/${reduction_method}_${n_components}.html`
+            embeddingsLink.href = `preliminary_results/${input_data}/${groupby}/${reduction_method}_${n_components}.html`
             embeddingsLink.textContent = `${groupsMap[groupby]} Embeddings`
             embeddingsCell.appendChild(embeddingsLink)
             row.appendChild(embeddingsCell)
 
             var centroidsCell = document.createElement("td")
             var centroidsLink = document.createElement("a")
-            centroidsLink.href = `results/${groupby}/${reduction_method}_${n_components}_centroids.html`
+            centroidsLink.href = `preliminary_results/${input_data}/${groupby}/${reduction_method}_${n_components}_centroids.html`
             centroidsLink.textContent = `${groupsMap[groupby]} Centroids`
             centroidsCell.appendChild(centroidsLink)
             row.appendChild(centroidsCell)
@@ -151,19 +157,19 @@
 
 
 
+        var INPUT_DATA = ["profiles", "tweets"]
         var REDUCTION_METHODS = ["pca", "tsne", "umap"]
-        var GROUPS = ["bot_label",
-            //"opinion_label",
-            "fourway_label", //"sixway_label"
-        ]
+        var GROUPS = ["opinion_label", "bot_label", "q_label", "group_label"]
 
+        INPUT_DATA.forEach(function(input_data){
         REDUCTION_METHODS.forEach(function(reduction_method){
         GROUPS.forEach(function(groupby){
 
-            createRow(tbody2, reduction_method, 2, groupby)
+            createRow(tbody2, input_data, reduction_method, 2, groupby)
 
-            createRow(tbody3, reduction_method, 3, groupby)
+            createRow(tbody3, input_data, reduction_method, 3, groupby)
 
+        })
         })
         })
 

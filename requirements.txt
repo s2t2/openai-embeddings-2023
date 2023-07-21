@@ -1,0 +1,20 @@
+
+
+
+# data processing:
+pandas
+numpy
+
+# dataviz:
+matplotlib
+plotly
+kaleido # for exporting plotly images to png / html
+
+# machine learning:
+scikit-learn
+#category_encoders
+#tensorflow
+umap-learn
+
+# automated tests:
+pytest
