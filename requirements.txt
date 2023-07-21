@@ -15,6 +15,7 @@ scikit-learn
 #category_encoders
 #tensorflow
 umap-learn
+hdbscan
 
 # automated tests:
 pytest
