@@ -22,11 +22,11 @@ if __name__ == "__main__":
     print(x.shape)
 
     metric = "euclidean"
+    hdbscan_params = {"metric": metric}
     min_cluster_size = MIN_CLUSTER_SIZE
     if min_cluster_size:
         min_cluster_size = int(min_cluster_size)
-
-    hdbscan_params = {"metric": metric, "min_cluster_size": min_cluster_size}
+        hdbscan_params["min_cluster_size"] = min_cluster_size
     print(hdbscan_params)
     hdb = HDBSCAN(**hdbscan_params)
     print(hdb)
