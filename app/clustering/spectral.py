@@ -81,17 +81,22 @@ if __name__ == "__main__":
     if n_clusters == 2:
         ar_bot = adjusted_rand_score(labels_df["is_bot"], labels)
         #print("ADJ RAND BOT:", ar_bot)
-
         ar_opinion = adjusted_rand_score(labels_df["opinion_community"], labels)
         #print("ADJ RAND OPINION:", ar_opinion)
-
         result["adjusted_rand_score"]["is_bot"] = ar_bot
         result["adjusted_rand_score"]["opinion_community"] = ar_opinion
+    elif n_clusters == 4:
+        ar_fourway = adjusted_rand_score(labels_df["fourway_label"], labels)
+        result["adjusted_rand_score"]["fourway_label"] = ar_fourway
+    elif n_clusters == 6:
+        ar_sixway = adjusted_rand_score(labels_df["sixway_label"], labels)
+        result["adjusted_rand_score"]["sixway_label"] = ar_sixway
+
 
 
     print("---------------------")
     print("UNSUPERVISED METRICS...")
-
+    # THESE ARE DISTANCE METRICS WHICH DON'T APPLY FOR CATEGORICAL LABELS
 
     #print("---------------------")
     sh = silhouette_score(x, labels, metric='euclidean')
@@ -100,16 +105,13 @@ if __name__ == "__main__":
     if n_clusters == 2:
         sh_bot = silhouette_score(DataFrame(labels_df["is_bot"]), labels, metric='euclidean')
         #print("SILHOUETTE BOT:", sh_bot)
-
         sh_opinion = silhouette_score(DataFrame(labels_df["opinion_community"]), labels, metric='euclidean')
         #print("SILHOUETTE OPINION:", sh_opinion)
-
         result["silhouette_score"]["is_bot"] = sh_bot
         result["silhouette_score"]["opinion_community"] = sh_opinion
-
     #elif n_clusters == 4:
-    #    sh_fourway = silhouette_score(DataFrame(labels_df["fourway"]), spectral.labels_, metric='euclidean')
-    #    print("FOUR WAY:", sh_fourway)
+    #    sh_fourway = silhouette_score(DataFrame(labels_df["fourway_label"]), spectral.labels_, metric='precomputed')
+    #    #> ValueError: could not convert string to float: 'Pro-Trump Bot'
     #elif n_clusters == 6:
     #    sh_sixway = silhouette_score(DataFrame(labels_df["sixway"]), spectral.labels_, metric='euclidean')
     #    print("FOUR WAY:", sh_sixway)
@@ -118,33 +120,33 @@ if __name__ == "__main__":
     ch_score = calinski_harabasz_score(x, labels)
     #print("CH:", ch_score)
     result["calinski_harabasz_score"]["all_features"] = ch_score
-
     if n_clusters == 2:
         ch_bot = calinski_harabasz_score(DataFrame(labels_df["is_bot"]), labels)
         #print("CH BOT:", sh_bot)
-
         ch_opinion = calinski_harabasz_score(DataFrame(labels_df["opinion_community"]), labels)
         #print("CH OPINION:", sh_opinion)
-
         result["calinski_harabasz_score"]["is_bot"] = ch_bot
         result["calinski_harabasz_score"]["opinion_community"] = ch_opinion
+    #elif n_clusters == 4:
+    #    ch_fourway = calinski_harabasz_score(DataFrame(labels_df["fourway_label"]), labels)
+    #    #> ValueError: could not convert string to float: 'Pro-Trump Bot'
+    #    result["calinski_harabasz_score"]["fourway_label"] = ch_fourway
 
     #print("---------------------")
     db_score = davies_bouldin_score(x, labels)
     #print("DB:", db_score)
     result["davies_bouldin_score"]["all_features"] = db_score
-
     if n_clusters == 2:
         db_bot = davies_bouldin_score(DataFrame(labels_df["is_bot"]), labels)
         #print("DB BOT:", db_bot)
-
         db_opinion = davies_bouldin_score(DataFrame(labels_df["opinion_community"]), labels)
         #print("DB OPINION:", db_opinion)
-
         result["davies_bouldin_score"]["is_bot"] = db_bot
         result["davies_bouldin_score"]["opinion_community"] = db_opinion
-
-
+    #elif n_clusters == 4:
+    #    db_fourway = davies_bouldin_score(DataFrame(labels_df["fourway_label"]), labels)
+    #    #>ValueError: could not convert string to float: 'Pro-Trump Bot'
+    #    result["davies_bouldin_score"]["fourway_label"] = db_fourway
 
 
 
