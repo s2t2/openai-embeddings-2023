@@ -1,9 +1,13 @@
 
 import os
+import json
+from pprint import pprint
 
 from pandas import DataFrame
 from sklearn.cluster import SpectralClustering
 from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score, adjusted_rand_score
+
+from app import RESULTS_DIRPATH
 
 
 N_CLUSTERS = int(os.getenv("N_CLUSTERS", default="2"))
@@ -50,25 +54,10 @@ if __name__ == "__main__":
     print("LABELS:", labels)
     labels_df[f"spectral_{n_clusters}"] = labels
 
-    # TODO: do more research about which clustering metrics to use
-    # https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
-    # https://scikit-learn.org/stable/modules/clustering.html#clustering-evaluation
-    #
-    # UNSUPERVISED:
-    #
-    #   silhouette_score: The best value is 1 and the worst value is -1.
-    #       ... Values near 0 indicate overlapping clusters.
-    #
-    #   calinski_harabasz_score: higher score relates to a model with better defined clusters.
-    #
-    #   davies_bouldin_score: The minimum score is zero, with lower values indicating better clustering.
-    #
-    #
-    # SUPERVISED:
-    #   adjusted_rand_score: Perfect labeling is scored 1.0.
-    #       ... Poorly agreeing labels (e.g. independent labelings) have lower scores,
-    #       ... and for the adjusted Rand index the score will be negative or close to zero.
-    #
+    results_dirpath = os.path.join(RESULTS_DIRPATH, "clustering")
+    csv_filepath = f"spectral_labels_{N_CLUSTERS}_clusters.csv"
+    labels_df.to_csv(csv_filepath, index=False)
+
     print("---------------------")
     print("SUPERVISED METRICS...")
 

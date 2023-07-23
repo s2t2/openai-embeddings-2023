@@ -4,6 +4,7 @@
 data/*/*.csv
 data/*/*.csv.gz
 
+results/*/*.csv
 
 
 
