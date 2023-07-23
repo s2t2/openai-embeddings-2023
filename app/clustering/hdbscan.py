@@ -45,7 +45,7 @@ if __name__ == "__main__":
     print(labels_df["hdbscan_label"].value_counts())
 
     results_dirpath = os.path.join(RESULTS_DIRPATH, "clustering")
-    csv_filename = f"hdbscan_labels_min_{min_cluster_size}.csv" if min_cluster_size else "hdbscan_labels.csv"
+    csv_filename = f"hdbscan_min_{min_cluster_size}.csv" if min_cluster_size else "hdbscan_labels.csv"
     csv_filepath = os.path.join(results_dirpath, csv_filename)
     labels_df.to_csv(csv_filepath, index=False)
 
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     pprint(result)
 
     # SAVE RESULTS TO FILE:
-    json_filename = f"hdbscan_results_min_{min_cluster_size}.json" if min_cluster_size else "hdbscan_results.json"
+    json_filename = f"hdbscan_min_{min_cluster_size}.json" if min_cluster_size else "hdbscan_results.json"
     json_filepath = os.path.join(results_dirpath, json_filename)
 
     with open(json_filepath, "w") as json_file:
