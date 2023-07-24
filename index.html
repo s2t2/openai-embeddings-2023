@@ -132,14 +132,14 @@
             var embeddingsCell = document.createElement("td")
             //embeddingsCell.textContent = "results/____.html";
             var embeddingsLink = document.createElement("a")
-            embeddingsLink.href = `results/${groupby}/${reduction_method}_${n_components}.html`
+            embeddingsLink.href = `results/reduction/${groupby}/${reduction_method}_${n_components}.html`
             embeddingsLink.textContent = `${groupsMap[groupby]} Embeddings`
             embeddingsCell.appendChild(embeddingsLink)
             row.appendChild(embeddingsCell)
 
             var centroidsCell = document.createElement("td")
             var centroidsLink = document.createElement("a")
-            centroidsLink.href = `results/${groupby}/${reduction_method}_${n_components}_centroids.html`
+            centroidsLink.href = `results/reduction/${groupby}/${reduction_method}_${n_components}_centroids.html`
             centroidsLink.textContent = `${groupsMap[groupby]} Centroids`
             centroidsCell.appendChild(centroidsLink)
             row.appendChild(centroidsCell)
