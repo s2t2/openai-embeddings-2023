@@ -5,6 +5,7 @@ from pandas import DataFrame
 import plotly.express as px
 
 from app import RESULTS_DIRPATH
+from app.dataset import Dataset
 from app.reduction.pipeline import ReductionPipeline, REDUCER_TYPE #, FIG_SAVE, FIG_SHOW
 
 MAX_COMPONENTS = os.getenv("MAX_COMPONENTS")
@@ -12,10 +13,11 @@ MAX_COMPONENTS = os.getenv("MAX_COMPONENTS")
 
 class ReductionTuner(ABC):
 
-    def __init__(self, df, label_cols, reducer_type, results_dirpath=RESULTS_DIRPATH, max_components=MAX_COMPONENTS):
-        self.df = df
-        self.label_cols = label_cols
-        self.feature_names = self.df.drop(columns=self.label_cols).columns.tolist()
+    def __init__(self, reducer_type, ds=None, results_dirpath=RESULTS_DIRPATH, max_components=MAX_COMPONENTS):
+        self.ds = ds or Dataset()
+        #self.df = self.ds.df
+        #self.label_cols = self.ds.label_cols
+        self.feature_names = self.ds.feature_names # self.df.drop(columns=self.label_cols).columns.tolist()
 
         self.reducer_type = reducer_type
         if max_components:
@@ -39,8 +41,7 @@ class ReductionTuner(ABC):
         # get the explained variance for each n up to the max number of components to search over
         for n_components in range(1, max_components+1):
             # we need to use PCA specifically because unlike other methods it gives us the explainability metrics
-            pipeline = ReductionPipeline(df=self.df, label_cols=self.label_cols,
-                                         reducer_type=self.reducer_type, n_components=n_components)
+            pipeline = ReductionPipeline(ds=self.ds, reducer_type=self.reducer_type, n_components=n_components)
             pipeline.perform()
             self.collect_result(pipeline, n_components)
 

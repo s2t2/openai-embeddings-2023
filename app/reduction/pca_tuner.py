@@ -10,8 +10,8 @@ from app.reduction.tuner import ReductionTuner, MAX_COMPONENTS
 
 class PCATuner(ReductionTuner):
 
-    def __init__(self, df, label_cols, results_dirpath=RESULTS_DIRPATH, max_components=MAX_COMPONENTS):
-        super().__init__(df=df, label_cols=label_cols, results_dirpath=results_dirpath, max_components=max_components,
+    def __init__(self, ds=None, results_dirpath=RESULTS_DIRPATH, max_components=MAX_COMPONENTS):
+        super().__init__(ds=ds, results_dirpath=results_dirpath, max_components=max_components,
                          reducer_type="PCA")
 
     #def perform(self):

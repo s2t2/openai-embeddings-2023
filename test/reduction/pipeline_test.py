@@ -83,18 +83,18 @@ def verify_tsne_explainability(pipeline):
 
 
 def test_pca_pipeline(ds):
-    pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols, reducer_type="PCA", n_components=2)
+    pipeline = ReductionPipeline(ds=ds, reducer_type="PCA", n_components=2)
     pipeline.perform()
     verify_embeddings(pipeline)
     verify_pca_explainability(pipeline, ds)
 
 def test_tsne_pipeline(ds):
-    pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols, reducer_type="T-SNE", n_components=2)
+    pipeline = ReductionPipeline(ds=ds, reducer_type="T-SNE", n_components=2)
     pipeline.perform()
     verify_embeddings(pipeline)
     verify_tsne_explainability(pipeline)
 
 def test_umap_pipeline(ds):
-    pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols, reducer_type="UMAP", n_components=2)
+    pipeline = ReductionPipeline(ds=ds, reducer_type="UMAP", n_components=2)
     pipeline.perform()
     verify_embeddings(pipeline)

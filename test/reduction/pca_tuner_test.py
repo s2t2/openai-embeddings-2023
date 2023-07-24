@@ -7,7 +7,7 @@ from conftest import N_FEATURES
 
 def test_pca_tuner(ds):
 
-    tuner = PCATuner(df=ds.df, label_cols=ds.label_cols)
+    tuner = PCATuner(ds=ds)
 
     assert "perform" in dir(tuner)
     assert "plot_explained_variance" in dir(tuner)
@@ -18,7 +18,7 @@ def test_pca_tuner_performance(ds):
 
     max_components = 10
 
-    tuner = PCATuner(df=ds.df, label_cols=ds.label_cols, max_components=max_components)
+    tuner = PCATuner(ds=ds, max_components=max_components)
     assert tuner.max_components == max_components
     assert len(tuner.feature_names) == N_FEATURES
 

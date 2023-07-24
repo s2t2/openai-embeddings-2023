@@ -22,6 +22,7 @@ from umap import UMAP
 import plotly.express as px
 
 from app import RESULTS_DIRPATH
+from app.dataset import Dataset
 
 REDUCER_TYPE = os.getenv("REDUCER_TYPE", default="PCA") # "PCA", "T-SNE", "UMAP"
 N_COMPONENTS = int(os.getenv("N_COMPONENTS", default="2"))
@@ -30,19 +31,24 @@ FIG_SHOW = bool(os.getenv("FIG_SHOW", default="false") == "true")
 FIG_SAVE = bool(os.getenv("FIG_SAVE", default="false") == "true")
 
 class ReductionPipeline:
-    def __init__(self, df, label_cols, x_scale=X_SCALE,
+    def __init__(self, ds=None, x_scale=X_SCALE,
                         reducer_type=REDUCER_TYPE, n_components=N_COMPONENTS,
                         results_dirpath=RESULTS_DIRPATH):
 
-        self.df = df
-        self.labels_df = self.df[label_cols]
-        self.x = self.df.drop(columns=label_cols)
-        print("X:", self.x.shape)
+        self.ds = ds or Dataset()
+        self.labels_df = self.ds.labels
+        #self.x = self.df.drop(columns=label_cols)
 
         self.x_scale = x_scale
         self.reducer_type = reducer_type
         self.n_components = n_components
         self.results_dirpath = results_dirpath
+
+        if self.x_scale:
+            self.x = self.ds.x_scaled
+        else:
+            self.x = self.ds.x
+        #print("X:", self.x.shape)
 
         self.reducer_name = {"PCA": "pca", "T-SNE": "tsne", "UMAP": "umap"}[self.reducer_type]
 
@@ -61,19 +67,14 @@ class ReductionPipeline:
     def component_names(self):
         return [f"component_{i}" for i in range(1, self.n_components+1)]
 
-    @cached_property
-    def x_scaled(self):
-        x = scale(self.x)
-        df = DataFrame(x, columns=self.feature_names)
-        df.index = self.x.index
-        return df
+    #@cached_property
+    #def x_scaled(self):
+    #    x = scale(self.x)
+    #    df = DataFrame(x, columns=self.feature_names)
+    #    df.index = self.x.index
+    #    return df
 
     def perform(self):
-        if self.x_scale:
-            x = self.x_scaled
-        else:
-            x = self.x
-
         if self.reducer_type == "PCA":
             self.reducer = PCA(n_components=self.n_components, random_state=99)
         elif self.reducer_type == "T-SNE":
@@ -85,7 +86,7 @@ class ReductionPipeline:
         elif self.reducer_type == "UMAP":
             self.reducer = UMAP(n_components=self.n_components, random_state=99)
 
-        self.embeddings = self.reducer.fit_transform(x)
+        self.embeddings = self.reducer.fit_transform(self.x)
         print("EMBEDDINGS:", self.embeddings.shape)
         self.embeddings_df = DataFrame(self.embeddings, columns=self.component_names)
         self.embeddings_df = self.embeddings_df.merge(self.labels_df, left_index=True, right_index=True)
@@ -192,12 +193,9 @@ class ReductionPipeline:
 if __name__ == "__main__":
 
 
-    from app.dataset import Dataset
     from app.colors import COLORS_MAP
 
-    ds = Dataset()
-
-    pca_pipeline = ReductionPipeline(df=ds.df, label_cols=ds.label_cols)
+    pca_pipeline = ReductionPipeline()
     pca_pipeline.perform()
 
     for groupby_col in ["opinion_label"]: #["bot_label", "fourway_label", "sixway_label"]:

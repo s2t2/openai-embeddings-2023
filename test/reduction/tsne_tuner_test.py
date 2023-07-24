@@ -7,7 +7,7 @@ from conftest import N_FEATURES
 
 def test_tsne_tuner(ds):
 
-    tuner = TSNETuner(df=ds.df, label_cols=ds.label_cols)
+    tuner = TSNETuner(ds=ds)
 
     assert "perform" in dir(tuner)
     assert "plot_kl_divergence" in dir(tuner)
@@ -17,7 +17,7 @@ def test_tsne_tuner_performance(ds):
 
     max_components = 3 # tsne gets slow after 4!
 
-    tuner = TSNETuner(df=ds.df, label_cols=ds.label_cols, max_components=max_components)
+    tuner = TSNETuner(ds=ds, max_components=max_components)
     assert tuner.max_components == max_components
     assert len(tuner.feature_names) == N_FEATURES
 
