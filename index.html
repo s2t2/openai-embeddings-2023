@@ -106,7 +106,15 @@
 
 
         var methodsMap = {"pca": "PCA", "tsne": "T-SNE", "umap": "UMAP"}
-        var groupsMap = {"bot_label": "Bot Status", "opinion_label": "Opinion Community", "q_label": "Qanon Status", "fourway_label": "Four Group Label", "sixway_label": "Six Group Label"}
+        var groupsMap = {
+            "bot_label": "Bot Status",
+            "bom_overall_label": "Botometer Overall Label",
+            "bom_astroturf_label": "Botometer Astroturf Label",
+            "opinion_label": "Opinion Community",
+            "q_label": "Qanon Status",
+            "fourway_label": "Four Group Label",
+            "sixway_label": "Six Group Label"
+            }
         //var table = document.getElementById("results-table")
         //var tableBody = table.tBodies[0]
 
@@ -153,7 +161,8 @@
 
         var REDUCTION_METHODS = ["pca", "tsne", "umap"]
         var GROUPS = ["bot_label",
-            //"opinion_label",
+            "bom_overall_label", "bom_astroturf_label",
+            "opinion_label",
             "fourway_label", //"sixway_label"
         ]
 

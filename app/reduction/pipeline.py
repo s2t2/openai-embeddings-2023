@@ -24,6 +24,8 @@ import plotly.express as px
 from app import RESULTS_DIRPATH
 from app.dataset import Dataset
 
+REDUCTION_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "reduction")
+
 REDUCER_TYPE = os.getenv("REDUCER_TYPE", default="PCA") # "PCA", "T-SNE", "UMAP"
 N_COMPONENTS = int(os.getenv("N_COMPONENTS", default="2"))
 X_SCALE = bool(os.getenv("X_SCALE", default="true") == "true")
@@ -33,7 +35,7 @@ FIG_SAVE = bool(os.getenv("FIG_SAVE", default="false") == "true")
 class ReductionPipeline:
     def __init__(self, ds=None, x_scale=X_SCALE,
                         reducer_type=REDUCER_TYPE, n_components=N_COMPONENTS,
-                        results_dirpath=RESULTS_DIRPATH):
+                        results_dirpath=REDUCTION_RESULTS_DIRPATH):
 
         self.ds = ds or Dataset()
         self.labels_df = self.ds.labels
@@ -111,7 +113,7 @@ class ReductionPipeline:
             print("K-L DIVERGENCE:", self.reducer.kl_divergence_)
 
 
-    def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, color=None, color_map=None, hover_data=None, results_dirpath=None):
+    def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, color=None, color_map=None, category_orders=None, hover_data=None, results_dirpath=None):
         title = f"Dimensionality Reduction Results ({self.reducer_type} n_components={self.n_components})"
         if subtitle:
             title += f"<br><sup>{subtitle}</sup>"
@@ -125,6 +127,8 @@ class ReductionPipeline:
             chart_params["color"] = color
         if color_map:
             chart_params["color_discrete_map"] = color_map
+        if category_orders:
+            chart_params["category_orders"] = category_orders
         if hover_data:
             chart_params["hover_data"] = hover_data
 
@@ -147,7 +151,7 @@ class ReductionPipeline:
         return fig
 
 
-    def plot_centroids(self, groupby_col, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, title=None, subtitle=None, color_map=None, results_dirpath=None):
+    def plot_centroids(self, groupby_col, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, title=None, subtitle=None, color_map=None, category_orders=None, results_dirpath=None):
         title = title or f"Dimensionality Reduction Centroids ({self.reducer_type} n_components={self.n_components})"
         if subtitle:
             title += f"<br><sup>{subtitle}</sup>"
@@ -158,6 +162,8 @@ class ReductionPipeline:
         )
         if color_map:
             chart_params["color_discrete_map"] = color_map
+        if category_orders:
+            chart_params["category_orders"] = category_orders
 
         agg_params = {"component_1": "mean", "component_2": "mean"}
 
@@ -193,24 +199,27 @@ class ReductionPipeline:
 if __name__ == "__main__":
 
 
-    from app.colors import COLORS_MAP
+    from app.colors import COLORS_MAP, CATEGORY_ORDERS
 
     pca_pipeline = ReductionPipeline()
     pca_pipeline.perform()
 
     for groupby_col in ["bot_label", "opinion_label", "fourway_label", "sixway_label", "bom_overall_label", "bom_astroturf_label"]:
         color_map = COLORS_MAP[groupby_col]
+        category_orders = {groupby_col: CATEGORY_ORDERS[groupby_col]}
 
-        results_dirpath = os.path.join(RESULTS_DIRPATH, groupby_col)
+        results_dirpath = os.path.join(REDUCTION_RESULTS_DIRPATH, groupby_col)
         os.makedirs(results_dirpath, exist_ok=True)
 
         pca_pipeline.plot_embeddings(color=groupby_col, color_map=color_map,
+                                     category_orders=category_orders,
                                 #hover_data=["user_id", "bot_label"],
                                 #fig_show=True, fig_save=True,
                                 results_dirpath=results_dirpath
                                 )
 
         pca_pipeline.plot_centroids(groupby_col=groupby_col, color_map=color_map,
+                                    category_orders=category_orders,
                                 #hover_data=["user_id", "bot_label"],
                                 #fig_show=True, fig_save=True
                                 results_dirpath=results_dirpath
