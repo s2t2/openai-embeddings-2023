@@ -34,13 +34,19 @@ class HDBSCANPipeline(ClusteringPipeline):
 
     @property
     def results(self):
+        model_params = self.model.get_params()
+        del model_params["memory"] # Memory datatype not serializable
+
         # cluster_persistence: score of 1.0 represents a perfectly stable cluster that persists over all distance scales,
         # ... while a score of 0.0 represents a perfectly ephemeral cluster.
         # ... These scores can be guage the relative coherence of the clusters output by the algorithm.
+
         hdbscan_results = {
+            "model_type": self.model.__class__.__name__,
+            "model_params": model_params,
             "cluster_persistence": list(self.model.cluster_persistence_),
         }
-        return {**super().results, **hdbscan_results}
+        return hdbscan_results #{**super().results, **hdbscan_results}
 
 
 

@@ -68,6 +68,14 @@ MAX_COMPONENTS=10 FIG_SHOW=true FIG_SAVE=true  python -m app.reduction.tsne_tune
 
 ### Clustering
 
+K-Means Clustering on full dimensional data:
+
+```sh
+N_CLUSTERS=2 python -m app.clustering.kmeans
+N_CLUSTERS=4 python -m app.clustering.kmeans
+```
+
+
 K-Modes Clustering on full dimensional data:
 
 ```sh
