@@ -2,6 +2,7 @@
 
 import os
 import json
+#from abc import ABC, abstractmethod
 
 from pandas import Series, DataFrame
 from sklearn.metrics import (
@@ -14,7 +15,6 @@ from app import RESULTS_DIRPATH
 
 CLUSTERING_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "clustering")
 
-N_CLUSTERS = int(os.getenv("N_CLUSTERS", default="2"))
 
 
 def write_results_json(result:dict, json_filepath:str):
