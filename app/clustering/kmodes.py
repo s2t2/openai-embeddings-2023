@@ -8,11 +8,12 @@ from app.clustering import ClusteringPipeline, CLUSTERING_RESULTS_DIRPATH
 
 N_CLUSTERS = int(os.getenv("N_CLUSTERS", default="2"))
 N_ITER = int(os.getenv("N_ITER", default="10"))
+N_JOBS = int(os.getenv("N_JOBS", default="-1")) # use -1 for parallel
 
 
 class KModesPipeline(ClusteringPipeline):
 
-    def __init__(self, ds=None, x_scale=True, n_clusters=N_CLUSTERS, n_iter=N_ITER):
+    def __init__(self, ds=None, x_scale=True, n_clusters=N_CLUSTERS, n_iter=N_ITER, n_jobs=N_JOBS):
         super().__init__(ds=ds, x_scale=x_scale)
 
         self.n_clusters = n_clusters
@@ -31,7 +32,7 @@ class KModesPipeline(ClusteringPipeline):
         # ... The final results will be the best output of n_init consecutive runs in terms of cost.
         # ... default=10
 
-        self.model = KModes(n_clusters=n_clusters, init='Huang', n_init=n_iter, verbose=1, n_jobs=-1, random_state=99)
+        self.model = KModes(n_clusters=n_clusters, init='Huang', n_init=n_iter, verbose=1, n_jobs=n_jobs, random_state=99)
 
 
     @property
