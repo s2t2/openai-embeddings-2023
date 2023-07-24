@@ -68,6 +68,13 @@ MAX_COMPONENTS=10 FIG_SHOW=true FIG_SAVE=true  python -m app.reduction.tsne_tune
 
 ### Clustering
 
+K-Modes Clustering on full dimensional data:
+
+```sh
+N_CLUSTERS=2 python -m app.clustering.kmodes
+N_CLUSTERS=4 python -m app.clustering.kmodes
+```
+
 Spectral Clustering on full dimensional data:
 
 ```sh
@@ -77,7 +84,7 @@ N_CLUSTERS=2 python -m app.clustering.spectral
 N_CLUSTERS=4 python -m app.clustering.spectral
 ```
 
-HDBSCAN Clustering on full dimensional data:
+HDBSCAN Clustering on full dimensional data (note: HDBSCAN determines the number of clusters):
 
 ```sh
 python -m app.clustering.hdbscan

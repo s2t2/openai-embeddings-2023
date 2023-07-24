@@ -46,6 +46,11 @@ class Dataset():
         return self.df[self.label_cols].copy()
 
     @cached_property
+    def labels_slim(self):
+        return self.df[["user_id", "is_bot", "opinion_community", "is_q",
+                        "bot_label", "opinion_label", "q_label", "fourway_label", "sixway_label"]].copy()
+
+    @cached_property
     def x(self):
         return self.df.drop(columns=self.label_cols).copy()
 
