@@ -49,15 +49,11 @@ class ClusteringPipeline(ABC):
             json.dump(self.metrics, json_file, indent=4)
 
     @property
-    def base_results(self):
+    def results(self):
         return {
             "model_type": self.model.__class__.__name__,
             "model_params": self.model.get_params()
         }
-
-    @property
-    def base_metrics(self):
-        return {} # override in child class to provide model-specific params
 
     @cached_property
     def metrics(self):
@@ -98,7 +94,8 @@ class ClusteringPipeline(ABC):
 
         """
 
-        results = {**self.base_results, **self.base_metrics} # merge dictionaries
+        #results = {**self.base_results, **self.base_metrics} # merge dictionaries
+        results = self.results
 
         n_clusters = len(set(self.model.labels_)) # using actual number of labels, instead of n_clusters, because HDBSCAN determines its own n_clusters
         results["n_clusters"] = n_clusters
