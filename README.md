@@ -84,13 +84,13 @@ N_CLUSTERS=2 python -m app.clustering.spectral
 N_CLUSTERS=4 python -m app.clustering.spectral
 ```
 
-DBSCAN Clustering on full dimensional data:
+DBSCAN Clustering on full dimensional data (note: DBSCAN determines the number of clusters):
 
 ```sh
 python -m app.clustering.dbscan
 
-N_CLUSTERS=2 MIN_SAMPLES=10 python -m app.clustering.dbscan
-N_CLUSTERS=4 MIN_SAMPLES=10 python -m app.clustering.dbscan
+MIN_SAMPLES=10 python -m app.clustering.dbscan
+MIN_SAMPLES=10 python -m app.clustering.dbscan
 ```
 
 

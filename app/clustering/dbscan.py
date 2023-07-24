@@ -6,21 +6,18 @@ from sklearn.cluster import DBSCAN
 from app.clustering import ClusteringPipeline, CLUSTERING_RESULTS_DIRPATH
 
 
-N_CLUSTERS = int(os.getenv("N_CLUSTERS", default="2"))
-
 MIN_SAMPLES = int(os.getenv("MIN_SAMPLES", default="5"))
 
 
 class DBSCANPipeline(ClusteringPipeline):
     # TODO: override performance with a grid search over the eps parameter
 
-    def __init__(self, ds=None, x_scale=True, n_clusters=N_CLUSTERS, min_samples=MIN_SAMPLES):
+    def __init__(self, ds=None, x_scale=True, min_samples=MIN_SAMPLES):
         super().__init__(ds=ds, x_scale=x_scale)
 
-        self.n_clusters = n_clusters
         self.min_samples = min_samples
 
-        self.results_filestem = os.path.join(CLUSTERING_RESULTS_DIRPATH, f"dbscan_{self.n_clusters}_clusters_{self.min_samples}_min")
+        self.results_filestem = os.path.join(CLUSTERING_RESULTS_DIRPATH, f"dbscan_clusters_{self.min_samples}_min")
 
         # eps float, default=0.5
         # ... The maximum distance between two samples for one to be considered as in the neighborhood of the other.
