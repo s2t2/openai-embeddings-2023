@@ -2,15 +2,16 @@
 
 import numpy as np
 
-from conftest import N_USERS, N_FEATURES
+from conftest import N_USERS, N_FEATURES, N_LABELS
 
 
 def test_dataset(ds):
-    assert ds.df.shape == (N_USERS, 1559)
+    n_cols = N_FEATURES + N_LABELS
+    assert ds.df.shape == (N_USERS, n_cols)
 
 
 def test_labels(ds):
-    assert ds.labels.shape == (N_USERS, 23)
+    assert ds.labels.shape == (N_USERS, N_LABELS) # 30 label cols
 
 
 def test_x(ds):

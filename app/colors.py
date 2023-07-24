@@ -47,4 +47,18 @@ COLORS_MAP = {
     "q_label": Q_COLORS_MAP,
     "fourway_label": FOURWAY_COLORS_MAP,
     "sixway_label": SIXWAY_COLORS_MAP,
+    "bom_overall_label": BOT_COLORS_MAP,
+    "bom_astroturf_label": BOT_COLORS_MAP
+}
+
+
+BOT_LABEL_ORDER = ["Human", "Bot"]
+CATEGORY_ORDERS = {
+    "bot_label": BOT_LABEL_ORDER,
+    "bom_overall_label": BOT_LABEL_ORDER,
+    "bom_astroturf_label": BOT_LABEL_ORDER,
+    "opinion_label": ["Anti-Trump", "Pro-Trump"],
+    "q_label": ["Normal", "Q-anon"],
+    "fourway_label": list(FOURWAY_COLORS_MAP.keys()),
+    "sixway_label": list(SIXWAY_COLORS_MAP.keys()),
 }

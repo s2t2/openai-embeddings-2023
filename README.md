@@ -24,7 +24,7 @@ Install package dependencies:
 pip install -r requirements.txt
 ```
 
-Obtain a copy of the "botometer_sample_openai_tweet_embeddings_20230704.csv.gz" CSV file, and store it in the "data/text-embedding-ada-002" directory in this repo. This file is ignored from version control.
+Obtain a copy of the "botometer_sample_openai_tweet_embeddings_20230724.csv.gz" CSV file, and store it in the "data/text-embedding-ada-002" directory in this repo. This file is ignored from version control.
 
 ## Usage
 

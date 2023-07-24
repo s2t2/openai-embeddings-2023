@@ -11,14 +11,16 @@ from sklearn.preprocessing import scale #, StandardScaler
 
 from app import DATA_DIRPATH
 
-CSV_FILEPATH = os.path.join(DATA_DIRPATH, "text-embedding-ada-002", "botometer_sample_openai_tweet_embeddings_20230704.csv.gz")
+CSV_FILEPATH = os.path.join(DATA_DIRPATH, "text-embedding-ada-002", "botometer_sample_openai_tweet_embeddings_20230724.csv.gz")
 
 LABEL_COLS = [
     'user_id', 'created_on', 'screen_name_count', 'screen_names', 'status_count', 'rt_count', 'rt_pct',
     'avg_toxicity', 'avg_fact_score', 'opinion_community', 'is_bot', 'is_q',
     'tweet_texts',
-    'bom_cap', 'bom_astroturf', 'bom_fake_follower', 'bom_financial', 'bom_other',
-    'opinion_label', 'bot_label', 'q_label', #'group_label'
+    'bom_cap', 'bom_astroturf', 'bom_fake_follower', 'bom_financial', 'bom_other', 'bom_overall', 'bom_self_declared','bom_spammer',
+
+    'opinion_label', 'bot_label', 'q_label',
+    "is_bom_overall", "is_bom_astroturf", 'bom_overall_label', 'bom_astroturf_label', #'group_label'
     'fourway_label', 'sixway_label'
 ]
 
@@ -38,6 +40,12 @@ class Dataset():
 
         df["fourway_label"] = df["opinion_label"] + " " + df["bot_label"]
         #print(df["fourway_label"].value_counts())
+
+        df["is_bom_overall"] = df["bom_overall"].round()
+        df["is_bom_astroturf"] = df["bom_astroturf"].round()
+
+        df["bom_overall_label"] = df["is_bom_overall"].map({1:"Bot", 0:"Human"})
+        df["bom_astroturf_label"] = df["is_bom_astroturf"].map({1:"Bot", 0:"Human"})
 
         return df
 
