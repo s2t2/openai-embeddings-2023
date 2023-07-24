@@ -22,7 +22,7 @@ class HDBSCANPipeline(ClusteringPipeline):
             hdbscan_params["min_cluster_size"] = min_cluster_size
         self.min_cluster_size = min_cluster_size
 
-        filestem = f"hdbscan_clusters_min_{min_cluster_size}" if self.min_cluster_size else "hdbscan_clusters.csv"
+        filestem = f"hdbscan_clusters_{min_cluster_size}_min" if self.min_cluster_size else "hdbscan_clusters.csv"
         self.results_filestem = os.path.join(CLUSTERING_RESULTS_DIRPATH, filestem)
 
         self.model = HDBSCAN(**hdbscan_params)

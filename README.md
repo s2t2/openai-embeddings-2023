@@ -98,7 +98,6 @@ DBSCAN Clustering on full dimensional data (note: DBSCAN determines the number o
 python -m app.clustering.dbscan
 
 MIN_SAMPLES=10 python -m app.clustering.dbscan
-MIN_SAMPLES=10 python -m app.clustering.dbscan
 ```
 
 
@@ -107,7 +106,7 @@ HDBSCAN Clustering on full dimensional data (note: HDBSCAN determines the number
 ```sh
 python -m app.clustering.hdbscan
 
-MIN_CLUSTER_SIZE=50 python -m app.clustering.hdbscan
+MIN_CLUSTER_SIZE=10 python -m app.clustering.hdbscan
 ```
 
 ## Testing
