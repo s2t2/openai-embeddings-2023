@@ -198,7 +198,7 @@ if __name__ == "__main__":
     pca_pipeline = ReductionPipeline()
     pca_pipeline.perform()
 
-    for groupby_col in ["opinion_label"]: #["bot_label", "fourway_label", "sixway_label"]:
+    for groupby_col in ["bot_label", "opinion_label", "fourway_label", "sixway_label", "bom_overall_label", "bom_astroturf_label"]:
         color_map = COLORS_MAP[groupby_col]
 
         results_dirpath = os.path.join(RESULTS_DIRPATH, groupby_col)

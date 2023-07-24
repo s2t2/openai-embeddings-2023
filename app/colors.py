@@ -47,4 +47,6 @@ COLORS_MAP = {
     "q_label": Q_COLORS_MAP,
     "fourway_label": FOURWAY_COLORS_MAP,
     "sixway_label": SIXWAY_COLORS_MAP,
+    "bom_overall_label": BOT_COLORS_MAP,
+    "bom_astroturf_label": BOT_COLORS_MAP
 }
