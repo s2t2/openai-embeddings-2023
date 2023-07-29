@@ -62,3 +62,6 @@ CATEGORY_ORDERS = {
     "fourway_label": list(FOURWAY_COLORS_MAP.keys()),
     "sixway_label": list(SIXWAY_COLORS_MAP.keys()),
 }
+
+
+BOT_LABELS_MAP = {True:"Bot", False:"Human"}

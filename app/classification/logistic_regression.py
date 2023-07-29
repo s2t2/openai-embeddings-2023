@@ -25,37 +25,59 @@ K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
+import plotly.express as px
 
+def plot_confusion_matrix(clf, y_test, y_pred, y_col, img_filepath=None):
+    """Params
+        clf : an sklearn classifier (after it has been trained)
 
-def plot_confusion_matrix(clf, y_test, y_pred, img_filepath=None):
-    """Params clf : an sklearn classifier (after it has been trained) """
+        y_col : the column name of y values (for plot labeling purposes)
+    """
 
     classes = clf.classes_
+    BOT_LABELS_MAP = {True:"Bot", False:"Human"}
+    OPINION_LABELS_MAP = {0:"Anti-Trump", 1:"Pro-Trump"}
+    LABELS_MAP = {"is_bot": BOT_LABELS_MAP, "is_bom_overall": BOT_LABELS_MAP, "is_bom_astroturf": BOT_LABELS_MAP, "opinion_community":OPINION_LABELS_MAP}
+    if y_col in LABELS_MAP.keys():
+        labels_map = LABELS_MAP[y_col]
+        class_names = [labels_map[l] for l in classes]
+    else:
+        class_names = classes
 
     cm = confusion_matrix(y_test, y_pred)
-    # Confusion matrix whose i-th row and j-th column entry indicates the number of samples with
-    # ... true label being i-th class and predicted label being j-th class.
-
-    # df = DataFrame(cm, columns=classes, index=classes)
+    #cm = cm.astype(int)
+    # Returns: Confusion matrix whose i-th row and j-th column entry
+    # ... indicates the number of samples with true label being i-th class and predicted label being j-th class.
+    # Interpretation: actual value on rows, predicted value on cols
 
     #sns.set(rc = {'figure.figsize':(10,10)})
+    #sns.heatmap(cm,
+    #            square=True,
+    #            annot=True, fmt="d",
+    #            xticklabels=classes,
+    #            yticklabels=classes,
+    #            cbar=True, cmap= "Blues" #"Blues" #"viridis_r" #"rocket_r" # r for reverse
+    #)
+    #plt.ylabel("True Value") # cm rows are true
+    #plt.xlabel("Predicted Value") # cm cols are preds
+    #plt.title("Confusion Matrix on Test Data (Logistic Regression)")
+    #plt.show()
+    #if img_filepath:
+    #    plt.savefig(img_filepath, format=None)
 
-    sns.heatmap(cm,
-                square=True,
-                annot=True, fmt="d",
-                xticklabels=classes,
-                yticklabels=classes,
-                cbar=True, cmap= "Blues" #"Blues" #"viridis_r" #"rocket_r" # r for reverse
-    )
+    #title = f"Confusion Matrix (Logistic Regression, y='{y_col}')"
+    title = f"Confusion Matrix (Logistic Regression)"
+    #title += f"<br><sup>Scaler: None, Label Col: '{y_col}'</sup>"
+    title += f"<br><sup>Y: '{y_col}'</sup>"
 
-    plt.ylabel("True Value") # cm rows are true
-    plt.xlabel("Predicted Value") # cm cols are preds
-    plt.title("Confusion Matrix on Test Data (Logistic Regression)")
-    plt.show()
+    labels = {"x": "Predicted", "y": "Actual"}
+    fig = px.imshow(cm, x=class_names, y=class_names, height=450, color_continuous_scale="Blues", labels=labels, text_auto=True)
+    fig.update_layout(title={'text': title, 'x':0.485, 'xanchor': 'center'})
+    fig.show()
 
     if img_filepath:
-        plt.savefig(img_filepath, format=None)
-
+        fig.write_image(img_filepath)
+        fig.write_html(img_filepath.replace(".png", ".html"))
 
 
 
@@ -68,15 +90,17 @@ if __name__ == "__main__":
 
     ds = Dataset()
 
-    x_scale = False
-    if x_scale:
-        x = ds.x_scaled
-    else:
-        x = ds.x
+    #x_scale = False
+    #if x_scale:
+    #    x = ds.x_scaled
+    #else:
+    #    x = ds.x
+    x = ds.x
 
-    y_cols = ["is_bot",
-              #"opinion_community", "is_bom_overall", "is_bom_astroturf",
-              #"fourway_label", "bom_overall_fourway_label", "bom_astroturf_fourway_label"
+    y_cols = [
+        "is_bot", "opinion_community", "is_bom_overall", "is_bom_astroturf",
+        # "bot_label", #"opinion_label", "bom_overall_label", "bom_astroturf_label",
+        "fourway_label", "bom_overall_fourway_label", "bom_astroturf_fourway_label"
     ]
     for y_col in y_cols:
         y = ds.df[y_col]
@@ -135,20 +159,18 @@ if __name__ == "__main__":
         #y_pred = gs.predict_proba(x_test)[:,1]
         y_pred = gs.predict(x_test)
 
-        print(classification_report(y_test, y_pred))
+        print(classification_report(y_test, y_pred)) # print in human readable format
         results["classification_eport"] = classification_report(y_test, y_pred, output_dict=True)
 
-        #Only used for multiclass targets. Determines the type of configuration to use. The default value raises an error, so either 'ovr' or 'ovo' must be passed explicitly.
-        #
-        #'ovr':
-        #Stands for One-vs-rest. Computes the AUC of each class against the rest [3] [4]. This treats the multiclass case in the same way as the multilabel case. Sensitive to class imbalance even when average == 'macro', because class imbalance affects the composition of each of the ‘rest’ groupings.
-        #
-        #'ovo':
-        #Stands for One-vs-one. Computes the average AUC of all possible pairwise combinations of classes [5]. Insensitive to class imbalance when average == 'macro'.
-        results["roc_auc_score"] = roc_auc_score(y_test, y_pred)
+        # use with numeric data only, not labels
+        if not isinstance(y_test.iloc[0], str):
+            results["roc_auc_score"] = roc_auc_score(y_test, y_pred)
+            print("ROC AUC SCORE:", results["roc_auc_score"])
 
-        print("ROC AUC SCORE:", results["roc_auc_score"])
-        #pprint(results)
+        #cm = confusion_matrix(y_test, y_pred)
+        #results["confusion_matrix"] = cm
+
+        pprint(results)
 
         # SAVE RESULTS
 
@@ -161,5 +183,4 @@ if __name__ == "__main__":
         # PLOT RESULTS
 
         img_filepath = os.path.join(results_dirpath, "confusion.png")
-        breakpoint()
-        plot_confusion_matrix(gs.best_estimator_, y_test, y_pred, img_filepath)
+        plot_confusion_matrix(clf=gs.best_estimator_, y_test=y_test, y_pred=y_pred, y_col=y_col, img_filepath=img_filepath)
