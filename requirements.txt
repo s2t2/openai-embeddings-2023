@@ -7,8 +7,10 @@ numpy
 
 # dataviz:
 matplotlib
+seaborn
 plotly
 kaleido # for exporting plotly images to png / html
+
 
 # machine learning:
 scikit-learn

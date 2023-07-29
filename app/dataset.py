@@ -1,8 +1,4 @@
 
-
-
-
-
 import os
 from functools import cached_property
 
@@ -21,7 +17,7 @@ LABEL_COLS = [
 
     'opinion_label', 'bot_label', 'q_label',
     "is_bom_overall", "is_bom_astroturf", 'bom_overall_label', 'bom_astroturf_label', #'group_label'
-    'fourway_label', 'sixway_label'
+    'fourway_label', 'sixway_label', "bom_overall_fourway_label", "bom_astroturf_fourway_label"
 ]
 
 
@@ -46,6 +42,9 @@ class Dataset():
 
         df["bom_overall_label"] = df["is_bom_overall"].map({1:"Bot", 0:"Human"})
         df["bom_astroturf_label"] = df["is_bom_astroturf"].map({1:"Bot", 0:"Human"})
+
+        df["bom_overall_fourway_label"] = df["opinion_label"] + " " + df["bom_overall_label"]
+        df["bom_astroturf_fourway_label"] = df["opinion_label"] + " " + df["bom_astroturf_label"]
 
         return df
 
