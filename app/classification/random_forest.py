@@ -2,6 +2,7 @@
 from sklearn.tree import DecisionTreeClassifier
 
 from app.dataset import Dataset
+from app.classification import Y_COLS
 from app.classification.base import BaseClassifier
 
 class MyRandomForest(BaseClassifier):
@@ -10,7 +11,6 @@ class MyRandomForest(BaseClassifier):
         super().__init__(ds=ds, y_col=y_col, param_grid=param_grid)
 
         self.model = DecisionTreeClassifier(random_state=99)
-        self.model_type = "Decision Tree"
         self.model_dirname = "decision_tree"
 
         self.param_grid = param_grid or {
@@ -55,13 +55,10 @@ if __name__ == "__main__":
 
     ds = Dataset()
 
-    y_cols = [
-        "is_bot", "opinion_community", "is_bom_overall", "is_bom_astroturf",
-        "fourway_label", "bom_overall_fourway_label", "bom_astroturf_fourway_label"
-    ]
-
-    for y_col in y_cols:
+    for y_col in Y_COLS:
 
         clf = MyRandomForest(ds=ds, y_col=y_col)
 
         clf.train_eval()
+
+        clf.save_results()
