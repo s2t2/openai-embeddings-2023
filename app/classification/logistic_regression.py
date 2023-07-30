@@ -19,6 +19,7 @@ K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
 #X_SCALE = bool(os.getenv("X_SCALE", default="false").lower() == "true")
 #SCALER_TYPE = os.getenv("SCALER_TYPE")
 
+#class MyLogisticRegression(BaseClassifier)
 
 
 
@@ -26,6 +27,9 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
+
+
+
 
 def plot_confusion_matrix(clf, y_test, y_pred, y_col, img_filepath=None):
     """Params

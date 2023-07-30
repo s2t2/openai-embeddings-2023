@@ -7,7 +7,7 @@ numpy
 
 # dataviz:
 matplotlib
-seaborn
+#seaborn
 plotly
 kaleido # for exporting plotly images to png / html
 

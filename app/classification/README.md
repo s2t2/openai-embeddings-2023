@@ -13,3 +13,11 @@ python -m app.classification.logistic_regression
 
 # K_FOLDS=10 python -m app.classification.logistic_regression
 ```
+
+#### Random  Forest
+
+```sh
+python -m app.classification.random_forest
+
+# K_FOLDS=10 python -m app.classification.random_forest
+```
