@@ -56,8 +56,8 @@ if __name__ == "__main__":
     ds = Dataset()
 
     y_cols = [
-        "is_bot", #"opinion_community", "is_bom_overall", "is_bom_astroturf",
-        #"fourway_label", "bom_overall_fourway_label", "bom_astroturf_fourway_label"
+        "is_bot", "opinion_community", "is_bom_overall", "is_bom_astroturf",
+        "fourway_label", "bom_overall_fourway_label", "bom_astroturf_fourway_label"
     ]
 
     for y_col in y_cols:
