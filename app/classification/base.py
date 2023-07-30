@@ -27,7 +27,7 @@ class BaseClassifier(ABC):
 
         self.k_folds = k_folds
         self.gs = None
-        self.results_ = {}
+        self.results_ = {"metrics":{}}
 
         # set in child class:
         self.model = None
@@ -124,7 +124,7 @@ class BaseClassifier(ABC):
 
 
 
-    def plot_confusion_matrix(self, cm, img_filestem=None):
+    def plot_confusion_matrix(self, cm, img_filestem=None, fig_show=True):
         """Params
 
             cm : an sklearn confusion matrix result
@@ -132,12 +132,11 @@ class BaseClassifier(ABC):
                 ... indicates the number of samples with true label being i-th class and predicted label being j-th class.
                 ... Interpretation: actual value on rows, predicted value on cols
 
-
             clf : an sklearn classifier (after it has been trained)
 
             y_col : the column name of y values (for plot labeling purposes)
 
-            image_filepath : ends with ".png"
+            image_filestem : the directory path and file name (excluding file extension)
         """
 
         clf = self.gs.best_estimator_.named_steps["classifier"]
@@ -148,15 +147,19 @@ class BaseClassifier(ABC):
         else:
             class_names = classes
 
-        accy = round(self.results_["accuracy_score"], 3)
-        f1 = round(self.results_["f1_score"], 3)
+        #min_samples = self.gs.best_params_["classifier__min_samples_leaf"]
+        accy = round(self.results_["metrics"]["accuracy_score"], 3)
+        f1 = round(self.results_["metrics"]["f1_score"], 3)
+
         title = f"Confusion Matrix ({clf.__class__.__name__})"
         title += f"<br><sup>Y: '{self.y_col}' | Accy: {accy} | F1: {f1}</sup>"
 
         labels = {"x": "Predicted", "y": "Actual"}
         fig = px.imshow(cm, x=class_names, y=class_names, height=450, color_continuous_scale="Blues", labels=labels, text_auto=True)
         fig.update_layout(title={'text': title, 'x':0.485, 'xanchor': 'center'})
-        fig.show()
+
+        if fig_show:
+            fig.show()
 
         if img_filestem:
             fig.write_image(f"{img_filestem}.png")

@@ -27,7 +27,12 @@ class MyRandomForest(BaseClassifier):
             #... The minimum number of samples required to be at a leaf node.
             # ... A split point at any depth will only be considered if it leaves at least min_samples_leaf training samples in each of the left and right branches.
             # ... This may have the effect of smoothing the model, especially in regression.
-            "classifier__min_samples_leaf": (1, 2, 5, 10, 25, 50),
+            "classifier__min_samples_leaf": (1, #5,
+                                             10, #25,
+                                             50, #75,
+                                             90,
+                                             100, 110, #125, 150
+                                             ),
 
             # max_depth (int), default=None
             # ... The maximum depth of the tree. If None, then nodes are expanded until all leaves are pure or until all leaves contain less than min_samples_split samples.
