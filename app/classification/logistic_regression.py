@@ -25,7 +25,10 @@ class MyLogisticRegression(BaseClassifier):
             "classifier__max_iter": [#5, #15,
                                     #20,
                                     25, #30, #35,
-                                    #50, 100, 250, 500
+                                    #50,
+                                    #100, #250,
+                                    #500,
+                                    1000
                             ],
             #"classifier__solver": ["liblinear", "newton-cg", "lbfgs", "sag", "saga"],
         }

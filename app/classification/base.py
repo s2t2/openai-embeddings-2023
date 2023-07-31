@@ -8,101 +8,19 @@ from functools import cached_property
 #from pandas import Series
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import label_binarize, LabelBinarizer
-from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, roc_curve, auc, RocCurveDisplay
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import plotly.express as px
 
 
 from app.dataset import Dataset
 from app.classification import CLASSIFICATION_RESULTS_DIRPATH, save_results_json, class_labels
-#from app.classification.metrics import plot_confusion_matrix
+from app.classification.results import ClassificationResults
 
 K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
 #X_SCALE = bool(os.getenv("X_SCALE", default="false").lower() == "true")
 #SCALER_TYPE = os.getenv("SCALER_TYPE")
 
-
-
-class ClassificationResults:
-    """A helper class for reporting on classification results
-    """
-
-    def __init__(self, y_test, y_pred, class_names):
-        self.y_test = y_test
-        self.y_pred = y_pred
-
-        self.class_names = class_names #or sorted(list(set(self.y_test)))
-
-
-    @cached_property
-    def classification_report(self):
-        #if as_json:
-        #    print(classification_report(self.y_test, self.y_pred))
-        #else:
-        #    return classification_report(self.y_test, self.y_pred, output_dict=True)
-        #return classification_report(self.y_test, self.y_pred, output_dict=output_dict)
-        return classification_report(self.y_test, self.y_pred, output_dict=True)
-
-    def show_classification_report(self):
-         print(classification_report(self.y_test, self.y_pred))
-
-    @cached_property
-    def confusion_matrix(self):
-        return confusion_matrix(self.y_test, self.y_pred)
-
-    def metrics(self):
-        # WE HAVE ACCURACY FROM THE CLASSIFICATION REPORT
-        #self.results_["metrics"]["accuracy_score"] = accuracy_score(y_test, y_pred)
-
-        # binary vs multiclass classification
-        #metric_params = dict(y_true=y_test, y_pred=y_pred)
-        #if len(set(y_pred)):
-        #    # ValueError: Target is multiclass but average='binary'.
-        #    # Please choose another average setting, one of [None, 'micro', 'macro', 'weighted'].
-        #    metric_params["average"] = "..."
-        #self.results_["metrics"]["precision_score"] = precision_score(y_test, y_pred)
-        #self.results_["metrics"]["recall_score"] = recall_score(y_test, y_pred)
-        #self.results_["metrics"]["f1_score"] = f1_score(y_test, y_pred)
-        ## YEAH BUT WE WANT TO REPORT ON BOTH THE MACRO AVERAGE AND WEIGHTED AVERAGE
-        ## AND THIS INFO IS ALREADY IN THE CLASSIFICATION REPORT,
-        ## SO LET'S TAKE IT FROM THERE INSTEAD
-        pass
-
-    @cached_property
-    def accy(self):
-        return round(self.classification_report["accuracy"], 3)
-
-    @cached_property
-    def f1_macro(self):
-        return round(self.classification_report["macro avg"]["f1-score"], 3)
-
-    @cached_property
-    def f1_weighted(self):
-        return round(self.classification_report["weighted avg"]["f1-score"], 3)
-
-    @cached_property
-    def roc_auc_score(self):
-        # roc_auc_score uses average="macro" by default
-        # ... works with with numeric / boolean class labels, not string categorical class labels
-
-        if not isinstance(self.y_test.iloc[0], str):
-            return roc_auc_score(self.y_test, self.y_pred)
-        else:
-            # although we can one-hot encode categorical class labels to overcome
-            # ... ValueError: could not convert string to float: 'Anti-Trump Human'
-            y_test_encoded = label_binarize(self.y_test, classes=self.class_names)
-            y_pred_encoded = label_binarize(self.y_pred, classes=self.class_names)
-            return roc_auc_score(y_test_encoded, y_pred_encoded)
-
-    @cached_property
-    def as_json(self):
-        return {
-            "classification_report": self.classification_report,
-            "class_names": self.class_names.tolist(),
-            "confusion_matrix": self.confusion_matrix.tolist(),
-            "roc_auc_score": self.roc_auc_score
-        }
+FIG_SHOW = bool(os.getenv("FIG_SHOW", default="false").lower() == "true")
 
 
 
@@ -167,7 +85,7 @@ class BaseClassifier(ABC):
         scoring ="roc_auc_ovr" if self.n_classes > 2 else  "roc_auc"
         self.gs = GridSearchCV(estimator=pipeline, cv=self.k_folds,
             verbose=10, return_train_score=True, n_jobs=-5, # -1 means using all processors
-            scoring="roc_auc",
+            scoring=scoring, #"roc_auc",
             param_grid=self.param_grid
         )
 
@@ -220,14 +138,11 @@ class BaseClassifier(ABC):
         return dirpath
 
 
-    def plot_confusion_matrix(self, fig_show=True, fig_save=True):
-
+    def plot_confusion_matrix(self, fig_show=FIG_SHOW, fig_save=True):
         class_names = class_labels(self.y_col, self.class_names)
         cm = self.results.confusion_matrix
         accy = self.results.accy
         f1_macro = self.results.f1_macro
-        #f1_weighted = self.results.f1_weighted
-
         scaler_title = ", X Scaled" if self.x_scale else ""
         title = f"Confusion Matrix ({self.model_type}{scaler_title})"
         title += f"<br><sup>Y: '{self.y_col}' | Accy: {accy} | F-1 Macro: {f1_macro}</sup>"
