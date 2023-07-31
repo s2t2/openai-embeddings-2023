@@ -4,14 +4,18 @@ from pprint import pprint
 from abc import ABC
 from functools import cached_property
 
+#import numpy as np
+#from pandas import Series
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import label_binarize
-from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix, precision_score, recall_score, f1_score, accuracy_score
+from sklearn.preprocessing import label_binarize, LabelBinarizer
+from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, roc_curve, auc, RocCurveDisplay
+import matplotlib.pyplot as plt
 import plotly.express as px
 
+
 from app.dataset import Dataset
-from app.classification import CLASSIFICATION_RESULTS_DIRPATH, save_results_json, CLASSES_MAP
+from app.classification import CLASSIFICATION_RESULTS_DIRPATH, save_results_json, class_labels
 #from app.classification.metrics import plot_confusion_matrix
 
 K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
@@ -21,10 +25,14 @@ K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
 
 
 class ClassificationResults:
+    """A helper class for reporting on classification results
+    """
 
-    def __init__(self, y_test, y_pred):
+    def __init__(self, y_test, y_pred, class_names):
         self.y_test = y_test
         self.y_pred = y_pred
+
+        self.class_names = class_names #or sorted(list(set(self.y_test)))
 
 
     @cached_property
@@ -63,29 +71,37 @@ class ClassificationResults:
 
     @cached_property
     def accy(self):
-        return round(self.results.classification_report["accuracy"], 3)
+        return round(self.classification_report["accuracy"], 3)
 
     @cached_property
     def f1_macro(self):
-        return round(self.results.classification_report["macro avg"]["f1-score"], 3)
+        return round(self.classification_report["macro avg"]["f1-score"], 3)
 
-    def roc_auc_score(self, average="macro"):
-        # use with numeric / boolean data only, not string categorical class labels
+    @cached_property
+    def f1_weighted(self):
+        return round(self.classification_report["weighted avg"]["f1-score"], 3)
+
+    @cached_property
+    def roc_auc_score(self):
+        # roc_auc_score uses average="macro" by default
+        # ... works with with numeric / boolean class labels, not string categorical class labels
+
         if not isinstance(self.y_test.iloc[0], str):
             return roc_auc_score(self.y_test, self.y_pred)
         else:
-            breakpoint()
-            # one-hot encoded y labels
-            y_test_encoded = label_binarize(self.y_test) # classes=self.class_names
-            y_pred_encoded = label_binarize(self.y_pred) # classes=self.class_names
-            return roc_auc_score(y_test_encoded, y_pred_encoded, average=average)
+            # although we can one-hot encode categorical class labels to overcome
+            # ... ValueError: could not convert string to float: 'Anti-Trump Human'
+            y_test_encoded = label_binarize(self.y_test, classes=self.class_names)
+            y_pred_encoded = label_binarize(self.y_pred, classes=self.class_names)
+            return roc_auc_score(y_test_encoded, y_pred_encoded)
 
-    @property
+    @cached_property
     def as_json(self):
         return {
             "classification_report": self.classification_report,
+            "class_names": self.class_names.tolist(),
             "confusion_matrix": self.confusion_matrix.tolist(),
-            "roc_auc_score": self.roc_auc_score()
+            "roc_auc_score": self.roc_auc_score
         }
 
 
@@ -98,9 +114,23 @@ class BaseClassifier(ABC):
         self.x_scale = x_scale
         self.y_col = y_col
 
+        if self.x_scale:
+            self.x = self.ds.x_scaled
+        else:
+           self.x = self.ds.x
+
+        self.y = self.ds.df[self.y_col]
+        self.n_classes = len(set(self.y))
+
+        #if isinstance(y.iloc[0], str):
+        #    self.label_binarizer = LabelBinarizer()
+        #    y_encoded = self.label_binarizer.fit_transform(y)
+
         self.k_folds = k_folds
 
         # values set after training:
+        #self.label_binarizer = None # only for categorical / multiclass
+        self.class_names = None
         self.gs = None
         self.results = None
         self.results_json = {}
@@ -115,43 +145,60 @@ class BaseClassifier(ABC):
         return self.model.__class__.__name__
 
     def train_eval(self):
-        if self.x_scale:
-            x = self.ds.x_scaled
-        else:
-            x = self.ds.x
-
-        y = self.ds.df[self.y_col]
-
-        x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, test_size=0.2, random_state=99)
+        x_train, x_test, y_train, y_test = train_test_split(self.x, self.y, shuffle=True, test_size=0.2, random_state=99)
         print("X TRAIN:", x_train.shape)
         print("Y TRAIN:", y_train.shape)
         print(y_train.value_counts())
+        #if self.label_binarizer:
+        #    print(Series(self.label_binarizer.inverse_transform(y_train)).value_counts())
+        #else:
+        #    print(y_train.value_counts())
 
         pipeline_steps = [("classifier", self.model)]
+        #pipeline_steps = []
+        #if isinstance(y.iloc[0], str):
+        #    # one-hot encoding for categorical labels
+        #    label_binarizer = LabelBinarizer()
+        #    pipeline_steps.append(("label_binarizer", label_binarizer))
+        #    #> TypeError: LabelBinarizer.fit_transform() takes 2 positional arguments but 3 were given
+        #pipeline_steps.append(("classifier", self.model))
+
         pipeline = Pipeline(steps=pipeline_steps)
+        scoring ="roc_auc_ovr" if self.n_classes > 2 else  "roc_auc"
         self.gs = GridSearchCV(estimator=pipeline, cv=self.k_folds,
             verbose=10, return_train_score=True, n_jobs=-5, # -1 means using all processors
             scoring="roc_auc",
             param_grid=self.param_grid
         )
 
+        print("-----------------")
+        print("TRAINING...")
+
         self.gs.fit(x_train, y_train)
 
         print("-----------------")
         print("BEST PARAMS:", self.gs.best_params_)
         print("BEST SCORE:", self.gs.best_score_)
+        clf = self.gs.best_estimator_.named_steps["classifier"]
+        self.class_names = clf.classes_
+
+        #print("COEFS:")
+        #coefs = Series(best_est.coef_[0], index=features).sort_values(ascending=False)
+
+        #breakpoint()
 
         print("-----------------")
         print("EVALUATION...")
 
         y_pred = self.gs.predict(x_test)
+        #y_pred_proba = self.gs.predict_proba(x_test)
 
-        self.results = ClassificationResults(y_test, y_pred) # class_names=self.class_names
+        self.results = ClassificationResults(y_test, y_pred, self.class_names)
         self.results.show_classification_report()
 
         self.results_json = self.results.as_json
         self.results_json["grid_search"] = {
-            "sclaler_type": None,
+            "x_scaled": self.x_scale,
             "model_type": self.model_type, #self.gs.best_estimator_.named_steps["classifier"].__class__.__name__,
             "k_folds": self.k_folds,
             "param_grid": self.param_grid,
@@ -174,33 +221,15 @@ class BaseClassifier(ABC):
 
 
     def plot_confusion_matrix(self, fig_show=True, fig_save=True):
-        """Params
 
-            cm : an sklearn confusion matrix result
-                ... Confusion matrix whose i-th row and j-th column entry
-                ... indicates the number of samples with true label being i-th class and predicted label being j-th class.
-                ... Interpretation: actual value on rows, predicted value on cols
-
-            clf : an sklearn classifier (after it has been trained)
-
-            y_col : the column name of y values (for plot labeling purposes)
-
-            image_filestem : the directory path and file name (excluding file extension)
-        """
-
-        clf = self.gs.best_estimator_.named_steps["classifier"]
-        class_names = clf.classes_
-        # apply custom labels for binary values, to make chart easier to read
-        if self.y_col in CLASSES_MAP.keys():
-            classes_map = CLASSES_MAP[self.y_col]
-            class_names = [classes_map[val] for val in class_names]
-
+        class_names = class_labels(self.y_col, self.class_names)
         cm = self.results.confusion_matrix
-        accy = round(self.results.classification_report["accuracy"], 3)
-        f1_macro = round(self.results.classification_report["macro avg"]["f1-score"], 3)
-        #f1_weighted = round(self.results.classification_report["weighted avg"]["f1-score"], 3)
+        accy = self.results.accy
+        f1_macro = self.results.f1_macro
+        #f1_weighted = self.results.f1_weighted
 
-        title = f"Confusion Matrix ({self.model_type})"
+        scaler_title = ", X Scaled" if self.x_scale else ""
+        title = f"Confusion Matrix ({self.model_type}{scaler_title})"
         title += f"<br><sup>Y: '{self.y_col}' | Accy: {accy} | F-1 Macro: {f1_macro}</sup>"
 
         fig = px.imshow(cm, x=class_names, y=class_names, height=450,
@@ -215,3 +244,43 @@ class BaseClassifier(ABC):
         if fig_save:
             fig.write_image(os.path.join(self.results_dirpath, "confusion.png"))
             fig.write_html(os.path.join(self.results_dirpath, "confusion.html"))
+
+
+
+    #def plot_auc(self, y_test, y_pred):
+    #    n_classes = len(set(y_test))
+    #    if n_classes == 2:
+    #        self.plot_auc_binary(y_test, y_pred)
+    #    elif n_classes > 2:
+    #        self.plot_auc_multiclass(y_test, y_pred)
+
+    #def plot_auc(self):
+    #    if self.n_classes == 2:
+    #        self.results.plot_auc_binary()
+
+
+    #def plot_auc_binary(self, title="Receiver operating characteristic"):
+    #    """Plots the ROC characteristic and the AUC Score
+    #
+    #        See: https://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html#sphx-glr-auto-examples-model-selection-plot-roc-py
+    #
+    #    """
+    #
+    #    fpr, tpr, thresholds = roc_curve(self.y_test, self.y_pred)
+    #    score = auc(fpr, tpr)
+    #
+    #    fig, ax = plt.subplots(figsize=(10,10))
+    #    lw = 2
+    #    title = f"ROC curve (area = {round(score, 3)})"
+    #    ax.plot(fpr, tpr, color="darkorange", lw=lw, label=title)
+    #    ax.plot([0, 1], [0, 1], color="navy", lw=lw, linestyle="--")
+    #    ax.set_xlim([0.0, 1.0])
+    #    ax.set_ylim([0.0, 1.0])
+    #    plt.xlabel("False Positive Rate")
+    #    plt.ylabel("True Positive Rate")
+    #    plt.title(title)
+    #    plt.legend(loc="lower right")
+    #    plt.show()
+    #
+    #    #if fig_save:
+    #    #    plt.savefig()

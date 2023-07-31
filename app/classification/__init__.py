@@ -23,6 +23,16 @@ CLASSES_MAP = {
 }
 
 
+def class_labels(y_col, class_names):
+    # apply custom labels for binary values, to make chart easier to read
+    # keep order the same as they were passed in
+    # basically convert from classifier.classes_
+    if y_col in CLASSES_MAP.keys():
+        classes_map = CLASSES_MAP[y_col]
+        class_names = [classes_map[val] for val in class_names]
+    return class_names
+
+
 def save_results_json(results, json_filepath):
     with open(json_filepath, "w") as json_file:
         json.dump(results, json_file, indent=4)

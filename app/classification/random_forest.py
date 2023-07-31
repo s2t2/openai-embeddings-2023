@@ -2,7 +2,6 @@
 from sklearn.tree import DecisionTreeClassifier
 
 from app.dataset import Dataset
-from app.classification import Y_COLS
 from app.classification.base import BaseClassifier
 
 class MyRandomForest(BaseClassifier):
@@ -52,6 +51,8 @@ class MyRandomForest(BaseClassifier):
 
 
 if __name__ == "__main__":
+
+    from app.classification import Y_COLS
 
     ds = Dataset()
 
