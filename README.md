@@ -48,5 +48,5 @@ Perform machine learning and other analyses on the data:
 ## Testing
 
 ```sh
-pytest
+pytest --disable-warnings
 ```
