@@ -16,6 +16,10 @@ kaleido # for exporting plotly images to png / html
 scikit-learn
 #category_encoders
 #tensorflow
+# classification:
+xgboost
+#lightgbm
+# clustering:
 umap-learn
 kmodes
 hdbscan

@@ -13,10 +13,28 @@ python -m app.classification.logistic_regression
 # K_FOLDS=10 python -m app.classification.logistic_regression
 ```
 
+#### Decision Tree
+
+```sh
+python -m app.classification.decision_tree
+
+# K_FOLDS=10 python -m app.classification.decision_tree
+```
+
 #### Random Forest
 
 ```sh
 python -m app.classification.random_forest
 
 # K_FOLDS=10 python -m app.classification.random_forest
+```
+
+
+#### XGBoost
+
+
+```sh
+python -m app.classification.xgboost
+
+# K_FOLDS=10 python -m app.classification.xgboost
 ```

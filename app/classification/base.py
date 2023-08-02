@@ -5,7 +5,7 @@ from abc import ABC
 from functools import cached_property
 
 #import numpy as np
-#from pandas import Series
+from pandas import Series
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
 #import matplotlib.pyplot as plt
