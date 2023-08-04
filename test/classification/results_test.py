@@ -24,16 +24,21 @@ def results_ok(pipeline):
 
 
 def test_logistic_regression_binary(ds):
-    my_lr = MyLogisticRegression(ds=ds, y_col="is_bot", param_grid=logistic_params_grid)
-    assert my_lr.n_classes == 2
-    my_lr.train_eval()
-    results_ok(my_lr)
+    pipeline = MyLogisticRegression(ds=ds, y_col="is_bot", param_grid=logistic_params_grid)
+    assert pipeline.n_classes == 2
+    pipeline.train_eval()
+    results_ok(pipeline)
+
+    pipeline.plot_roc_curve(fig_save=False, fig_show=False)
+
+
+
 
 def test_logistic_regression_multiclass(ds):
-    my_lr = MyLogisticRegression(ds=ds, y_col="fourway_label", param_grid=logistic_params_grid)
-    assert my_lr.n_classes == 4
-    my_lr.train_eval()
-    results_ok(my_lr)
+    pipeline = MyLogisticRegression(ds=ds, y_col="fourway_label", param_grid=logistic_params_grid)
+    assert pipeline.n_classes == 4
+    pipeline.train_eval()
+    results_ok(pipeline)
 
 
 
