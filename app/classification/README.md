@@ -10,23 +10,19 @@ Perform classification on the fully dimensional data. Binary classification on b
 ```sh
 python -m app.classification.logistic_regression
 
-# K_FOLDS=10 python -m app.classification.logistic_regression
+FIG_SHOW=true FIG_SAVE=true python -m app.classification.logistic_regression
 ```
 
 #### Decision Tree
 
 ```sh
 python -m app.classification.decision_tree
-
-# K_FOLDS=10 python -m app.classification.decision_tree
 ```
 
 #### Random Forest
 
 ```sh
 python -m app.classification.random_forest
-
-# K_FOLDS=10 python -m app.classification.random_forest
 ```
 
 
@@ -35,6 +31,4 @@ python -m app.classification.random_forest
 
 ```sh
 python -m app.classification.xgboost
-
-# K_FOLDS=10 python -m app.classification.xgboost
 ```

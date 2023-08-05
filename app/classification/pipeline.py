@@ -8,7 +8,6 @@ from functools import cached_property
 from pandas import Series, DataFrame
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import roc_curve, auc
 #import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objs as go
@@ -22,10 +21,12 @@ K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
 #SCALER_TYPE = os.getenv("SCALER_TYPE")
 
 FIG_SHOW = bool(os.getenv("FIG_SHOW", default="false").lower() == "true")
+FIG_SAVE = bool(os.getenv("FIG_SAVE", default="true").lower() == "true")
 
 
 
-class BaseClassifier(ABC):
+class ClassificationPipeline(ABC):
+    """Right now this class supports binary classification only."""
 
     def __init__(self, ds=None, x_scale=False, y_col="is_bot", param_grid=None, k_folds=K_FOLDS):
 
@@ -62,6 +63,14 @@ class BaseClassifier(ABC):
     @property
     def model_type(self):
         return self.model.__class__.__name__
+
+
+    def perform(self):
+        self.train_eval()
+        self.save_results()
+        self.plot_confusion_matrix()
+        self.plot_roc_curve()
+
 
     def train_eval(self):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.x, self.y, shuffle=True, test_size=0.2, random_state=99)
@@ -111,9 +120,9 @@ class BaseClassifier(ABC):
         print("EVALUATION...")
 
         self.y_pred = self.gs.predict(self.x_test)
-        #y_pred_proba = self.gs.predict_proba(x_test)
+        self.y_pred_proba = self.gs.predict_proba(self.x_test)
 
-        self.results = ClassificationResults(self.y_test, self.y_pred, self.class_names)
+        self.results = ClassificationResults(self.y_test, self.y_pred, self.y_pred_proba, self.class_names)
         self.results.show_classification_report()
 
         self.results_json = self.results.as_json
@@ -140,7 +149,7 @@ class BaseClassifier(ABC):
         return dirpath
 
 
-    def plot_confusion_matrix(self, fig_show=FIG_SHOW, fig_save=True):
+    def plot_confusion_matrix(self, fig_show=FIG_SHOW, fig_save=FIG_SAVE):
         cm = self.results.confusion_matrix
         accy = self.results.accy
         f1_macro = self.results.f1_macro
@@ -164,16 +173,27 @@ class BaseClassifier(ABC):
 
 
 
-
-    def plot_roc_curve(self, fig_save=False, fig_show=False, height=500):
+    def plot_roc_curve(self, fig_show=FIG_SHOW, fig_save=FIG_SAVE, height=500):
         """Plots the ROC characteristic and the AUC Score
+
+            For binary classification.
 
             See: https://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html#sphx-glr-auto-examples-model-selection-plot-roc-py
 
         """
 
-        fpr, tpr, thresholds = roc_curve(self.y_test, self.y_pred)
-        score = auc(fpr, tpr)
+        # roc_curve wants a singe column, but passing it preds leads to only three values coming back
+        # ... so we want to use the proba instead (specifically the positive class)
+        # proba is two column, with score for each class, so if class labels are [False, True],
+        # ... then positive class is in the second column, and we reference with proba[:1]
+        # ... https://stackoverflow.com/a/67754984/670433
+        #y_pred_proba_pos = self.y_pred_proba[:,1]
+        #fpr, tpr, thresholds = roc_curve(self.y_test, y_pred_proba_pos)
+        #score = auc(fpr, tpr)
+
+        fpr, tpr, _ = self.results.roc_curve
+        score = self.results.roc_curve_auc
+        #score_check = self.results.roc_auc_score_proba
 
         scaler_title = "| X Scaled" if self.x_scale else ""
         #title = f"ROC Curve ({self.model_type}{scaler_title})"
@@ -213,71 +233,11 @@ class BaseClassifier(ABC):
 
         fig = go.Figure(data=[trace_roc, trace_diag], layout=layout)
 
-        if True: #fig_show:
+        if fig_show:
             fig.show()
 
         if fig_save:
             fig.write_image(os.path.join(self.results_dirpath, "roc_curve.png"))
             fig.write_html(os.path.join(self.results_dirpath, "roc_curve.html"))
 
-
-    #def plot_roc_curve(self, fig_show=FIG_SHOW, fig_save=True):
-    #    fpr, tpr, thresholds = roc_curve(self.y_test, self.y_pred)
-#
-    #    # this isn't right. let's make a left and right axis
-    #    #const = [0, 0.5, 1] # TODO
-    #    #chart_df = DataFrame({"fpr": fpr, "tpr":tpr, "const":const})
-    #    #fig = px.line(chart_df, x="fpr", y=["tpr", "const"])
-#
-    #    chart_df = DataFrame({"fpr": fpr, "tpr":tpr})
-    #    fig = px.line(chart_df, x="fpr", y="tpr")
-#
-    #    if fig_show:
-    #        fig.show()
-#
-    #    if fig_save:
-    #        fig.write_image(os.path.join(self.results_dirpath, "roc_curve.png"))
-    #        fig.write_html(os.path.join(self.results_dirpath, "roc_curve.html"))
-
-
-
-
-    #def plot_auc(self, y_test, y_pred):
-    #    n_classes = len(set(y_test))
-    #    if n_classes == 2:
-    #        self.plot_auc_binary(y_test, y_pred)
-    #    elif n_classes > 2:
-    #        self.plot_auc_multiclass(y_test, y_pred)
-
-    #def plot_auc(self):
-    #    if self.n_classes == 2:
-    #        self.results.plot_auc_binary()
-
-
-
-
-    #def plot_auc_binary(self, title="Receiver operating characteristic"):
-    #    """Plots the ROC characteristic and the AUC Score
-    #
-    #        See: https://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html#sphx-glr-auto-examples-model-selection-plot-roc-py
-    #
-    #    """
-    #
-    #    fpr, tpr, thresholds = roc_curve(self.y_test, self.y_pred)
-    #    score = auc(fpr, tpr)
-    #
-    #    fig, ax = plt.subplots(figsize=(10,10))
-    #    lw = 2
-    #    title = f"ROC curve (area = {round(score, 3)})"
-    #    ax.plot(fpr, tpr, color="darkorange", lw=lw, label=title)
-    #    ax.plot([0, 1], [0, 1], color="navy", lw=lw, linestyle="--")
-    #    ax.set_xlim([0.0, 1.0])
-    #    ax.set_ylim([0.0, 1.0])
-    #    plt.xlabel("False Positive Rate")
-    #    plt.ylabel("True Positive Rate")
-    #    plt.title(title)
-    #    plt.legend(loc="lower right")
-    #    plt.show()
-    #
-    #    #if fig_save:
-    #    #    plt.savefig()
+        return fig

@@ -41,6 +41,8 @@
         ]
     ],
     "roc_auc_score": 0.7132664613116394,
+    "roc_auc_score_proba": 0.8787735182964627,
+    "roc_curve_auc": 0.8787735182964627,
     "grid_search": {
         "x_scaled": false,
         "model_type": "LogisticRegression",

@@ -2,10 +2,9 @@
 # https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
 from sklearn.linear_model import LogisticRegression
 
-from app.dataset import Dataset
-from app.classification.base import BaseClassifier
+from app.classification.pipeline import ClassificationPipeline
 
-class MyLogisticRegression(BaseClassifier):
+class LogisticRegressionPipeline(ClassificationPipeline):
 
     def __init__(self, ds=None, y_col="is_bot", param_grid=None):
         super().__init__(ds=ds, y_col=y_col, param_grid=param_grid)
@@ -37,15 +36,12 @@ class MyLogisticRegression(BaseClassifier):
 
 if __name__ == "__main__":
 
-    from app.classification import Y_COLS
+    from app.classification import Y_COLS_BINARY
+    from app.dataset import Dataset
 
     ds = Dataset()
 
-    for y_col in Y_COLS:
+    for y_col in Y_COLS_BINARY:
 
-        clf = MyLogisticRegression(ds=ds, y_col=y_col)
-
-        clf.train_eval()
-        clf.save_results()
-        clf.plot_confusion_matrix()
-        #clf.plot_auc()
+        pipeline = LogisticRegressionPipeline(ds=ds, y_col=y_col)
+        pipeline.perform()

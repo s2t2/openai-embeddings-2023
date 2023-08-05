@@ -1,10 +1,9 @@
 # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
 from sklearn.tree import DecisionTreeClassifier
 
-from app.dataset import Dataset
-from app.classification.base import BaseClassifier
+from app.classification.pipeline import ClassificationPipeline
 
-class MyDecisionTree(BaseClassifier):
+class DecisionTreePipeline(ClassificationPipeline):
 
     def __init__(self, ds=None, y_col="is_bot", param_grid=None):
         super().__init__(ds=ds, y_col=y_col, param_grid=param_grid)
@@ -54,14 +53,12 @@ class MyDecisionTree(BaseClassifier):
 
 if __name__ == "__main__":
 
-    from app.classification import Y_COLS
+    from app.classification import Y_COLS_BINARY
+    from app.dataset import Dataset
 
     ds = Dataset()
 
-    for y_col in Y_COLS:
+    for y_col in Y_COLS_BINARY:
 
-        clf = MyDecisionTree(ds=ds, y_col=y_col)
-
-        clf.train_eval()
-
-        clf.save_results()
+        pipeline = DecisionTreePipeline(ds=ds, y_col=y_col)
+        pipeline.perform()
