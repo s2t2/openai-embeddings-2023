@@ -62,5 +62,9 @@ if __name__ == "__main__":
 
     for y_col in Y_COLS_BINARY:
 
-        pipeline = RandomForestPipeline(ds=ds, y_col=y_col)
+        pipeline = RandomForestPipeline(ds=ds, y_col=y_col, param_grid={
+            "classifier__criterion": ["gini"],
+            "classifier__min_samples_leaf": [3, 5, 8],
+            "classifier__n_estimators": [250, 500, 1000],
+        })
         pipeline.perform()

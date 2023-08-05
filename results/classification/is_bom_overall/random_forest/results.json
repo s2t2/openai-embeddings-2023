@@ -41,35 +41,32 @@
         ]
     ],
     "roc_auc_score": 0.4995610184372256,
+    "roc_auc_score_proba": 0.7547860696517413,
+    "roc_curve_auc": 0.7547860696517413,
     "grid_search": {
         "x_scaled": false,
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {
-            "classifier__n_estimators": [
-                50,
-                100,
-                150,
-                250
-            ],
             "classifier__criterion": [
-                "gini",
-                "log_loss"
+                "gini"
             ],
             "classifier__min_samples_leaf": [
-                1,
+                3,
                 5,
-                10,
-                25,
-                50,
-                100
+                8
+            ],
+            "classifier__n_estimators": [
+                250,
+                500,
+                1000
             ]
         },
         "best_params": {
             "classifier__criterion": "gini",
-            "classifier__min_samples_leaf": 25,
-            "classifier__n_estimators": 250
+            "classifier__min_samples_leaf": 8,
+            "classifier__n_estimators": 1000
         },
-        "best_score": 0.7273515900787881
+        "best_score": 0.7292263597204633
     }
 }

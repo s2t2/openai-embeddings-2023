@@ -145,6 +145,7 @@ class ClassificationPipeline(ABC):
     @cached_property
     def results_dirpath(self):
         dirpath = os.path.join(CLASSIFICATION_RESULTS_DIRPATH, self.y_col, self.model_dirname)
+        #dirpath = os.path.join(CLASSIFICATION_RESULTS_DIRPATH, self.model_dirname, self.y_col)
         os.makedirs(dirpath, exist_ok=True)
         return dirpath
 

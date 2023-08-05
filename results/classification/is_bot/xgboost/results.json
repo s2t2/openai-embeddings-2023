@@ -41,6 +41,8 @@
         ]
     ],
     "roc_auc_score": 0.9555073692448155,
+    "roc_auc_score_proba": 0.9761912525542367,
+    "roc_curve_auc": 0.9761912525542367,
     "grid_search": {
         "x_scaled": false,
         "model_type": "XGBClassifier",
