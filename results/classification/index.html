@@ -91,6 +91,13 @@
         const bomOverallTab = document.getElementById("bom-overall")
         const bomAstroTab = document.getElementById("bom-astroturf")
 
+        const Y_LABELS = {
+            "is_bot": "Bot Status",
+            "opinion_community": "Opinion Community",
+            "is_bom_overall": "Botometer Overall Score",
+            "is_bom_astroturf": "Botometer Astroturf Score",
+        }
+
         const MODELS_MAP = {
             "Logistic Regression": "logistic_regression",
             "Random Forest": "random_forest",
@@ -176,9 +183,11 @@
         class Page extends React.Component {
             render() {
                 this.y_col = this.props.y_col || "is_bot"
+                this.y_label = Y_LABELS[this.y_col]
 
                 return (
                     <div>
+                        <h4 style={{marginTop:"15px", marginBottom:"15px"}}>{this.y_label}</h4>
                         <ClassificationResults y_col={this.y_col} model_name="Logistic Regression"/>
                         <ClassificationResults y_col={this.y_col} model_name="Random Forest"/>
                         <ClassificationResults y_col={this.y_col} model_name="XGBoost"/>
