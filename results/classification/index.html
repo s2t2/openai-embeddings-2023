@@ -98,15 +98,36 @@
         }
 
         class ClassificationResults extends React.Component {
+
+            // CORS ISSUE WITH LOCAL FILES
+            //loadJSONData(jsonFilepath) {
+            //    fetch(jsonFilepath)
+            //        .then(data => {
+            //            //this.setState({ results: data.default }); // Update state with loaded JSON data
+            //            console.log(data)
+            //            return data.default
+            //        })
+            //        .catch(error => {
+            //            console.error('Error loading JSON data:', error);
+            //            return null
+            //        });
+            //}
+
             render() {
                 this.y_col = this.props.y_col || "is_bot"
                 this.model_dirname = MODELS_MAP[this.props.model_name]
                 this.confusion_matrix_filepath = `./${this.y_col}/${this.model_dirname}/confusion.png`
                 this.roc_curve_filepath = `./${this.y_col}/${this.model_dirname}/roc_curve.png`
 
+                this.results_filepath = `./${this.y_col}/${this.model_dirname}/results.json`
+                //this.results = this.loadJSONData(this.results_filepath)
+                //this.results = this.state.results
+
                 return (
                     <div class="classification-results">
                         <h5>{this.props.model_name}</h5>
+
+                        <a href={this.results_filepath}>Results JSON</a>
 
                         <div class="row row-cols-2">
                             <div class="card col" style={{width:"26rem", margin:"20px"}}>
@@ -120,6 +141,15 @@
                     </div>
                 )
             }
+
+
+
+
+
+
+
+
+
         }
 
         // Create a function to wrap up your component
