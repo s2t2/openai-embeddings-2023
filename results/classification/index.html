@@ -86,6 +86,10 @@
     <script type="text/babel">
 
         const rootElement = document.getElementById('root')
+        const isBotTab = document.getElementById("is-bot")
+        const opinionTab = document.getElementById("opinion-community")
+        const bomOverallTab = document.getElementById("bom-overall")
+        const bomAstroTab = document.getElementById("bom-astroturf")
 
         const MODELS_MAP = {
             "Logistic Regression": "logistic_regression",
@@ -95,7 +99,7 @@
 
         class ClassificationResults extends React.Component {
             render() {
-                this.y_col = "is_bot"
+                this.y_col = this.props.y_col || "is_bot"
                 this.model_dirname = MODELS_MAP[this.props.model_name]
                 this.confusion_matrix_filepath = `./${this.y_col}/${this.model_dirname}/confusion.png`
                 this.roc_curve_filepath = `./${this.y_col}/${this.model_dirname}/roc_curve.png`
@@ -119,17 +123,36 @@
         }
 
         // Create a function to wrap up your component
-        function App(){
-            return(
-                <div>
-                    <ClassificationResults model_name="Logistic Regression"/>
-                    <ClassificationResults model_name="Random Forest"/>
-                    <ClassificationResults model_name="XGBoost"/>
-                </div>
-            )
+        //function App(y_col){
+        //    return(
+        //        <div>
+        //            <ClassificationResults model_name="Logistic Regression"/>
+        //            <ClassificationResults model_name="Random Forest"/>
+        //            <ClassificationResults model_name="XGBoost"/>
+        //        </div>
+        //    )
+        //}
+
+        //ReactDOM.render(<App />, rootElement)
+
+        class Page extends React.Component {
+            render() {
+                this.y_col = this.props.y_col || "is_bot"
+
+                return (
+                    <div>
+                        <ClassificationResults y_col={this.y_col} model_name="Logistic Regression"/>
+                        <ClassificationResults y_col={this.y_col} model_name="Random Forest"/>
+                        <ClassificationResults y_col={this.y_col} model_name="XGBoost"/>
+                    </div>
+                )
+            }
         }
 
-        ReactDOM.render(<App />, rootElement)
+        ReactDOM.render(<Page y_col="is_bot"/>, isBotTab)
+        ReactDOM.render(<Page y_col="opinion_community"/>, opinionTab)
+        ReactDOM.render(<Page y_col="is_bom_overall"/>, bomOverallTab)
+        ReactDOM.render(<Page y_col="is_bom_astroturf"/>, bomAstroTab)
     </script>
 </body>
 </html>
