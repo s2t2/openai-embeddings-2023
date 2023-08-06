@@ -150,7 +150,7 @@ class ClassificationPipeline(ABC):
         return dirpath
 
 
-    def plot_confusion_matrix(self, fig_show=FIG_SHOW, fig_save=FIG_SAVE):
+    def plot_confusion_matrix(self, fig_show=FIG_SHOW, fig_save=FIG_SAVE, showscale=False):
         cm = self.results.confusion_matrix
         accy = self.results.accy
         f1_macro = self.results.f1_macro
@@ -163,6 +163,7 @@ class ClassificationPipeline(ABC):
                         color_continuous_scale="Blues", text_auto=True,
         )
         fig.update_layout(title={'text': title, 'x':0.485, 'xanchor': 'center'})
+        fig.update_coloraxes(showscale=showscale) # consider removing the color scale from the image
 
         if fig_show:
             fig.show()
@@ -196,10 +197,9 @@ class ClassificationPipeline(ABC):
         score = self.results.roc_curve_auc
         #score_check = self.results.roc_auc_score_proba
 
-        scaler_title = "| X Scaled" if self.x_scale else ""
-        #title = f"ROC Curve ({self.model_type}{scaler_title})"
-        title = "Receiver Operating Characteristic"
-        title += f"<br><sup>Y: '{self.y_col}' | Model: {self.model_type} {scaler_title}</sup>"
+        scaler_title = ", X Scaled" if self.x_scale else ""
+        title = f"ROC Curve ({self.model_type}{scaler_title})"
+        title += f"<br><sup>Y: '{self.y_col}' | AUC: {round(score, 2)}</sup>"
 
         #roc_title = f"Receiver operating characteristic"
         #roc_title = f"Receiver operating characteristic (AUC = {round(score, 3)})"

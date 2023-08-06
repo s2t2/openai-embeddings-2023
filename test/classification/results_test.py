@@ -43,7 +43,8 @@ def test_logistic_regression_binary(ds):
     assert pipeline.n_classes == 2
     pipeline.train_eval()
     results_ok(pipeline)
-    #pipeline.plot_roc_curve(fig_save=False, fig_show=False)
+    pipeline.plot_confusion_matrix(fig_save=False, fig_show=False)
+    pipeline.plot_roc_curve(fig_save=False, fig_show=False)
 
 
 def test_random_forest_binary(ds):
