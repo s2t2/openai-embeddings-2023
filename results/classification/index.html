@@ -54,19 +54,19 @@
 
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="is-bot" role="tabpanel" aria-labelledby="is-bot-tab">
-                <p>Bot Status</p>
+                <h4>Bot Status</h4>
             </div>
 
             <div class="tab-pane fade show" id="opinion-community" role="tabpanel" aria-labelledby="opinion-tab">
-                <p>Opinion Community</p>
+                <h4>Opinion Community</h4>
             </div>
 
             <div class="tab-pane fade show" id="bom-overall" role="tabpanel" aria-labelledby="bom-overall-tab">
-                <p>Botometer Overall</p>
+                <h4>Botometer Overall</h4>
             </div>
 
             <div class="tab-pane fade show" id="bom-astroturf" role="tabpanel" aria-labelledby="bom-astroturf-tab">
-                <p>Botometer Astroturf</p>
+                <h4>Botometer Astroturf</h4>
             </div>
         </div>
 
@@ -87,15 +87,20 @@
 
         const rootElement = document.getElementById('root')
 
-        class ShoppingList extends React.Component {
+        class ClassificationResults extends React.Component {
             render() {
+                this.y_col = "is_bot"
+
                 return (
-                    <div className="shopping-list">
-                        <h1>Shopping List for {this.props.name}</h1>
+                    <div className="classification-results">
+                        <h5>{this.props.model_name}</h5>
                         <ul>
-                            <li>1</li>
-                            <li>2</li>
-                            <li>3</li>
+                            <li>
+                                <img src={"./is_bot/logistic_regression/confusion.png"} alt="Confusion Matrix"/>
+                            </li>
+                            <li>
+                                <img src={"./is_bot/logistic_regression/roc_curve.png"} alt="ROC Curve"/>
+                            </li>
                         </ul>
                     </div>
                 )
@@ -106,7 +111,9 @@
         function App(){
             return(
                 <div>
-                    <ShoppingList name="My Name"/>
+                    <ClassificationResults model_name="Logistic Regression"/>
+                    <ClassificationResults model_name="Decision Tree"/>
+                    <ClassificationResults model_name="XGBoost"/>
                 </div>
             )
         }
