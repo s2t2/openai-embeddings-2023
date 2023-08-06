@@ -10,6 +10,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- BOOTSTRAP ICONS: https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- REACT.JS
+        https://dev.to/luispa/lets-try-react-without-nodejs-3a7
+        todo: upgrade to react@17
+    -->
+    <script type="application/javascript" src="https://unpkg.com/react@16.0.0/umd/react.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
 </head>
 <body>
     <div class="container">
@@ -62,6 +70,11 @@
             </div>
         </div>
 
+
+        <hr>
+        <div id="root"></div>
+        <hr>
+
         <footer>
             <a href="https://github.com/s2t2/openai-embeddings-2023">source code</a>
         </footer>
@@ -70,7 +83,35 @@
     <!-- BOOTSTRAP JS https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
+    <script type="text/babel">
 
+        const rootElement = document.getElementById('root')
 
+        class ShoppingList extends React.Component {
+            render() {
+                return (
+                    <div className="shopping-list">
+                        <h1>Shopping List for {this.props.name}</h1>
+                        <ul>
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                        </ul>
+                    </div>
+                )
+            }
+        }
+
+        // Create a function to wrap up your component
+        function App(){
+            return(
+                <div>
+                    <ShoppingList name="My Name"/>
+                </div>
+            )
+        }
+
+        ReactDOM.render(<App />, rootElement)
+    </script>
 </body>
 </html>
