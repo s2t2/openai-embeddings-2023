@@ -87,21 +87,32 @@
 
         const rootElement = document.getElementById('root')
 
+        const MODELS_MAP = {
+            "Logistic Regression": "logistic_regression",
+            "Random Forest": "random_forest",
+            "XGBoost": "xgboost",
+        }
+
         class ClassificationResults extends React.Component {
             render() {
                 this.y_col = "is_bot"
+                this.model_dirname = MODELS_MAP[this.props.model_name]
+                this.confusion_matrix_filepath = `./${this.y_col}/${this.model_dirname}/confusion.png`
+                this.roc_curve_filepath = `./${this.y_col}/${this.model_dirname}/roc_curve.png`
 
                 return (
-                    <div className="classification-results">
+                    <div class="classification-results">
                         <h5>{this.props.model_name}</h5>
-                        <ul>
-                            <li>
-                                <img src={"./is_bot/logistic_regression/confusion.png"} alt="Confusion Matrix"/>
-                            </li>
-                            <li>
-                                <img src={"./is_bot/logistic_regression/roc_curve.png"} alt="ROC Curve"/>
-                            </li>
-                        </ul>
+
+                        <div class="row row-cols-2">
+                            <div class="card col" style={{width:"26rem", margin:"20px"}}>
+                                <img src={this.roc_curve_filepath} alt="ROC Curve"/>
+                            </div>
+
+                            <div class="card col" style={{width:"36rem", margin:"20px"}}>
+                                <img src={this.confusion_matrix_filepath} alt="Confusion Matrix"/>
+                            </div>
+                        </div>
                     </div>
                 )
             }
@@ -112,7 +123,7 @@
             return(
                 <div>
                     <ClassificationResults model_name="Logistic Regression"/>
-                    <ClassificationResults model_name="Decision Tree"/>
+                    <ClassificationResults model_name="Random Forest"/>
                     <ClassificationResults model_name="XGBoost"/>
                 </div>
             )
