@@ -17,9 +17,83 @@
 
         <p class="lead">Can ChatGPT help detect Twitter bots, based on their tweet content?</h2>
 
-        <a href="results/reduction/index.html"><h3>Dimensionality Reduction Results</h3></a>
+        <h3>Dimensionality Reduction Results</h3>
 
-        <a href="results/classification/index.html"><h3>Classification Results</h3></a>
+        <!--select name="track_length" id="track-length-selector">
+            <option value="3">3 second tracks</option>
+            <option value="30">30 second tracks</option>
+        </select>
+
+        <select name="n_mfcc" id="n-mfcc-selector">
+            <option value="13">13 MFCCs</option>
+        </select>
+
+        <select name="reduction_method" id="reduction-method-selector">
+            <option value="pca">PCA</option>
+            <option value="tsne">T-SNE</option>
+            <option value="umap">UMAP</option>
+        </select>
+
+        <select name="n_components" id="n-components-selector">
+            <option value="2">2 components</option>
+            <option value="3">3 components</option>
+        </select-->
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-top: 30px; margin-bottom: 15px;">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                    Two Components
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                    Three Components
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+
+                <div class="table-responsive">
+                    <table class="table" id="results-table-2">
+                        <thead>
+                            <tr>
+                                <th>Num Components</th>
+                                <th>Reduction Method</th>
+                                <th>Embeddings</th>
+                                <th>Centroids</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+
+                <div class="table-responsive">
+                    <table class="table" id="results-table-3">
+                        <thead>
+                            <tr>
+                                <th>Num Components</th>
+                                <th>Reduction Method</th>
+                                <th>Embeddings</th>
+                                <th>Centroids</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+
 
         <footer>
             <a href="https://github.com/s2t2/openai-embeddings-2023">source code</a>
@@ -67,14 +141,14 @@
             var embeddingsCell = document.createElement("td")
             //embeddingsCell.textContent = "results/____.html";
             var embeddingsLink = document.createElement("a")
-            embeddingsLink.href = `results/reduction/${groupby}/${reduction_method}_${n_components}.html`
+            embeddingsLink.href = `${groupby}/${reduction_method}_${n_components}.html`
             embeddingsLink.textContent = `${groupsMap[groupby]} Embeddings`
             embeddingsCell.appendChild(embeddingsLink)
             row.appendChild(embeddingsCell)
 
             var centroidsCell = document.createElement("td")
             var centroidsLink = document.createElement("a")
-            centroidsLink.href = `results/reduction/${groupby}/${reduction_method}_${n_components}_centroids.html`
+            centroidsLink.href = `${groupby}/${reduction_method}_${n_components}_centroids.html`
             centroidsLink.textContent = `${groupsMap[groupby]} Centroids`
             centroidsCell.appendChild(centroidsLink)
             row.appendChild(centroidsCell)

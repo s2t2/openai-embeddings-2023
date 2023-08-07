@@ -36,81 +36,17 @@ Demonstrate ability to load the dataset:
 python -m app.dataset
 ```
 
-### Dimensionality Reduction
+### Data Analysis
 
-Perform PCA (or another reduction method) using specified number of components:
+Perform machine learning and other analyses on the data:
 
-```sh
-python -m app.reduction.pipeline
+  + [Dimensionality Reduction](app/reduction/README.md)
+  + [Clustering](app/clustering/README.md)
+  + [Classification](app/classification/README.md)
 
-N_COMPONENTS=2 FIG_SHOW=true FIG_SAVE=true python -m app.reduction.pipeline
-N_COMPONENTS=3 FIG_SHOW=true FIG_SAVE=true python -m app.reduction.pipeline
-
-# other methods:
-REDUCER_TYPE="T-SNE" N_COMPONENTS=2 FIG_SHOW=true FIG_SAVE=true python -m app.reduction.pipeline
-REDUCER_TYPE="UMAP" N_COMPONENTS=2 FIG_SHOW=true FIG_SAVE=true python -m app.reduction.pipeline
-```
-
-
-Use PCA to calculate explained variance for each number of components, up to a specified max (to help understand the ideal number of components to use):
-
-```sh
-python -m app.pca_tuner
-
-MAX_COMPONENTS=250 FIG_SHOW=true FIG_SAVE=true python -m app.reduction.pca_tuner
-```
-
-Use T-SNE KL divergence metric to find optimal n components:
-
-```sh
-MAX_COMPONENTS=10 FIG_SHOW=true FIG_SAVE=true  python -m app.reduction.tsne_tuner
-```
-
-### Clustering
-
-K-Means Clustering on full dimensional data:
-
-```sh
-N_CLUSTERS=2 python -m app.clustering.kmeans
-N_CLUSTERS=4 python -m app.clustering.kmeans
-```
-
-
-K-Modes Clustering on full dimensional data:
-
-```sh
-N_CLUSTERS=2 python -m app.clustering.kmodes
-N_CLUSTERS=4 python -m app.clustering.kmodes
-```
-
-Spectral Clustering on full dimensional data:
-
-```sh
-python -m app.clustering.spectral
-
-N_CLUSTERS=2 python -m app.clustering.spectral
-N_CLUSTERS=4 python -m app.clustering.spectral
-```
-
-DBSCAN Clustering on full dimensional data (note: DBSCAN determines the number of clusters):
-
-```sh
-python -m app.clustering.dbscan
-
-MIN_SAMPLES=10 python -m app.clustering.dbscan
-```
-
-
-HDBSCAN Clustering on full dimensional data (note: HDBSCAN determines the number of clusters):
-
-```sh
-python -m app.clustering.hdbscan
-
-MIN_CLUSTER_SIZE=10 python -m app.clustering.hdbscan
-```
 
 ## Testing
 
 ```sh
-pytest
+pytest --disable-warnings
 ```
