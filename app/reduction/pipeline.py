@@ -113,6 +113,20 @@ class ReductionPipeline:
             print("K-L DIVERGENCE:", self.reducer.kl_divergence_)
 
 
+    def save_embeddings(self):
+        """
+        Save a slim copy of the embeddings to CSV (just user_id and component values).
+        With the goal of merging all the results into a single file later.
+        """
+        csv_filepath = os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}_embeddings.csv")
+        results_cols = ["user_id"] + self.component_names
+        results_df = self.embeddings_df[results_cols].copy()
+        for colname in self.component_names:
+            # rename column to include info about which method produced it:
+            results_df.rename(columns={colname: f"{self.reducer_name}_{self.n_components}_{colname}"}, inplace=True)
+        results_df.to_csv(csv_filepath, index=False)
+
+
     def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, color=None, color_map=None, category_orders=None, hover_data=None, results_dirpath=None):
         title = f"Dimensionality Reduction Results ({self.reducer_type} n_components={self.n_components})"
         if subtitle:
@@ -203,6 +217,7 @@ if __name__ == "__main__":
 
     pca_pipeline = ReductionPipeline()
     pca_pipeline.perform()
+    pca_pipeline.save_embeddings()
 
     for groupby_col in ["bot_label", "opinion_label", "fourway_label", "sixway_label", "bom_overall_label", "bom_astroturf_label"]:
         color_map = COLORS_MAP[groupby_col]
