@@ -27,8 +27,10 @@ if __name__ == "__main__":
     reduced_dataset_path = os.path.join(REDUCTION_RESULTS_DIRPATH, "reduced_embeddings_20230813.csv")
 
     if os.path.isfile(reduced_dataset_path) and not FORCE_RECOMPILE:
+        print("LOADING EXISTING DATASET FROM FILE...")
         df = read_csv(reduced_dataset_path)
     else:
+        print("COMPILING DATASET FROM RESULTS FILES...")
         ds = Dataset()
         df = ds.df
 
@@ -42,12 +44,16 @@ if __name__ == "__main__":
             "umap_2_embeddings.csv",
             "umap_3_embeddings.csv",
         ]
-
         for csv_filename in csv_filenames:
             csv_filepath = os.path.join(REDUCTION_RESULTS_DIRPATH, csv_filename)
-            embeddings_df = read_csv(csv_filepath)
-            embeddings_df.index = embeddings_df["user_id"]
-            df.merge(embeddings_df, left_on="user_id", right_on="user_id", inplace=True)
+            if os.path.isfile(csv_filepath):
+                embeddings_df = read_csv(csv_filepath)
+                df = df.merge(embeddings_df, left_on="user_id", right_on="user_id")
+            else:
+                print("--------------")
+                print("OOPS, COULDN'T FIND FILE:", csv_filename)
 
-        print(len(df.columns))
-        breakpoint()
+        df.to_csv(reduced_dataset_path, index=False)
+
+    print(df.shape)
+    print(df.columns)
