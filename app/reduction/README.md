@@ -49,4 +49,4 @@ After performing dimensionality reduction using a variety of combinations of met
 python -m app.reduced_dataset
 ```
 
-Copy the resulting dataset from the "results" directory into the "data" directory as "data/text-embedding-ada-002/reduced_embeddings_20230813.csv.gz". Also upload to Google Drive.
+Copy the resulting dataset from the "results" directory into the "data" directory as "data/text-embedding-ada-002/botometer_sample_openai_tweet_embeddings_reduced_20230813.csv.gz". Also upload to Google Drive.

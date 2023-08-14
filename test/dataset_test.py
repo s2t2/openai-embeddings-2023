@@ -11,7 +11,7 @@ def test_dataset(ds):
 
 
 def test_labels(ds):
-    assert ds.labels.shape == (N_USERS, N_LABELS) # 30 label cols
+    assert ds.labels.shape == (N_USERS, N_LABELS) # 32 label cols
 
 
 def test_x(ds):
