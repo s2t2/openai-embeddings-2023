@@ -5,6 +5,7 @@ data/*/*.csv
 data/*/*.csv.gz
 
 results/*/*.csv
+results/*/*.csv.gz
 results/*/*.json
 
 results/*/*/*.png

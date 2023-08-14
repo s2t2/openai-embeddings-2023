@@ -43,8 +43,10 @@ MAX_COMPONENTS=10 FIG_SHOW=true FIG_SAVE=true  python -m app.reduction.tsne_tune
 
 #### Reduced Dataset
 
-After performing dimensionality reduction using a variety of methods and number of components and saving the results to CSV files, we are now combining all the results into a single file:
+After performing dimensionality reduction using a variety of combinations of methods and number of components, and after saving the results to CSV files, we are now combining all the results into a single file:
 
 ```sh
 python -m app.reduced_dataset
 ```
+
+Copy the resulting dataset from the "results" directory into the "data" directory as "data/text-embedding-ada-002/reduced_embeddings_20230813.csv.gz". Also upload to Google Drive.
