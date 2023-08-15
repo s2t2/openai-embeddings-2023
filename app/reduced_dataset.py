@@ -31,8 +31,11 @@ class ReducedDataset(Dataset):
 
         # for analysis (single method):
         self.reducer_name = reducer_name
+        self.reducer_type = {"pca": "PCA", "tsne": "T-SNE", "umap": "UMAP"}[self.reducer_name]
         self.n_components = n_components
-        self.title = f"Tweet Embeddings Dataset ({self.reducer_name}_{self.n_components})"
+        #self.title = f"OpenAI Embeddings * {self.reducer_type}-{self.n_components}"
+        #self.chart_title = f"OpenAI Embeddings + {self.reducer_title}-{self.n_components}"
+
         self.feature_cols = feature_colnames(self.reducer_name, self.n_components)
 
 

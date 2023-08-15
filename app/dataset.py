@@ -23,7 +23,7 @@ LABEL_COLS = [
 
 class Dataset():
     def __init__(self, csv_filepath=CSV_FILEPATH, label_cols=LABEL_COLS):
-        self.title = "Tweet Embeddings Dataset"
+        #self.title = "OpenAI Embeddings"
         self.csv_filepath = csv_filepath
         self.label_cols = label_cols
 
