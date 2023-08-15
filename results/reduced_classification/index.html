@@ -183,8 +183,8 @@
                 this.y_label = Y_LABELS[this.y_col]
 
                 // todo: get currently selected values
-                this.reducer_name = "pca"
-                this.n_components = 2
+                this.reducer_name = this.props.reducer_name || "pca"
+                this.n_components = this.props.n_components || "2"
 
                 return (
                     <div>
@@ -197,10 +197,36 @@
             }
         }
 
-        ReactDOM.render(<Page y_col="is_bot"/>, isBotTab)
-        ReactDOM.render(<Page y_col="opinion_community"/>, opinionTab)
-        ReactDOM.render(<Page y_col="is_bom_overall"/>, bomOverallTab)
-        ReactDOM.render(<Page y_col="is_bom_astroturf"/>, bomAstroTab)
+        //ReactDOM.render(<Page y_col="is_bot"/>, isBotTab)
+        //ReactDOM.render(<Page y_col="opinion_community"/>, opinionTab)
+        //ReactDOM.render(<Page y_col="is_bom_overall"/>, bomOverallTab)
+        //ReactDOM.render(<Page y_col="is_bom_astroturf"/>, bomAstroTab)
+
+
+        var dropdown = document.getElementById("select-reduction-method")
+
+        function selectReductionMethod(event){
+            //var select = event.target
+            //var value = select.value
+            //console.log("YOU SELECTED", value)
+
+            //var selectedOption = event.target.options[event.target.selectedIndex]
+            var selectedOption = dropdown.options[dropdown.selectedIndex]
+            var value = selectedOption.value
+            var reducer_name = selectedOption.dataset["reducerName"]
+            var n_components = selectedOption.dataset["nComponents"]
+            console.log("YOU SELECTED", value, reducer_name, n_components)
+
+            ReactDOM.render(<Page reducer_name={reducer_name} n_components={n_components} y_col="is_bot"/>, isBotTab)
+            ReactDOM.render(<Page reducer_name={reducer_name} n_components={n_components} y_col="opinion_community"/>, opinionTab)
+            ReactDOM.render(<Page reducer_name={reducer_name} n_components={n_components} y_col="is_bom_overall"/>, bomOverallTab)
+            ReactDOM.render(<Page reducer_name={reducer_name} n_components={n_components} y_col="is_bom_astroturf"/>, bomAstroTab)
+        }
+
+        dropdown.addEventListener("change", selectReductionMethod, false)
+
+        selectReductionMethod()
+
     </script>
 </body>
 </html>

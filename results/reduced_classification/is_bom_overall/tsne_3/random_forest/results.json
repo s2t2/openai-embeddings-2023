@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "0.0": {
+            "precision": 0.7524818001323627,
+            "recall": 0.9982440737489026,
+            "f1-score": 0.8581132075471698,
+            "support": 1139.0
+        },
+        "1.0": {
+            "precision": 0.3333333333333333,
+            "recall": 0.0026666666666666666,
+            "f1-score": 0.005291005291005292,
+            "support": 375.0
+        },
+        "accuracy": 0.7516512549537648,
+        "macro avg": {
+            "precision": 0.542907566732848,
+            "recall": 0.5004553702077846,
+            "f1-score": 0.4317021064190876,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.6486636528076362,
+            "recall": 0.7516512549537648,
+            "f1-score": 0.6468791746237472,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        0.0,
+        1.0
+    ],
+    "confusion_matrix": [
+        [
+            1137,
+            2
+        ],
+        [
+            374,
+            1
+        ]
+    ],
+    "roc_auc_score": 0.5004553702077845,
+    "roc_auc_score_proba": 0.6752484635645304,
+    "roc_curve_auc": 0.6752484635645304,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "log_loss",
+            "classifier__min_samples_leaf": 50,
+            "classifier__n_estimators": 50
+        },
+        "best_score": 0.6574164806077663
+    }
+}

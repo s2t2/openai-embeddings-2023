@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "0.0": {
+            "precision": 0.8032786885245902,
+            "recall": 0.9365768896611643,
+            "f1-score": 0.8648215002005617,
+            "support": 1151.0
+        },
+        "1.0": {
+            "precision": 0.5755813953488372,
+            "recall": 0.2727272727272727,
+            "f1-score": 0.37009345794392523,
+            "support": 363.0
+        },
+        "accuracy": 0.7774108322324967,
+        "macro avg": {
+            "precision": 0.6894300419367136,
+            "recall": 0.6046520811942184,
+            "f1-score": 0.6174574790722435,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.7486854801872068,
+            "recall": 0.7774108322324967,
+            "f1-score": 0.746204406845767,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        0.0,
+        1.0
+    ],
+    "confusion_matrix": [
+        [
+            1078,
+            73
+        ],
+        [
+            264,
+            99
+        ]
+    ],
+    "roc_auc_score": 0.6046520811942184,
+    "roc_auc_score_proba": 0.7777211336171924,
+    "roc_curve_auc": 0.7777211336171924,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "log_loss",
+            "classifier__min_samples_leaf": 10,
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.7837772583242537
+    }
+}

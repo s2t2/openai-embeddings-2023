@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "0.0": {
+            "precision": 0.7849223946784922,
+            "recall": 0.9226759339704604,
+            "f1-score": 0.8482428115015974,
+            "support": 1151.0
+        },
+        "1.0": {
+            "precision": 0.4472049689440994,
+            "recall": 0.19834710743801653,
+            "f1-score": 0.2748091603053435,
+            "support": 363.0
+        },
+        "accuracy": 0.7490092470277411,
+        "macro avg": {
+            "precision": 0.6160636818112958,
+            "recall": 0.5605115207042385,
+            "f1-score": 0.5615259859034705,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.7039505151926371,
+            "recall": 0.7490092470277411,
+            "f1-score": 0.7107550866771323,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        0.0,
+        1.0
+    ],
+    "confusion_matrix": [
+        [
+            1062,
+            89
+        ],
+        [
+            291,
+            72
+        ]
+    ],
+    "roc_auc_score": 0.5605115207042385,
+    "roc_auc_score_proba": 0.7647464296228217,
+    "roc_curve_auc": 0.7647464296228217,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "log_loss",
+            "classifier__min_samples_leaf": 25,
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.7747566505301107
+    }
+}
