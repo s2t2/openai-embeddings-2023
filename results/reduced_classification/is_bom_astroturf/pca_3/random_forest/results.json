@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "0.0": {
+            "precision": 0.8660409556313993,
+            "recall": 0.8818418766290183,
+            "f1-score": 0.8738699956952216,
+            "support": 1151.0
+        },
+        "1.0": {
+            "precision": 0.6023391812865497,
+            "recall": 0.5674931129476584,
+            "f1-score": 0.5843971631205673,
+            "support": 363.0
+        },
+        "accuracy": 0.8064729194187582,
+        "macro avg": {
+            "precision": 0.7341900684589745,
+            "recall": 0.7246674947883383,
+            "f1-score": 0.7291335794078945,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8028152329846487,
+            "recall": 0.8064729194187582,
+            "f1-score": 0.8044653469339273,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        0.0,
+        1.0
+    ],
+    "confusion_matrix": [
+        [
+            1015,
+            136
+        ],
+        [
+            157,
+            206
+        ]
+    ],
+    "roc_auc_score": 0.7246674947883384,
+    "roc_auc_score_proba": 0.862242199261392,
+    "roc_curve_auc": 0.862242199261392,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "log_loss",
+            "classifier__min_samples_leaf": 50,
+            "classifier__n_estimators": 100
+        },
+        "best_score": 0.8702649056733375
+    }
+}

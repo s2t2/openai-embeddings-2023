@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "0.0": {
+            "precision": 0.8525423728813559,
+            "recall": 0.8740225890529973,
+            "f1-score": 0.8631488631488632,
+            "support": 1151.0
+        },
+        "1.0": {
+            "precision": 0.5658682634730539,
+            "recall": 0.5206611570247934,
+            "f1-score": 0.5423242467718795,
+            "support": 363.0
+        },
+        "accuracy": 0.7892998678996037,
+        "macro avg": {
+            "precision": 0.7092053181772049,
+            "recall": 0.6973418730388954,
+            "f1-score": 0.7027365549603714,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.7838087521975953,
+            "recall": 0.7892998678996037,
+            "f1-score": 0.7862272411245268,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        0.0,
+        1.0
+    ],
+    "confusion_matrix": [
+        [
+            1006,
+            145
+        ],
+        [
+            174,
+            189
+        ]
+    ],
+    "roc_auc_score": 0.6973418730388954,
+    "roc_auc_score_proba": 0.8501734029338484,
+    "roc_curve_auc": 0.8501734029338484,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "gini",
+            "classifier__min_samples_leaf": 100,
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.8572696531319736
+    }
+}

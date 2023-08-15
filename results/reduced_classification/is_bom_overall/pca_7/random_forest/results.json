@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "0.0": {
+            "precision": 0.7619377162629758,
+            "recall": 0.9666374012291484,
+            "f1-score": 0.8521671826625388,
+            "support": 1139.0
+        },
+        "1.0": {
+            "precision": 0.4492753623188406,
+            "recall": 0.08266666666666667,
+            "f1-score": 0.13963963963963963,
+            "support": 375.0
+        },
+        "accuracy": 0.7476882430647291,
+        "macro avg": {
+            "precision": 0.6056065392909082,
+            "recall": 0.5246520339479075,
+            "f1-score": 0.4959034111510892,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.6844949271420704,
+            "recall": 0.7476882430647291,
+            "f1-score": 0.6756824873959687,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        0.0,
+        1.0
+    ],
+    "confusion_matrix": [
+        [
+            1101,
+            38
+        ],
+        [
+            344,
+            31
+        ]
+    ],
+    "roc_auc_score": 0.5246520339479075,
+    "roc_auc_score_proba": 0.7425507755340943,
+    "roc_curve_auc": 0.7425507755340943,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "log_loss",
+            "classifier__min_samples_leaf": 50,
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.726059004335846
+    }
+}

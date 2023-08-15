@@ -117,35 +117,32 @@
             "XGBoost": "xgboost",
         }
 
-        class ClassificationResults extends React.Component {
+        const REDUCERS_MAP = {
+            "pca": "PCA",
+            "tsne": "T-SNE",
+            "umap": "UMAP",
+        }
 
-            // CORS ISSUE WITH LOCAL FILES
-            //loadJSONData(jsonFilepath) {
-            //    fetch(jsonFilepath)
-            //        .then(data => {
-            //            //this.setState({ results: data.default }); // Update state with loaded JSON data
-            //            console.log(data)
-            //            return data.default
-            //        })
-            //        .catch(error => {
-            //            console.error('Error loading JSON data:', error);
-            //            return null
-            //        });
-            //}
+        class ReducedClassificationResults extends React.Component {
 
             render() {
+                this.reducer_name = this.props.reducer_name || "pca"
+                this.reducer_type = REDUCERS_MAP[this.reducer_name]
+                this.n_components = this.props.n_components || "2"
                 this.y_col = this.props.y_col || "is_bot"
+                this.model_name = this.props.model_name
                 this.model_dirname = MODELS_MAP[this.props.model_name]
-                this.confusion_matrix_filepath = `./${this.y_col}/${this.model_dirname}/confusion.png`
-                this.roc_curve_filepath = `./${this.y_col}/${this.model_dirname}/roc_curve.png`
 
-                this.results_filepath = `./${this.y_col}/${this.model_dirname}/results.json`
+                this.results_dirpath = `./${this.y_col}/${this.reducer_name}_${this.n_components}/${this.model_dirname}`
+                this.confusion_matrix_filepath = `./${this.results_dirpath}/confusion.png`
+                this.roc_curve_filepath = `./${this.results_dirpath}/roc_curve.png`
+                this.results_filepath = `./${this.results_dirpath}/results.json`
                 //this.results = this.loadJSONData(this.results_filepath)
                 //this.results = this.state.results
 
                 return (
-                    <div class="classification-results">
-                        <h5>{this.props.model_name}</h5>
+                    <div class="reduced-classification-results">
+                        <h5>{this.props.model_name} ({this.reducer_type} {this.n_components})</h5>
 
                         <a href={this.results_filepath}>Results JSON</a>
 
@@ -180,30 +177,21 @@
 
         }
 
-        // Create a function to wrap up your component
-        //function App(y_col){
-        //    return(
-        //        <div>
-        //            <ClassificationResults model_name="Logistic Regression"/>
-        //            <ClassificationResults model_name="Random Forest"/>
-        //            <ClassificationResults model_name="XGBoost"/>
-        //        </div>
-        //    )
-        //}
-
-        //ReactDOM.render(<App />, rootElement)
-
         class Page extends React.Component {
             render() {
                 this.y_col = this.props.y_col || "is_bot"
                 this.y_label = Y_LABELS[this.y_col]
 
+                // todo: get currently selected values
+                this.reducer_name = "pca"
+                this.n_components = 2
+
                 return (
                     <div>
                         <h4 style={{marginTop:"15px", marginBottom:"15px"}}>{this.y_label}</h4>
-                        <ClassificationResults y_col={this.y_col} model_name="Logistic Regression"/>
-                        <ClassificationResults y_col={this.y_col} model_name="Random Forest"/>
-                        <ClassificationResults y_col={this.y_col} model_name="XGBoost"/>
+                        <ReducedClassificationResults reducer_name={this.reducer_name} n_components={this.n_components} y_col={this.y_col} model_name="Logistic Regression"/>
+                        <ReducedClassificationResults reducer_name={this.reducer_name} n_components={this.n_components} y_col={this.y_col} model_name="Random Forest"/>
+                        <ReducedClassificationResults reducer_name={this.reducer_name} n_components={this.n_components} y_col={this.y_col} model_name="XGBoost"/>
                     </div>
                 )
             }
