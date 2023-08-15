@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "0.0": {
+            "precision": 0.7943368107302533,
+            "recall": 0.9261511728931364,
+            "f1-score": 0.8551945447252306,
+            "support": 1151.0
+        },
+        "1.0": {
+            "precision": 0.5058139534883721,
+            "recall": 0.2396694214876033,
+            "f1-score": 0.3252336448598131,
+            "support": 363.0
+        },
+        "accuracy": 0.7615587846763541,
+        "macro avg": {
+            "precision": 0.6500753821093127,
+            "recall": 0.5829102971903699,
+            "f1-score": 0.5902140947925218,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.7251599301630123,
+            "recall": 0.7615587846763541,
+            "f1-score": 0.7281299432383438,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        0.0,
+        1.0
+    ],
+    "confusion_matrix": [
+        [
+            1066,
+            85
+        ],
+        [
+            276,
+            87
+        ]
+    ],
+    "roc_auc_score": 0.5829102971903699,
+    "roc_auc_score_proba": 0.7779437212341407,
+    "roc_curve_auc": 0.7779437212341407,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "gini",
+            "classifier__min_samples_leaf": 25,
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.7802970995612533
+    }
+}

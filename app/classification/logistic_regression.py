@@ -6,8 +6,8 @@ from app.classification.pipeline import ClassificationPipeline
 
 class LogisticRegressionPipeline(ClassificationPipeline):
 
-    def __init__(self, ds=None, y_col="is_bot", param_grid=None):
-        super().__init__(ds=ds, y_col=y_col, param_grid=param_grid)
+    def __init__(self, ds=None, y_col="is_bot", param_grid=None, results_dirpath=None):
+        super().__init__(ds=ds, y_col=y_col, param_grid=param_grid, results_dirpath=results_dirpath)
 
         self.model = LogisticRegression(random_state=99)
         self.model_dirname = "logistic_regression"

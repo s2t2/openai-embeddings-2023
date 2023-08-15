@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "False": {
+            "precision": 0.9844311377245509,
+            "recall": 0.9113082039911308,
+            "f1-score": 0.9464594127806563,
+            "support": 902.0
+        },
+        "True": {
+            "precision": 0.882179675994109,
+            "recall": 0.9787581699346405,
+            "f1-score": 0.927962819519752,
+            "support": 612.0
+        },
+        "accuracy": 0.9385733157199472,
+        "macro avg": {
+            "precision": 0.93330540685933,
+            "recall": 0.9450331869628856,
+            "f1-score": 0.9372111161502041,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.9430983143566313,
+            "recall": 0.9385733157199472,
+            "f1-score": 0.9389825864426949,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        false,
+        true
+    ],
+    "confusion_matrix": [
+        [
+            822,
+            80
+        ],
+        [
+            13,
+            599
+        ]
+    ],
+    "roc_auc_score": 0.9450331869628856,
+    "roc_auc_score_proba": 0.9691082271785285,
+    "roc_curve_auc": 0.9691082271785285,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "gini",
+            "classifier__min_samples_leaf": 50,
+            "classifier__n_estimators": 100
+        },
+        "best_score": 0.9690929534163661
+    }
+}

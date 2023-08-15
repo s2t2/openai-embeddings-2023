@@ -2,6 +2,7 @@ import os
 from pytest import fixture
 
 from app.dataset import Dataset
+from app.reduced_dataset import ReducedDataset
 
 CI_ENV = bool(os.getenv("CI")=="true")
 
@@ -18,3 +19,15 @@ def ds():
 @fixture(scope="module")
 def df(ds):
     return ds.df
+
+# REDUCED DATASET
+
+@fixture(scope="module")
+def reduced_ds():
+    dataset = ReducedDataset(reducer_name="pca", n_components=2)
+    dataset.df
+    return dataset
+
+@fixture(scope="module")
+def reduced_df(reduced_ds):
+    return reduced_ds.df

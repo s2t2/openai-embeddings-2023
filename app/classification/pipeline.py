@@ -28,7 +28,7 @@ FIG_SAVE = bool(os.getenv("FIG_SAVE", default="true").lower() == "true")
 class ClassificationPipeline(ABC):
     """Right now this class supports binary classification only."""
 
-    def __init__(self, ds=None, x_scale=False, y_col="is_bot", param_grid=None, k_folds=K_FOLDS):
+    def __init__(self, ds=None, x_scale=False, y_col="is_bot", param_grid=None, k_folds=K_FOLDS, results_dirpath=None):
 
         self.ds = ds or Dataset()
         self.x_scale = x_scale
@@ -47,6 +47,7 @@ class ClassificationPipeline(ABC):
         #    y_encoded = self.label_binarizer.fit_transform(y)
 
         self.k_folds = k_folds
+        self._results_dirpath = results_dirpath
 
         # values set after training:
         #self.label_binarizer = None # only for categorical / multiclass
@@ -144,8 +145,7 @@ class ClassificationPipeline(ABC):
 
     @cached_property
     def results_dirpath(self):
-        dirpath = os.path.join(CLASSIFICATION_RESULTS_DIRPATH, self.y_col, self.model_dirname)
-        #dirpath = os.path.join(CLASSIFICATION_RESULTS_DIRPATH, self.model_dirname, self.y_col)
+        dirpath = self._results_dirpath or os.path.join(CLASSIFICATION_RESULTS_DIRPATH, self.y_col, self.model_dirname)
         os.makedirs(dirpath, exist_ok=True)
         return dirpath
 

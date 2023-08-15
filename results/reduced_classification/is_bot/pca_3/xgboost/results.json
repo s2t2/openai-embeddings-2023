@@ -1,0 +1,54 @@
+{
+    "classification_report": {
+        "False": {
+            "precision": 0.9695193434935522,
+            "recall": 0.9168514412416852,
+            "f1-score": 0.9424501424501425,
+            "support": 902.0
+        },
+        "True": {
+            "precision": 0.886535552193646,
+            "recall": 0.9575163398692811,
+            "f1-score": 0.9206598586017283,
+            "support": 612.0
+        },
+        "accuracy": 0.9332892998678997,
+        "macro avg": {
+            "precision": 0.928027447843599,
+            "recall": 0.9371838905554831,
+            "f1-score": 0.9315550005259354,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.9359750368386364,
+            "recall": 0.9332892998678997,
+            "f1-score": 0.9336419167465564,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        false,
+        true
+    ],
+    "confusion_matrix": [
+        [
+            827,
+            75
+        ],
+        [
+            26,
+            586
+        ]
+    ],
+    "roc_auc_score": 0.9371838905554831,
+    "roc_auc_score_proba": 0.9686209295248032,
+    "roc_curve_auc": 0.9686209295248032,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "XGBClassifier",
+        "k_folds": 5,
+        "param_grid": {},
+        "best_params": {},
+        "best_score": 0.9673059244449931
+    }
+}

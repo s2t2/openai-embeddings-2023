@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "False": {
+            "precision": 0.9880239520958084,
+            "recall": 0.9146341463414634,
+            "f1-score": 0.9499136442141624,
+            "support": 902.0
+        },
+        "True": {
+            "precision": 0.8865979381443299,
+            "recall": 0.9836601307189542,
+            "f1-score": 0.9326103795507358,
+            "support": 612.0
+        },
+        "accuracy": 0.9425363276089829,
+        "macro avg": {
+            "precision": 0.9373109451200692,
+            "recall": 0.9491471385302088,
+            "f1-score": 0.9412620118824491,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.9470247971827932,
+            "recall": 0.9425363276089829,
+            "f1-score": 0.9429191937689728,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        false,
+        true
+    ],
+    "confusion_matrix": [
+        [
+            825,
+            77
+        ],
+        [
+            10,
+            602
+        ]
+    ],
+    "roc_auc_score": 0.9491471385302089,
+    "roc_auc_score_proba": 0.9702639740301147,
+    "roc_curve_auc": 0.9702639740301147,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "log_loss",
+            "classifier__min_samples_leaf": 25,
+            "classifier__n_estimators": 100
+        },
+        "best_score": 0.9706563777785681
+    }
+}

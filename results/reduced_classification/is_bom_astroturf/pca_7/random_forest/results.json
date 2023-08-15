@@ -1,0 +1,77 @@
+{
+    "classification_report": {
+        "0.0": {
+            "precision": 0.8711340206185567,
+            "recall": 0.8809730668983493,
+            "f1-score": 0.8760259179265659,
+            "support": 1151.0
+        },
+        "1.0": {
+            "precision": 0.6085714285714285,
+            "recall": 0.5867768595041323,
+            "f1-score": 0.5974754558204769,
+            "support": 363.0
+        },
+        "accuracy": 0.8104359313077939,
+        "macro avg": {
+            "precision": 0.7398527245949926,
+            "recall": 0.7338749632012408,
+            "f1-score": 0.7367506868735214,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8081814308476799,
+            "recall": 0.8104359313077939,
+            "f1-score": 0.809240040948686,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        0.0,
+        1.0
+    ],
+    "confusion_matrix": [
+        [
+            1014,
+            137
+        ],
+        [
+            150,
+            213
+        ]
+    ],
+    "roc_auc_score": 0.7338749632012408,
+    "roc_auc_score_proba": 0.8656743567098201,
+    "roc_curve_auc": 0.8656743567098201,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "log_loss",
+            "classifier__min_samples_leaf": 25,
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.8758108736489906
+    }
+}

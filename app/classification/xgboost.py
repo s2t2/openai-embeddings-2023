@@ -20,8 +20,8 @@ from app.classification.pipeline import ClassificationPipeline
 
 class XGBoostPipeline(ClassificationPipeline):
 
-    def __init__(self, ds=None, y_col="is_bot", param_grid=None):
-        super().__init__(ds=ds, y_col=y_col, param_grid=param_grid)
+    def __init__(self, ds=None, y_col="is_bot", param_grid=None, results_dirpath=None):
+        super().__init__(ds=ds, y_col=y_col, param_grid=param_grid, results_dirpath=results_dirpath)
 
 
         #if isinstance(self.y.iloc[0], str):
