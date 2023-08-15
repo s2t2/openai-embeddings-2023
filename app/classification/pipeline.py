@@ -47,9 +47,7 @@ class ClassificationPipeline(ABC):
         #    y_encoded = self.label_binarizer.fit_transform(y)
 
         self.k_folds = k_folds
-
-        self.results_dirpath = results_dirpath or os.path.join(CLASSIFICATION_RESULTS_DIRPATH, self.y_col, self.model_dirname)
-        os.makedirs(results_dirpath, exist_ok=True)
+        self._results_dirpath = results_dirpath
 
         # values set after training:
         #self.label_binarizer = None # only for categorical / multiclass
@@ -145,12 +143,11 @@ class ClassificationPipeline(ABC):
         save_results_json(self.results_json, json_filepath)
 
 
-    #@cached_property
-    #def results_dirpath(self):
-    #    dirpath = os.path.join(CLASSIFICATION_RESULTS_DIRPATH, self.y_col, self.model_dirname)
-    #    #dirpath = os.path.join(CLASSIFICATION_RESULTS_DIRPATH, self.model_dirname, self.y_col)
-    #    os.makedirs(dirpath, exist_ok=True)
-    #    return dirpath
+    @cached_property
+    def results_dirpath(self):
+        dirpath = self._results_dirpath or os.path.join(CLASSIFICATION_RESULTS_DIRPATH, self.y_col, self.model_dirname)
+        os.makedirs(dirpath, exist_ok=True)
+        return dirpath
 
 
     def plot_confusion_matrix(self, fig_show=FIG_SHOW, fig_save=FIG_SAVE, showscale=False):

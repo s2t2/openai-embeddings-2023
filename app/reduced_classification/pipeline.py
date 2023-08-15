@@ -18,14 +18,14 @@ if __name__ == "__main__":
 
         for y_col in Y_COLS_BINARY:
             results_dirpath = os.path.join(RESULTS_DIRPATH, "reduced_classification", y_col, results_dirname, "logistic_regression")
-
             pipeline = LogisticRegressionPipeline(ds=ds, y_col=y_col, results_dirpath=results_dirpath)
             pipeline.perform()
 
-            breakpoint()
-            #pipeline = XGBoostPipeline(ds=ds, y_col=y_col)
-            #pipeline.perform()
-            #
-            ## the slowest can go last:
-            #pipeline = RandomForestPipeline(ds=ds, y_col=y_col)
-            #pipeline.perform()
+            results_dirpath = os.path.join(RESULTS_DIRPATH, "reduced_classification", y_col, results_dirname, "xgboost")
+            pipeline = XGBoostPipeline(ds=ds, y_col=y_col, results_dirpath=results_dirpath)
+            pipeline.perform()
+
+            # the slowest can go last:
+            results_dirpath = os.path.join(RESULTS_DIRPATH, "reduced_classification", y_col, results_dirname, "random_forest")
+            pipeline = RandomForestPipeline(ds=ds, y_col=y_col, results_dirpath=results_dirpath)
+            pipeline.perform()
