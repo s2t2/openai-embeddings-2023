@@ -2,7 +2,7 @@
 import os
 from functools import cached_property
 
-from pandas import read_csv, DataFrame
+from pandas import read_csv, DataFrame, isnull
 from sklearn.preprocessing import scale #, StandardScaler
 
 from app import DATA_DIRPATH
@@ -11,7 +11,7 @@ CSV_FILEPATH = os.path.join(DATA_DIRPATH, "text-embedding-ada-002", "botometer_s
 
 LABEL_COLS = [
     'user_id', 'created_on', 'screen_name_count', 'screen_names', 'status_count', 'rt_count', 'rt_pct',
-    'avg_toxicity', 'avg_fact_score', 'opinion_community', 'is_bot', 'is_q',
+    'avg_toxicity', 'avg_fact_score', 'opinion_community', 'is_bot', 'is_q', "is_toxic", "is_factual",
     'tweet_texts',
     'bom_cap', 'bom_astroturf', 'bom_fake_follower', 'bom_financial', 'bom_other', 'bom_overall', 'bom_self_declared','bom_spammer',
 
@@ -39,12 +39,15 @@ class Dataset():
 
         df["is_bom_overall"] = df["bom_overall"].round()
         df["is_bom_astroturf"] = df["bom_astroturf"].round()
-
         df["bom_overall_label"] = df["is_bom_overall"].map({1:"Bot", 0:"Human"})
         df["bom_astroturf_label"] = df["is_bom_astroturf"].map({1:"Bot", 0:"Human"})
-
         df["bom_overall_fourway_label"] = df["opinion_label"] + " " + df["bom_overall_label"]
         df["bom_astroturf_fourway_label"] = df["opinion_label"] + " " + df["bom_astroturf_label"]
+
+        df["is_toxic"] = df["avg_toxicity"] >= 0.1 # set threshold and check robustness
+        #df["is_factual"] = df["avg_fact_score"] >= 3 # set threshold and check robustness.
+        # FYI there are null avg_fact_score, so we only apply operation if not null, and leave nulls
+        df["is_factual"] = df["avg_fact_score"].apply(lambda score: score if isnull(score) else score >= 3.0)
 
         return df
 

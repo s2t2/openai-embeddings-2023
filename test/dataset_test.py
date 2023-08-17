@@ -1,6 +1,6 @@
 
 
-import numpy as np
+from numpy import nan, isclose
 
 from conftest import N_USERS, N_FEATURES, N_LABELS
 
@@ -23,9 +23,19 @@ def test_x_scaled(ds):
 
     scaled_vals = ds.x_scaled.to_numpy().flatten()
     # mean centered:
-    assert np.isclose(scaled_vals.mean(), 0)
+    assert isclose(scaled_vals.mean(), 0)
     # unit variance:
-    assert np.isclose(scaled_vals.std(), 1)
+    assert isclose(scaled_vals.std(), 1)
 
-    assert np.isclose(scaled_vals.max(), 6.79286)
-    assert np.isclose(scaled_vals.min(), -7.80073)
+    assert isclose(scaled_vals.max(), 6.79286)
+    assert isclose(scaled_vals.min(), -7.80073)
+
+
+def test_score_thresholding(ds):
+
+    assert ds.df["avg_toxicity"].isna().sum() == 0
+    assert ds.df["avg_fact_score"].isna().sum() == 4274
+
+    #assert ds.df["is_factual"].value_counts(dropna=False).to_dict() == {nan: 4274, False: 1696, True: 1596}
+    assert ds.df["is_factual"].isna().sum() == 4274
+    assert ds.df["is_factual"].sum() == 1596
