@@ -40,6 +40,14 @@ class ClassificationPipeline(ABC):
            self.x = self.ds.x
 
         self.y = self.ds.df[self.y_col]
+        # if there are null values, consider imputing them or dropping, based on specified strategy
+        if self.y.isna().sum() > 0:
+            # "drop" strategy
+            self.y.dropna(inplace=True) # need to drop x as well
+            remaining_indices = self.y.index
+            self.x = self.x.loc[remaining_indices]
+
+
         self.n_classes = len(set(self.y))
 
         #if isinstance(y.iloc[0], str):

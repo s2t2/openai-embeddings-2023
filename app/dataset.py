@@ -10,13 +10,18 @@ from app import DATA_DIRPATH
 CSV_FILEPATH = os.path.join(DATA_DIRPATH, "text-embedding-ada-002", "botometer_sample_openai_tweet_embeddings_20230724.csv.gz")
 
 LABEL_COLS = [
+    # in original dataset
     'user_id', 'created_on', 'screen_name_count', 'screen_names', 'status_count', 'rt_count', 'rt_pct',
-    'avg_toxicity', 'avg_fact_score', 'opinion_community', 'is_bot', 'is_q', "is_toxic", "is_factual",
+    'avg_toxicity', 'avg_fact_score', 'opinion_community', 'is_bot', 'is_q',
     'tweet_texts',
     'bom_cap', 'bom_astroturf', 'bom_fake_follower', 'bom_financial', 'bom_other', 'bom_overall', 'bom_self_declared','bom_spammer',
 
+    # virtual attributes
+    "is_bom_overall", 'is_bom_astroturf',
+    "is_toxic", "is_factual", "is_factual",
+
     'opinion_label', 'bot_label', 'q_label',
-    "is_bom_overall", "is_bom_astroturf", 'bom_overall_label', 'bom_astroturf_label', #'group_label'
+    'bom_overall_label', 'bom_astroturf_label', #'group_label'
     'fourway_label', 'sixway_label', "bom_overall_fourway_label", "bom_astroturf_fourway_label"
 ]
 
@@ -44,10 +49,14 @@ class Dataset():
         df["bom_overall_fourway_label"] = df["opinion_label"] + " " + df["bom_overall_label"]
         df["bom_astroturf_fourway_label"] = df["opinion_label"] + " " + df["bom_astroturf_label"]
 
-        df["is_toxic"] = df["avg_toxicity"] >= 0.1 # set threshold and check robustness
-        #df["is_factual"] = df["avg_fact_score"] >= 3 # set threshold and check robustness.
-        # FYI there are null avg_fact_score, so we only apply operation if not null, and leave nulls
-        df["is_factual"] = df["avg_fact_score"].apply(lambda score: score if isnull(score) else score >= 3.0)
+        toxic_threshold = 0.1 # set threshold and check robustness
+        df["is_toxic"] = df["avg_toxicity"] >= toxic_threshold
+        df["is_toxic"] = df["is_toxic"].map({True: 1, False :0 })
+
+        # there are null avg_fact_score, so we only apply operation if not null, and leave nulls
+        fact_threshold = 3.0 # set threshold and check robustness
+        df["is_factual"] = df["avg_fact_score"].apply(lambda score: score if isnull(score) else score >= fact_threshold)
+        df["is_factual"] = df["is_factual"].map({True: 1, False :0 })
 
         return df
 
