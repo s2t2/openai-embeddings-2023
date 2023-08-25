@@ -219,7 +219,9 @@ if __name__ == "__main__":
     pca_pipeline.perform()
     pca_pipeline.save_embeddings()
 
-    for groupby_col in ["bot_label", "opinion_label", "fourway_label", "sixway_label", "bom_overall_label", "bom_astroturf_label"]:
+    for groupby_col in [#"bot_label", "opinion_label", "fourway_label", "sixway_label", "bom_overall_label", "bom_astroturf_label"
+        "toxic_label", "factual_label",
+                        ]:
         color_map = COLORS_MAP[groupby_col]
         category_orders = {groupby_col: CATEGORY_ORDERS[groupby_col]}
 

@@ -8,7 +8,7 @@ from app.reduction.pipeline import REDUCTION_RESULTS_DIRPATH
 FORCE_RECOMPILE = bool(os.getenv("FORCE_RECOMPILE", default="false") == "true")
 
 
-REDUCED_DATASET_PATH = os.path.join(REDUCTION_RESULTS_DIRPATH, "botometer_sample_openai_tweet_embeddings_reduced_20230813.csv.gz")
+REDUCED_DATASET_PATH = os.path.join(REDUCTION_RESULTS_DIRPATH, "botometer_sample_openai_tweet_embeddings_reduced_20230825.csv.gz")
 REDUCTIONS = [
     ("pca", 2), ("pca", 3), ("pca", 7),
     ("tsne", 2), ("tsne", 3), ("tsne", 4),
@@ -50,7 +50,7 @@ class ReducedDataset(Dataset):
             ds = Dataset()
             df = ds.df
             # merge original dataset with reduction results files:
-            for results_csv_filepath in self.reduction_results_csv_filepaths:
+            for results_csv_filepath in self.results_csv_filepaths:
                 embeddings_df = read_csv(results_csv_filepath)
                 df = df.merge(embeddings_df, left_on="user_id", right_on="user_id")
             # write dataset (for faster loading later):

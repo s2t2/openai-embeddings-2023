@@ -18,9 +18,10 @@ LABEL_COLS = [
 
     # virtual attributes
     "is_bom_overall", 'is_bom_astroturf',
-    "is_toxic", "is_factual", "is_factual",
+    "is_toxic", "is_factual",
 
     'opinion_label', 'bot_label', 'q_label',
+    "toxic_label", "factual_label",
     'bom_overall_label', 'bom_astroturf_label', #'group_label'
     'fourway_label', 'sixway_label', "bom_overall_fourway_label", "bom_astroturf_fourway_label"
 ]
@@ -52,11 +53,13 @@ class Dataset():
         toxic_threshold = 0.1 # set threshold and check robustness
         df["is_toxic"] = df["avg_toxicity"] >= toxic_threshold
         df["is_toxic"] = df["is_toxic"].map({True: 1, False :0 })
+        df["toxic_label"] = df["is_toxic"].map({1: "Toxic", 0 :"Normal" })
 
         # there are null avg_fact_score, so we only apply operation if not null, and leave nulls
         fact_threshold = 3.0 # set threshold and check robustness
         df["is_factual"] = df["avg_fact_score"].apply(lambda score: score if isnull(score) else score >= fact_threshold)
         df["is_factual"] = df["is_factual"].map({True: 1, False :0 })
+        df["factual_label"] = df["is_factual"].map({1: "High", 0 :"Low" })
 
         return df
 
