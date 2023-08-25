@@ -9,9 +9,9 @@ CLASSIFICATION_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "classification")
 Y_COLS_BINARY = [
     # binary classification with boolean classes:
     "is_bot", "opinion_community",
-    "is_bom_overall", "is_bom_astroturf",
+    #"is_q",
+    #"is_bom_overall", "is_bom_astroturf",
     "is_toxic",
-    "is_q",
     "is_factual",
 ]
 #Y_COLS_MULTICLASS = [
