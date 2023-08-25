@@ -25,7 +25,7 @@
 
         <p class="lead">Can ChatGPT help detect Twitter bots, based on their tweet content?</h2>
 
-        <h3>Dimensionality Reduction </h3>
+        <h3>Dimensionality Reduction Results</h3>
 
         <label for="select-n-components">Number of Components:</label>
         <select name="n_components" id="select-n-components" class="form-select form-select-lg" style="width:400px;">
@@ -154,34 +154,31 @@
                 //this.roc_curve_filepath = `./${this.results_dirpath}/roc_curve.png`
                 //this.results_filepath = `./${this.results_dirpath}/results.json`
                 this.y_label = LABELS_MAP[this.y_col]
-                this.embeddings_html_filepath = `./${this.y_label}/${this.reducer_name}_${this.n_components}.html`
-                this.centroids_html_filepath = `./${this.y_label}/${this.reducer_name}_${this.n_components}_centroids.html`
+                this.filestem = `./${this.y_label}/${this.reducer_name}_${this.n_components}`
+                this.embeddings_html_filepath = `${this.filestem}.html`
+                this.embeddings_png_filepath = `${this.filestem}.png`
+                this.centroids_html_filepath = `${this.filestem}_centroids.html`
+                this.centroids_png_filepath = `${this.filestem}_centroids.png`
 
                 return (
                     <div class="reduction-results">
                         <h5>{this.reducer_type} ({this.n_components} Components)</h5>
 
-                        <a href={this.embeddings_html_filepath}>Embeddings Chart</a>
-                        <a href={this.centroids_html_filepath}>Centroids Chart</a>
-                        {/*
+                        <p>
+                            <a href={this.embeddings_html_filepath}>Embeddings Chart</a> | &nbsp;
+                            <a href={this.centroids_html_filepath}>Centroids Chart</a>
+                        </p>
+
                         <div class="row row-cols-2">
-                            <div class="card col" style={{width:"26rem", margin:"20px"}}>
-                                <img src={this.roc_curve_filepath} alt="ROC Curve"/>
-                            </div>
+                            <a class="card col" style={{width:"26rem", margin:"0px 20px 40px 20px"}} href={this.embeddings_html_filepath}>
+                                <img src={this.embeddings_png_filepath} alt="Embeddings Chart"/>
+                            </a>
 
-                            <div class="card col" style={{width:"26rem", margin:"20px",
-                                    overflow:"hidden", height: "26rem",
-                                }}>
-                                <img src={this.confusion_matrix_filepath} style={{
-                                    //maxHeight:"480px", height: "150%", width: "auto", overflow:"hidden"
-                                    //height: "100%", width: "100%",
-                                    height: "24rem", width: "36rem",
-                                    position: "relative",  top: "5%", right: "20%"  //transform: "translateY(-20%)"
-
-                                }} alt="Confusion Matrix"/>
-                            </div>
+                            <a class="card col" style={{width:"26rem", margin:"0px 20px 20px 40px"}} href={this.centroids_html_filepath}>
+                                <img src={this.centroids_png_filepath} alt="Centroids Chart"/>
+                            </a>
                         </div>
-                        */}
+
                     </div>
                 )
             }

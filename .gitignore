@@ -8,7 +8,7 @@ results/*/*.csv
 results/*/*.csv.gz
 results/*/*.json
 
-results/*/*/*.png
+#results/*/*/*.png
 #results/*/*/*.html
 results/*/*/*.json
 
