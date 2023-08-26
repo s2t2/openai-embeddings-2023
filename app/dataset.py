@@ -59,7 +59,7 @@ class Dataset():
         fact_threshold = 3.0 # set threshold and check robustness
         df["is_factual"] = df["avg_fact_score"].apply(lambda score: score if isnull(score) else score >= fact_threshold)
         df["is_factual"] = df["is_factual"].map({True: 1, False :0 })
-        df["factual_label"] = df["is_factual"].map({1: "High", 0 :"Low" })
+        df["factual_label"] = df["is_factual"].map({1: "High Quality", 0 :"Low Quality" })
 
         return df
 
