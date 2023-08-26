@@ -64,7 +64,8 @@ CATEGORY_ORDERS = {
     "q_label": ["Normal", "Q-anon"],
 
     "toxic_label": ["Normal", "Toxic"],
-    "factual_label": ["High", "Low"],
+    "factual_label": ["High Quality", "Low Quality"],
+
     "fourway_label": list(FOURWAY_COLORS_MAP.keys()),
     "sixway_label": list(SIXWAY_COLORS_MAP.keys()),
 }
