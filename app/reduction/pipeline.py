@@ -159,8 +159,9 @@ class ReductionPipeline:
 
         if fig_save:
             results_dirpath = results_dirpath or self.results_dirpath
-            embeddings_html_filepath = os.path.join(results_dirpath, f"{self.reducer_name}_{self.n_components}.html")
-            fig.write_html(embeddings_html_filepath)
+            filestem = os.path.join(results_dirpath, f"{self.reducer_name}_{self.n_components}")
+            fig.write_image(f"{filestem}.png")
+            fig.write_html(f"{filestem}.html")
 
         return fig
 
@@ -201,9 +202,9 @@ class ReductionPipeline:
 
         if fig_save:
             results_dirpath = results_dirpath or self.results_dirpath
-            #centroids_png_filepath = os.path.join(results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids.png")
-            centroids_html_filepath = os.path.join(results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids.html")
-            fig.write_html(centroids_html_filepath)
+            filestem = os.path.join(results_dirpath, f"{self.reducer_name}_{self.n_components}_centroids")
+            fig.write_image(f"{filestem}.png")
+            fig.write_html(f"{filestem}.html")
 
         return fig
 
@@ -219,7 +220,12 @@ if __name__ == "__main__":
     pca_pipeline.perform()
     pca_pipeline.save_embeddings()
 
-    for groupby_col in ["bot_label", "opinion_label", "fourway_label", "sixway_label", "bom_overall_label", "bom_astroturf_label"]:
+    for groupby_col in [
+        "bot_label", "opinion_label", "bom_overall_label", "bom_astroturf_label",
+        "toxic_label", "factual_label",
+
+        # "fourway_label", "sixway_label",
+                        ]:
         color_map = COLORS_MAP[groupby_col]
         category_orders = {groupby_col: CATEGORY_ORDERS[groupby_col]}
 

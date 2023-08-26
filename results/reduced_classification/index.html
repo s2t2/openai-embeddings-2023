@@ -21,7 +21,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>OpenAI Embeddings 2023</h1>
+        <h1><a href="../../index.html">OpenAI Embeddings 2023</a></h1>
 
         <p class="lead">Can ChatGPT help detect Twitter bots, based on their tweet content?</h2>
 
@@ -54,13 +54,25 @@
 
              <li class="nav-item" role="presentation">
                 <button class="nav-link" id="bom-overall-tab" data-bs-toggle="tab" data-bs-target="#bom-overall" type="button" role="tab" aria-controls="bom-overall" aria-selected="false">
-                    Botometer Overall Score
+                    Botometer Overall
                 </button>
             </li>
 
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="bom-astroturf-tab" data-bs-toggle="tab" data-bs-target="#bom-astroturf" type="button" role="tab" aria-controls="bom-astroturf" aria-selected="false">
-                    Botometer Astroturf Score
+                    Botometer Astroturf
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="is-toxic-tab" data-bs-toggle="tab" data-bs-target="#is-toxic" type="button" role="tab" aria-controls="is-toxic" aria-selected="false">
+                    Language Toxicity
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="is-factual-tab" data-bs-toggle="tab" data-bs-target="#is-factual" type="button" role="tab" aria-controls="is-factual" aria-selected="false">
+                    News Quality
                 </button>
             </li>
         </ul>
@@ -80,6 +92,14 @@
 
             <div class="tab-pane fade show" id="bom-astroturf" role="tabpanel" aria-labelledby="bom-astroturf-tab">
                 <h4>Botometer Astroturf</h4>
+            </div>
+
+            <div class="tab-pane fade show" id="is-toxic" role="tabpanel" aria-labelledby="is-toxic-tab">
+                <h4>Language Toxicity</h4>
+            </div>
+
+            <div class="tab-pane fade show" id="is-factual" role="tabpanel" aria-labelledby="is-factual-tab">
+                <h4>News Quality</h4>
             </div>
         </div>
 
@@ -103,12 +123,16 @@
         const opinionTab = document.getElementById("opinion-community")
         const bomOverallTab = document.getElementById("bom-overall")
         const bomAstroTab = document.getElementById("bom-astroturf")
+        const toxicTab = document.getElementById("is-toxic")
+        const factualTab = document.getElementById("is-factual")
 
         const Y_LABELS = {
             "is_bot": "Bot Status",
             "opinion_community": "Opinion Community",
             "is_bom_overall": "Botometer Overall Score",
             "is_bom_astroturf": "Botometer Astroturf Score",
+            "is_toxic": "Language Toxicity",
+            "is_factual": "News Quality"
         }
 
         const MODELS_MAP = {
@@ -117,11 +141,7 @@
             "XGBoost": "xgboost",
         }
 
-        const REDUCERS_MAP = {
-            "pca": "PCA",
-            "tsne": "T-SNE",
-            "umap": "UMAP",
-        }
+        const REDUCERS_MAP = {"pca": "PCA","tsne": "T-SNE","umap": "UMAP"}
 
         class ReducedClassificationResults extends React.Component {
 
@@ -221,6 +241,8 @@
             ReactDOM.render(<Page reducer_name={reducer_name} n_components={n_components} y_col="opinion_community"/>, opinionTab)
             ReactDOM.render(<Page reducer_name={reducer_name} n_components={n_components} y_col="is_bom_overall"/>, bomOverallTab)
             ReactDOM.render(<Page reducer_name={reducer_name} n_components={n_components} y_col="is_bom_astroturf"/>, bomAstroTab)
+            ReactDOM.render(<Page reducer_name={reducer_name} n_components={n_components} y_col="is_toxic"/>, toxicTab)
+            ReactDOM.render(<Page reducer_name={reducer_name} n_components={n_components} y_col="is_factual"/>, factualTab)
         }
 
         dropdown.addEventListener("change", selectReductionMethod, false)

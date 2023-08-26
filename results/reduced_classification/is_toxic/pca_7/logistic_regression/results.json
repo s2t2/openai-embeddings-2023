@@ -1,0 +1,61 @@
+{
+    "classification_report": {
+        "0": {
+            "precision": 0.8924812030075188,
+            "recall": 0.968189233278956,
+            "f1-score": 0.9287949921752738,
+            "support": 1226.0
+        },
+        "1": {
+            "precision": 0.7880434782608695,
+            "recall": 0.5034722222222222,
+            "f1-score": 0.6144067796610169,
+            "support": 288.0
+        },
+        "accuracy": 0.8797886393659181,
+        "macro avg": {
+            "precision": 0.8402623406341941,
+            "recall": 0.7358307277505891,
+            "f1-score": 0.7716008859181454,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.872614581655448,
+            "recall": 0.8797886393659181,
+            "f1-score": 0.8689906294248737,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        0,
+        1
+    ],
+    "confusion_matrix": [
+        [
+            1187,
+            39
+        ],
+        [
+            143,
+            145
+        ]
+    ],
+    "roc_auc_score": 0.7358307277505891,
+    "roc_auc_score_proba": 0.8821030451332248,
+    "roc_curve_auc": 0.8821030451332248,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__max_iter": [
+                25,
+                1000
+            ]
+        },
+        "best_params": {
+            "classifier__max_iter": 25
+        },
+        "best_score": 0.8670275110640961
+    }
+}

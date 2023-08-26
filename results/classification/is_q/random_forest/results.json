@@ -1,0 +1,72 @@
+{
+    "classification_report": {
+        "False": {
+            "precision": 0.9815059445178336,
+            "recall": 1.0,
+            "f1-score": 0.9906666666666667,
+            "support": 1486.0
+        },
+        "True": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 28.0
+        },
+        "accuracy": 0.9815059445178336,
+        "macro avg": {
+            "precision": 0.4907529722589168,
+            "recall": 0.5,
+            "f1-score": 0.49533333333333335,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.9633539191238445,
+            "recall": 0.9815059445178336,
+            "f1-score": 0.9723452223690005,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        false,
+        true
+    ],
+    "confusion_matrix": [
+        [
+            1486,
+            0
+        ],
+        [
+            28,
+            0
+        ]
+    ],
+    "roc_auc_score": 0.5,
+    "roc_auc_score_proba": 0.9211449721207461,
+    "roc_curve_auc": 0.9211449721207461,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__criterion": [
+                "gini"
+            ],
+            "classifier__min_samples_leaf": [
+                3,
+                5,
+                8
+            ],
+            "classifier__n_estimators": [
+                250,
+                500,
+                1000
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "gini",
+            "classifier__min_samples_leaf": 8,
+            "classifier__n_estimators": 1000
+        },
+        "best_score": 0.929000998008437
+    }
+}
