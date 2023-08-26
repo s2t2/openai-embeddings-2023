@@ -20,17 +20,13 @@ Y_COLS_BINARY = [
 #]
 
 BOT_CLASSES_MAP = {True:"Bot", False:"Human"}
-OPINION_CLASSES_MAP = {0:"Anti-Trump", 1:"Pro-Trump"}
-TOXIC_CLASSES_MAP = {0: "Normal", 1: "Toxic"}
-FACT_CLASSES_MAP = {0: "Low", 1: "High"}
-
 CLASSES_MAP = {
     "is_bot": BOT_CLASSES_MAP,
     "is_bom_overall": BOT_CLASSES_MAP,
     "is_bom_astroturf": BOT_CLASSES_MAP,
-    "opinion_community":OPINION_CLASSES_MAP,
-    "is_toxic": TOXIC_CLASSES_MAP,
-    "is_factual": FACT_CLASSES_MAP,
+    "opinion_community": {0:"Anti-Trump", 1:"Pro-Trump"},
+    "is_toxic": {0: "Normal", 1: "Toxic"},
+    "is_factual": {0: "Low Quality", 1: "High Quality"},
 }
 
 
