@@ -23,10 +23,13 @@ K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
 FIG_SHOW = bool(os.getenv("FIG_SHOW", default="false").lower() == "true")
 FIG_SAVE = bool(os.getenv("FIG_SAVE", default="true").lower() == "true")
 
+from sklearn.metrics import roc_curve, roc_auc_score, auc
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import label_binarize
 
 
 class ClassificationPipeline(ABC):
-    """Right now this class supports binary classification only."""
+    """Supports binary and multiclass classification."""
 
     def __init__(self, ds=None, x_scale=False, y_col="is_bot", param_grid=None, k_folds=K_FOLDS, results_dirpath=None):
 
@@ -78,7 +81,11 @@ class ClassificationPipeline(ABC):
         self.train_eval()
         self.save_results()
         self.plot_confusion_matrix()
-        self.plot_roc_curve()
+
+        if len(self.class_names) >=3:
+            self.plot_roc_curve_multiclass()
+        else:
+            self.plot_roc_curve()
 
 
     def train_eval(self):
@@ -248,5 +255,80 @@ class ClassificationPipeline(ABC):
         if fig_save:
             fig.write_image(os.path.join(self.results_dirpath, "roc_curve.png"))
             fig.write_html(os.path.join(self.results_dirpath, "roc_curve.html"))
+
+        return fig
+
+
+    def plot_roc_curve_multiclass(self, fig_show=FIG_SHOW, fig_save=FIG_SAVE, height=500):
+
+        ovr_score = roc_auc_score(self.y_test, self.y_pred_proba, multi_class="ovr")
+
+        return None
+        # TODO: fix the chart
+
+        y_test_encoded = label_binarize(self.y_test, classes=self.class_names)
+        #y_pred_encoded = label_binarize(self.y_pred, classes=self.class_names)
+
+        fpr, tpr, thresholds = {}, {}, {}
+        scores = {}
+        for i, class_name in enumerate(self.class_names):
+
+            y_test_i = y_test_encoded[:,i]
+            #y_pred_proba_i = y_pred_encoded[:,i] # use column i (multiclass) instead of column 1 (binary)
+            y_pred_proba_i = self.y_pred_proba[:,i] # use column i (multiclass) instead of column 1 (binary)
+
+            fpr[i], tpr[i], thresholds[i] = roc_curve(y_test_i, y_pred_proba_i, pos_label=i)
+
+            #scores[i] = roc_auc_score(self.y_test, y_pred_proba_i)
+            scores[i] = auc(fpr[i], tpr[i])
+
+        # CHART
+        chart_data = []
+        for i, class_name in enumerate(self.class_names):
+            trace_roc_ovr = go.Scatter(x=fpr[i], y=tpr[i], mode='lines',
+                                line=dict(color='darkorange', width=2),
+                                name=f"{class_name} vs Rest (AUC = {round(scores[i], 3)})"
+            )
+            chart_data.append(trace_roc_ovr)
+
+        trace_diag = go.Scatter(x=[0, 1], y=[0, 1], mode='lines',
+                                line=dict(color='navy', width=2, dash='dash'),
+                                name="Chance level (AUC = 0.5)"
+        )
+        chart_data.append(trace_diag)
+
+        # https://plotly.com/python-api-reference/generated/plotly.graph_objects.Layout.html
+        scaler_title = ", X Scaled" if self.x_scale else ""
+        title = f"ROC Curve ({self.model_type}{scaler_title})"
+        title += f"<br><sup>Y: '{self.y_col}' | AUC (OVR ): {round(ovr_score, 2)}</sup>"
+
+        layout = go.Layout(
+            title=title, title_x=0.5, # centered
+            width=height, height=height, # square
+
+            xaxis=dict(title="False Positive Rate",
+                       #showline=True, showgrid=False, mirror=True
+                       ),
+            yaxis=dict(title="True Positive Rate", ticks="inside",
+                       #showline=True, showgrid=False, mirror=True
+                       ),
+
+            showlegend=True,
+            #legend=dict(x=0.02, y=0.98),
+            legend=dict(x=.98, y=0.02, xanchor='right', yanchor='bottom', bordercolor='gray', borderwidth=1),
+
+            #plot_bgcolor='white',  # Set white background
+             # black plot border, see: https://stackoverflow.com/a/42098976/670433
+        )
+
+        fig = go.Figure(data=chart_data, layout=layout)
+        fig.show()
+
+        #if fig_show:
+        #    fig.show()
+        #
+        #if fig_save:
+        #    fig.write_image(os.path.join(self.results_dirpath, "roc_curve.png"))
+        #    fig.write_html(os.path.join(self.results_dirpath, "roc_curve.html"))
 
         return fig

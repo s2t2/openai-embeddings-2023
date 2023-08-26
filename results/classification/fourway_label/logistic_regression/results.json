@@ -1,0 +1,91 @@
+{
+    "classification_report": {
+        "Anti-Trump Bot": {
+            "precision": 0.8587962962962963,
+            "recall": 0.9893333333333333,
+            "f1-score": 0.919454770755886,
+            "support": 375.0
+        },
+        "Anti-Trump Human": {
+            "precision": 0.8366718027734977,
+            "recall": 0.861904761904762,
+            "f1-score": 0.8491008600469115,
+            "support": 630.0
+        },
+        "Pro-Trump Bot": {
+            "precision": 0.8764044943820225,
+            "recall": 0.9873417721518988,
+            "f1-score": 0.9285714285714286,
+            "support": 237.0
+        },
+        "Pro-Trump Human": {
+            "precision": 0.8132530120481928,
+            "recall": 0.4963235294117647,
+            "f1-score": 0.6164383561643835,
+            "support": 272.0
+        },
+        "accuracy": 0.8474240422721269,
+        "macro avg": {
+            "precision": 0.8462814013750023,
+            "recall": 0.8337258492004396,
+            "f1-score": 0.8283913538846525,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8441641554187995,
+            "recall": 0.8474240422721269,
+            "f1-score": 0.8371675972993082,
+            "support": 1514.0
+        }
+    },
+    "class_names": [
+        "Anti-Trump Bot",
+        "Anti-Trump Human",
+        "Pro-Trump Bot",
+        "Pro-Trump Human"
+    ],
+    "confusion_matrix": [
+        [
+            371,
+            0,
+            4,
+            0
+        ],
+        [
+            56,
+            543,
+            0,
+            31
+        ],
+        [
+            3,
+            0,
+            234,
+            0
+        ],
+        [
+            2,
+            106,
+            29,
+            135
+        ]
+    ],
+    "roc_auc_score": 0.8888295730964713,
+    "roc_auc_score_proba": 0.8888295730964713,
+    "grid_search": {
+        "x_scaled": false,
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__max_iter": [
+                25,
+                1000,
+                10000
+            ]
+        },
+        "best_params": {
+            "classifier__max_iter": 1000
+        },
+        "best_score": 0.952610419906996
+    }
+}

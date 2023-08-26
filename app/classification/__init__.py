@@ -14,10 +14,10 @@ Y_COLS_BINARY = [
     "is_toxic",
     "is_factual",
 ]
-#Y_COLS_MULTICLASS = [
-#    # multiclass classification with categorical classes:
-#    #"fourway_label", #"bom_overall_fourway_label", "bom_astroturf_fourway_label"
-#]
+Y_COLS_MULTICLASS = [
+    # multiclass classification with categorical classes:
+    "fourway_label", #"bom_overall_fourway_label", "bom_astroturf_fourway_label"
+]
 
 BOT_CLASSES_MAP = {True:"Bot", False:"Human"}
 CLASSES_MAP = {

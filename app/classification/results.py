@@ -1,6 +1,7 @@
 
 from functools import cached_property
 
+import numpy as np
 from sklearn.preprocessing import label_binarize, LabelBinarizer
 from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, roc_curve, auc, RocCurveDisplay
 
@@ -17,7 +18,7 @@ class ClassificationResults:
         self.y_pred_proba = y_pred_proba
 
         self.class_names = class_names #or sorted(list(set(self.y_test)))
-
+        self.is_multiclass = len(self.class_names) >= 3
 
     @cached_property
     def classification_report(self):
@@ -46,18 +47,14 @@ class ClassificationResults:
     @cached_property
     def roc_auc_score(self):
         # roc_auc_score uses average="macro" by default
-        # ... works with with numeric / boolean class labels, not string categorical class labels
-        # ... but  we can one-hot encode categorical class labels to overcome ValueError: could not convert string to float
-
-        #if not isinstance(self.y_test.iloc[0], str):
-        #    return roc_auc_score(self.y_test, self.y_pred)
-        #else:
-#
-        #    y_test_encoded = label_binarize(self.y_test, classes=self.class_names)
-        #    y_pred_encoded = label_binarize(self.y_pred, classes=self.class_names)
-        #    return roc_auc_score(y_test_encoded, y_pred_encoded)
-
-        return roc_auc_score(self.y_test, self.y_pred)
+        if isinstance(self.y_test.iloc[0], str):
+            # roc_auc_score works with with numeric / boolean class labels, not string categorical class labels (will throw ValueError: could not convert string to float)
+            # ... but we can one-hot encode categorical class labels to overcome the error
+            y_test_encoded = label_binarize(self.y_test, classes=self.class_names)
+            y_pred_encoded = label_binarize(self.y_pred, classes=self.class_names)
+            return roc_auc_score(y_test_encoded, y_pred_encoded)
+        else:
+            return roc_auc_score(self.y_test, self.y_pred)
 
     @cached_property
     def roc_auc_score_proba(self):
@@ -73,21 +70,43 @@ class ClassificationResults:
         # ... In addition, the order of the class scores must correspond to the order of labels, if provided, or else to the numerical or lexicographical order of the labels in y_true.
         # ... See more information in the User guide <roc_auc_multiclass>;
 
-        y_pred_proba_pos = self.y_pred_proba[:,1]
-        return roc_auc_score(self.y_test, y_pred_proba_pos)
+        #y_pred_proba_pos = self.y_pred_proba[:,1] # take the second of two columns, because it wants the scores for the positive class
+        #return roc_auc_score(self.y_test, y_pred_proba_pos
+
+        # ValueError: multi_class must be in ('ovo', 'ovr'). 'raise' is the default
+        #multi_class = "ovr" if len(self.class_names) >= 3 else "raise"
+
+        if self.is_multiclass:
+            # multiclass, use one-hot encoded, overcomes: numpy.AxisError: axis 1 is out of bounds for array of dimension 1
+            y_test_encoded = label_binarize(self.y_test, classes=self.class_names)
+            y_pred_encoded = label_binarize(self.y_pred, classes=self.class_names)
+            return roc_auc_score(y_test_encoded, y_pred_encoded, multi_class="ovr")
+        else:
+            y_pred_proba_pos = self.y_pred_proba[:,1] # take the second of two columns, because it wants the scores for the positive class
+            return roc_auc_score(self.y_test, y_pred_proba_pos)
+
+
+
 
     @cached_property
     def roc_curve(self):
+        """binary classification only"""
         y_pred_proba_pos = self.y_pred_proba[:,1]
         fpr, tpr, thresholds = roc_curve(self.y_test, y_pred_proba_pos)
         return fpr, tpr, thresholds
 
     @cached_property
     def roc_curve_auc(self):
-        """This is the same as roc_auc_score_proba"""
+        """This is the same as roc_auc_score_proba (binary classification only)"""
         fpr, tpr, _ = self.roc_curve
         return auc(fpr, tpr)
 
+    #@cached_property
+    #def roc_curve_multiclass(self, label_index):
+    #    """multiclass classification using OVR where label_index is the index of the one label to compare the rest against"""
+    #    y_pred_proba_pos = self.y_pred_proba[:,1]
+    #    fpr, tpr, thresholds = roc_curve(self.y_test, y_pred_proba_pos, pos_label=label_index)
+    #    return fpr, tpr, thresholds
 
 
     @cached_property
@@ -98,5 +117,4 @@ class ClassificationResults:
             "confusion_matrix": self.confusion_matrix.tolist(),
             "roc_auc_score": self.roc_auc_score,
             "roc_auc_score_proba": self.roc_auc_score_proba,
-            "roc_curve_auc": self.roc_curve_auc
         }
