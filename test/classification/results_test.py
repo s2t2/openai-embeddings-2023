@@ -15,14 +15,14 @@ def results_ok(pipeline):
     assert isinstance(results.f1_macro, float)
     assert isinstance(results.f1_weighted, float)
     assert isinstance(results.roc_auc_score, float)
-    assert isinstance(results.roc_auc_score_proba, float)
-    assert results.roc_auc_score_proba == results.roc_curve_auc
+    #assert isinstance(results.roc_auc_score_proba, float)
+    #assert results.roc_auc_score_proba == results.roc_curve_auc
 
     results_json = pipeline.results_json
     assert sorted(results_json.keys()) == [
         'class_names',
         'classification_report', 'confusion_matrix', 'grid_search',
-        'roc_auc_score', "roc_auc_score_proba", "roc_curve_auc"
+        'roc_auc_score', #"roc_auc_score_proba", "roc_curve_auc"
     ]
     assert isinstance(results_json["roc_auc_score"], float)
 

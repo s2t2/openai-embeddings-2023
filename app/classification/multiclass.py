@@ -1,7 +1,10 @@
+# https://scikit-learn.org/stable/modules/multiclass.html
+# https://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
+
 
 from app.classification.logistic_regression import LogisticRegressionPipeline
-from app.classification.random_forest import RandomForestClassifier
-from app.classification.xgboost import XGBClassifier
+from app.classification.random_forest import RandomForestPipeline
+from app.classification.xgboost import XGBoostPipeline
 
 if __name__ == "__main__":
 
@@ -15,8 +18,8 @@ if __name__ == "__main__":
         pipeline = LogisticRegressionPipeline(ds=ds, y_col=y_col)
         pipeline.perform()
 
-        pipeline = RandomForestClassifier(ds=ds, y_col=y_col)
+        pipeline = XGBoostPipeline(ds=ds, y_col=y_col)
         pipeline.perform()
 
-        pipeline = XGBClassifier(ds=ds, y_col=y_col)
+        pipeline = RandomForestPipeline(ds=ds, y_col=y_col)
         pipeline.perform()

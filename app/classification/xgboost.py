@@ -14,6 +14,7 @@
 # https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.XGBClassifier
 
 from xgboost import XGBClassifier
+from sklearn.preprocessing import label_binarize, LabelBinarizer, LabelEncoder
 
 from app.classification.pipeline import ClassificationPipeline
 
@@ -23,17 +24,13 @@ class XGBoostPipeline(ClassificationPipeline):
     def __init__(self, ds=None, y_col="is_bot", param_grid=None, results_dirpath=None):
         super().__init__(ds=ds, y_col=y_col, param_grid=param_grid, results_dirpath=results_dirpath)
 
+        # UserWarning: The use of label encoder in XGBClassifier is deprecated and will be removed in a future release.
+        # To remove this warning, do the following: 1) Pass option use_label_encoder=False when constructing XGBClassifier object; and 2) Encode your labels (y) as integers starting with 0, i.e. 0, 1, 2, ..., [num_class - 1].
 
-        #if isinstance(self.y.iloc[0], str):
-        #    self.label_binarizer = LabelBinarizer()
-        #    self.y = self.label_binarizer.fit_transform(self.y)
+        # ValueError: Experimental support for categorical data is not implemented for current tree method yet.
 
-        #params = {"random_state": 99}
-        #if isinstance(self.y.iloc[0], str):
-        #    params["enable_categorical"] = True
-        #self.model = XGBClassifier(**params)
-
-        self.model = XGBClassifier(random_state=99)
+        self.model = XGBClassifier(random_state=99 #, enable_categorical=True
+                                   )
         self.model_dirname = "xgboost"
 
         self.param_grid = param_grid or {

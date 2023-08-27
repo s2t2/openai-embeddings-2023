@@ -25,7 +25,8 @@ FIG_SAVE = bool(os.getenv("FIG_SAVE", default="true").lower() == "true")
 
 from sklearn.metrics import roc_curve, roc_auc_score, auc
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import label_binarize
+from sklearn.preprocessing import label_binarize, LabelBinarizer, LabelEncoder
+from app.colors import ORANGES
 
 
 class ClassificationPipeline(ABC):
@@ -52,17 +53,23 @@ class ClassificationPipeline(ABC):
 
 
         self.n_classes = len(set(self.y))
+        self.is_multiclass = bool(self.n_classes > 2)
 
-        #if isinstance(y.iloc[0], str):
-        #    self.label_binarizer = LabelBinarizer()
-        #    y_encoded = self.label_binarizer.fit_transform(y)
+        # if the y labels are strings, let's convert them to numbers (primarily for xgboost)
+        if isinstance(self.y.iloc[0], str):
+            self.label_encoder = LabelEncoder() # changes strings to numbers starting with 0
+            self.y = self.label_encoder.fit_transform(self.y)
+            self.class_labels = list(self.label_encoder.classes_) # the original string labels
+            self.class_names = list(self.label_encoder.transform(self.class_labels))
+        else:
+            self.label_encoder = None
+            self.class_labels = None
+            self.class_names = None
 
         self.k_folds = k_folds
         self._results_dirpath = results_dirpath
 
         # values set after training:
-        #self.label_binarizer = None # only for categorical / multiclass
-        self.class_names = None
         self.gs = None
         self.results = None
         self.results_json = {}
@@ -76,39 +83,29 @@ class ClassificationPipeline(ABC):
     def model_type(self):
         return self.model.__class__.__name__
 
-
     def perform(self):
         self.train_eval()
         self.save_results()
         self.plot_confusion_matrix()
 
-        if len(self.class_names) >=3:
+        if self.is_multiclass:
             self.plot_roc_curve_multiclass()
         else:
             self.plot_roc_curve()
 
 
     def train_eval(self):
+
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.x, self.y, shuffle=True, test_size=0.2, random_state=99)
         print("X TRAIN:", self.x_train.shape)
         print("Y TRAIN:", self.y_train.shape)
-        print(self.y_train.value_counts())
-        #if self.label_binarizer:
-        #    print(Series(self.label_binarizer.inverse_transform(y_train)).value_counts())
-        #else:
-        #    print(y_train.value_counts())
+        #print(self.y_train.value_counts())
+        #print(Series(self.y_train).value_counts())
+        print(Series(self.y_train).map(lambda i: self.class_labels[i]).value_counts())
 
-        pipeline_steps = [("classifier", self.model)]
-        #pipeline_steps = []
-        #if isinstance(y.iloc[0], str):
-        #    # one-hot encoding for categorical labels
-        #    label_binarizer = LabelBinarizer()
-        #    pipeline_steps.append(("label_binarizer", label_binarizer))
-        #    #> TypeError: LabelBinarizer.fit_transform() takes 2 positional arguments but 3 were given
-        #pipeline_steps.append(("classifier", self.model))
-
-        pipeline = Pipeline(steps=pipeline_steps)
-        scoring ="roc_auc_ovr" if self.n_classes > 2 else  "roc_auc"
+        steps = [("classifier", self.model)]
+        pipeline = Pipeline(steps=steps)
+        scoring ="roc_auc_ovr" if self.is_multiclass else "roc_auc"
         self.gs = GridSearchCV(estimator=pipeline, cv=self.k_folds,
             verbose=10, return_train_score=True, n_jobs=-5, # -1 means using all processors
             scoring=scoring, #"roc_auc",
@@ -124,32 +121,39 @@ class ClassificationPipeline(ABC):
         print("BEST PARAMS:", self.gs.best_params_)
         print("BEST SCORE:", self.gs.best_score_)
         clf = self.gs.best_estimator_.named_steps["classifier"]
-        self.class_names = clf.classes_
-        self.class_labels = class_labels(y_col=self.y_col, class_names=self.class_names)
 
+        self.class_names = self.class_names or list(clf.classes_)
+        #self.class_labels = class_labels(y_col=self.y_col, class_names=self.class_names)
+
+        # for logistic and xgboost:
         #print("COEFS:")
         #coefs = Series(best_est.coef_[0], index=features).sort_values(ascending=False)
 
-        #breakpoint()
+        # for xgboost:
+        # model.feature_importances_
 
         print("-----------------")
         print("EVALUATION...")
 
+        #breakpoint()
+
         self.y_pred = self.gs.predict(self.x_test)
         self.y_pred_proba = self.gs.predict_proba(self.x_test)
 
-        self.results = ClassificationResults(self.y_test, self.y_pred, self.y_pred_proba, self.class_names)
+        self.results = ClassificationResults(self.y_test, self.y_pred, self.y_pred_proba, self.class_names, self.class_labels)
         self.results.show_classification_report()
 
-        self.results_json = self.results.as_json
-        self.results_json["grid_search"] = {
-            "x_scaled": self.x_scale,
-            "model_type": self.model_type, #self.gs.best_estimator_.named_steps["classifier"].__class__.__name__,
-            "k_folds": self.k_folds,
-            "param_grid": self.param_grid,
-            "best_params": self.gs.best_params_,
-            "best_score": self.gs.best_score_
+        self.results_json = {
+            "grid_search": {
+                "x_scaled": self.x_scale,
+                "model_type": self.model_type, #self.gs.best_estimator_.named_steps["classifier"].__class__.__name__,
+                "k_folds": self.k_folds,
+                "param_grid": self.param_grid,
+                "best_params": self.gs.best_params_,
+                "best_score": self.gs.best_score_
+            }
         }
+        self.results_json = {**self.results.as_json, **self.results_json} # merge dicts
         pprint(self.results_json)
 
 
@@ -214,7 +218,7 @@ class ClassificationPipeline(ABC):
 
         scaler_title = ", X Scaled" if self.x_scale else ""
         title = f"ROC Curve ({self.model_type}{scaler_title})"
-        title += f"<br><sup>Y: '{self.y_col}' | AUC: {round(score, 2)}</sup>"
+        title += f"<br><sup>Y: '{self.y_col}' | AUC: {score.round(2)}</sup>"
 
         #roc_title = f"Receiver operating characteristic"
         #roc_title = f"Receiver operating characteristic (AUC = {round(score, 3)})"
@@ -261,74 +265,54 @@ class ClassificationPipeline(ABC):
 
     def plot_roc_curve_multiclass(self, fig_show=FIG_SHOW, fig_save=FIG_SAVE, height=500):
 
-        ovr_score = roc_auc_score(self.y_test, self.y_pred_proba, multi_class="ovr")
+        # CHART DATA
 
-        return None
-        # TODO: fix the chart
+        label_binarizer = LabelBinarizer().fit(self.y_train)
+        y_test_encoded = label_binarizer.transform(self.y_test)
+        class_names = self.class_labels #label_binarizer.classes_ # self.class_names
 
-        y_test_encoded = label_binarize(self.y_test, classes=self.class_names)
-        #y_pred_encoded = label_binarize(self.y_pred, classes=self.class_names)
-
-        fpr, tpr, thresholds = {}, {}, {}
-        scores = {}
-        for i, class_name in enumerate(self.class_names):
-
-            y_test_i = y_test_encoded[:,i]
-            #y_pred_proba_i = y_pred_encoded[:,i] # use column i (multiclass) instead of column 1 (binary)
-            y_pred_proba_i = self.y_pred_proba[:,i] # use column i (multiclass) instead of column 1 (binary)
-
-            fpr[i], tpr[i], thresholds[i] = roc_curve(y_test_i, y_pred_proba_i, pos_label=i)
-
-            #scores[i] = roc_auc_score(self.y_test, y_pred_proba_i)
-            scores[i] = auc(fpr[i], tpr[i])
-
-        # CHART
         chart_data = []
-        for i, class_name in enumerate(self.class_names):
-            trace_roc_ovr = go.Scatter(x=fpr[i], y=tpr[i], mode='lines',
-                                line=dict(color='darkorange', width=2),
-                                name=f"{class_name} vs Rest (AUC = {round(scores[i], 3)})"
+        for i, class_name in enumerate(class_names):
+            fpr, tpr, _ = roc_curve(y_test_encoded[:,i], self.y_pred_proba[:,i])
+            score = auc(fpr, tpr)
+            trace = go.Scatter(x=fpr, y=tpr,
+                mode='lines',
+                line=dict(color=ORANGES[i+2], width=2),
+                name=f"'{str(class_name).title()}' vs Rest (AUC = {score.round(3)})"
             )
-            chart_data.append(trace_roc_ovr)
+            chart_data.append(trace)
 
         trace_diag = go.Scatter(x=[0, 1], y=[0, 1], mode='lines',
-                                line=dict(color='navy', width=2, dash='dash'),
-                                name="Chance level (AUC = 0.5)"
+            line=dict(color='navy', width=2, dash='dash'),
+            name="Chance level (AUC = 0.5)"
         )
         chart_data.append(trace_diag)
 
-        # https://plotly.com/python-api-reference/generated/plotly.graph_objects.Layout.html
-        scaler_title = ", X Scaled" if self.x_scale else ""
-        title = f"ROC Curve ({self.model_type}{scaler_title})"
-        title += f"<br><sup>Y: '{self.y_col}' | AUC (OVR ): {round(ovr_score, 2)}</sup>"
+        # LAYOUT
 
-        layout = go.Layout(
-            title=title, title_x=0.5, # centered
+        #macro_ovr_score = roc_auc_score(self.y_test, self.y_pred_proba, multi_class="ovr", average="macro")
+        macro_ovr_score = self.results.roc_auc_score
+
+        title = f"ROC Curve ({self.model_type})"
+        title += f"<br><sup><sup>Y: '{self.y_col}' | AUC (Macro averaged One vs Rest): {round(macro_ovr_score, 3)}</sup>"
+
+        layout = go.Layout(title=title, title_x=0.5, # centered
             width=height, height=height, # square
-
-            xaxis=dict(title="False Positive Rate",
-                       #showline=True, showgrid=False, mirror=True
-                       ),
-            yaxis=dict(title="True Positive Rate", ticks="inside",
-                       #showline=True, showgrid=False, mirror=True
-                       ),
-
+            xaxis=dict(title="False Positive Rate"),
+            yaxis=dict(title="True Positive Rate", ticks="inside"),
             showlegend=True,
-            #legend=dict(x=0.02, y=0.98),
             legend=dict(x=.98, y=0.02, xanchor='right', yanchor='bottom', bordercolor='gray', borderwidth=1),
+        ) # https://plotly.com/python-api-reference/generated/plotly.graph_objects.Layout.html
 
-            #plot_bgcolor='white',  # Set white background
-             # black plot border, see: https://stackoverflow.com/a/42098976/670433
-        )
+        # FIGURE
 
         fig = go.Figure(data=chart_data, layout=layout)
-        fig.show()
 
-        #if fig_show:
-        #    fig.show()
-        #
-        #if fig_save:
-        #    fig.write_image(os.path.join(self.results_dirpath, "roc_curve.png"))
-        #    fig.write_html(os.path.join(self.results_dirpath, "roc_curve.html"))
+        if fig_show:
+            fig.show()
+
+        if fig_save:
+            fig.write_image(os.path.join(self.results_dirpath, "roc_curve.png"))
+            fig.write_html(os.path.join(self.results_dirpath, "roc_curve.html"))
 
         return fig

@@ -1,4 +1,16 @@
 {
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot",
+        "Anti-Trump Human",
+        "Pro-Trump Bot",
+        "Pro-Trump Human"
+    ],
     "classification_report": {
         "Anti-Trump Bot": {
             "precision": 0.8587962962962963,
@@ -38,12 +50,6 @@
             "support": 1514.0
         }
     },
-    "class_names": [
-        "Anti-Trump Bot",
-        "Anti-Trump Human",
-        "Pro-Trump Bot",
-        "Pro-Trump Human"
-    ],
     "confusion_matrix": [
         [
             371,
@@ -70,8 +76,7 @@
             135
         ]
     ],
-    "roc_auc_score": 0.8888295730964713,
-    "roc_auc_score_proba": 0.8888295730964713,
+    "roc_auc_score": 0.9551626982156016,
     "grid_search": {
         "x_scaled": false,
         "model_type": "LogisticRegression",
