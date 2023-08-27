@@ -8,7 +8,8 @@ CLASSIFICATION_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "classification")
 
 Y_COLS_BINARY = [
     # binary classification with boolean classes:
-    "is_bot", "opinion_community",
+    "is_bot",
+    "opinion_community",
     #"is_q",
     #"is_bom_overall", "is_bom_astroturf",
     "is_toxic",
@@ -18,6 +19,7 @@ Y_COLS_MULTICLASS = [
     # multiclass classification with categorical classes:
     "fourway_label", #"bom_overall_fourway_label", "bom_astroturf_fourway_label"
 ]
+Y_COLS = Y_COLS_BINARY + Y_COLS_MULTICLASS
 
 BOT_CLASSES_MAP = {True:"Bot", False:"Human"}
 CLASSES_MAP = {
@@ -28,6 +30,7 @@ CLASSES_MAP = {
     "is_toxic": {0: "Normal", 1: "Toxic"},
     "is_factual": {0: "Low Quality", 1: "High Quality"},
 }
+
 
 
 def class_labels(y_col, class_names):

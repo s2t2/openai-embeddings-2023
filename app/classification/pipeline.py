@@ -101,7 +101,11 @@ class ClassificationPipeline(ABC):
         print("Y TRAIN:", self.y_train.shape)
         #print(self.y_train.value_counts())
         #print(Series(self.y_train).value_counts())
-        print(Series(self.y_train).map(lambda i: self.class_labels[i]).value_counts())
+
+        if self.class_labels:
+            print(Series(self.y_train).map(lambda i: self.class_labels[i]).value_counts())
+        else:
+            print(self.y_train.value_counts())
 
         steps = [("classifier", self.model)]
         pipeline = Pipeline(steps=steps)
@@ -123,7 +127,7 @@ class ClassificationPipeline(ABC):
         clf = self.gs.best_estimator_.named_steps["classifier"]
 
         self.class_names = self.class_names or list(clf.classes_)
-        #self.class_labels = class_labels(y_col=self.y_col, class_names=self.class_names)
+        self.class_labels = self.class_labels or class_labels(y_col=self.y_col, class_names=self.class_names)
 
         # for logistic and xgboost:
         #print("COEFS:")
@@ -214,17 +218,14 @@ class ClassificationPipeline(ABC):
 
         fpr, tpr, _ = self.results.roc_curve
         score = self.results.roc_curve_auc
-        #score_check = self.results.roc_auc_score_proba
 
         scaler_title = ", X Scaled" if self.x_scale else ""
         title = f"ROC Curve ({self.model_type}{scaler_title})"
-        title += f"<br><sup>Y: '{self.y_col}' | AUC: {score.round(2)}</sup>"
+        title += f"<br><sup>Y: '{self.y_col}' | AUC: {score.round(3)}</sup>"
 
-        #roc_title = f"Receiver operating characteristic"
-        #roc_title = f"Receiver operating characteristic (AUC = {round(score, 3)})"
         trace_roc = go.Scatter(x=fpr, y=tpr, mode='lines',
                                line=dict(color='darkorange', width=2),
-                               name=f"ROC (AUC = {round(score, 2)})"
+                               name=f"ROC (AUC = {score.round(3)})"
         )
         trace_diag = go.Scatter(x=[0, 1], y=[0, 1], mode='lines',
                                 line=dict(color='navy', width=2, dash='dash'),
@@ -235,20 +236,10 @@ class ClassificationPipeline(ABC):
         layout = go.Layout(
             title=title, title_x=0.5, # centered
             width=height, height=height, # square
-
-            xaxis=dict(title="False Positive Rate",
-                       #showline=True, showgrid=False, mirror=True
-                       ),
-            yaxis=dict(title="True Positive Rate", ticks="inside",
-                       #showline=True, showgrid=False, mirror=True
-                       ),
-
+            xaxis=dict(title="False Positive Rate"),
+            yaxis=dict(title="True Positive Rate", ticks="inside"),
             showlegend=True,
-            #legend=dict(x=0.02, y=0.98),
             legend=dict(x=.98, y=0.02, xanchor='right', yanchor='bottom', bordercolor='gray', borderwidth=1),
-
-            #plot_bgcolor='white',  # Set white background
-             # black plot border, see: https://stackoverflow.com/a/42098976/670433
         )
 
         fig = go.Figure(data=[trace_roc, trace_diag], layout=layout)

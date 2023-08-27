@@ -19,7 +19,8 @@ class ClassificationResults:
 
         self.class_names = class_names #or sorted(list(set(self.y_test)))
         self.is_multiclass = len(self.class_names) >= 3
-        self.class_labels =  list(class_labels) or class_names #or sorted(list(set(self.y_test)))
+        self.class_labels = class_labels or class_names #or sorted(list(set(self.y_test)))
+        self.class_labels =  [str(l) for l in self.class_labels] # ensure values are strings (for classification report)
 
     @cached_property
     def classification_report(self):
@@ -57,12 +58,13 @@ class ClassificationResults:
         #else:
         #    return roc_auc_score(self.y_test, self.y_pred)
         #
-        # UPDATE: we are converting string values at the begging, so this is no longer necessary
+        # UPDATE: we are converting string values at the beginning, so this is no longer necessary
 
-        params = dict(y_true=self.y_test, y_score=self.y_pred_proba)
         if self.is_multiclass:
-           params["multi_class"] = "ovr"
-        return roc_auc_score(**params)
+           return roc_auc_score(y_true=self.y_test, y_score=self.y_pred_proba, multi_class="ovr")
+        else:
+            y_pred_proba_pos = self.y_pred_proba[:,1] # positive class (for binary classification)
+            return roc_auc_score(y_true=self.y_test, y_score=y_pred_proba_pos)
 
     #@cached_property
     #def roc_auc_score_proba(self):

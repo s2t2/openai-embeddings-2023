@@ -134,12 +134,12 @@ class XGBoostPipeline(ClassificationPipeline):
 
 if __name__ == "__main__":
 
-    from app.classification import Y_COLS_BINARY
+    from app.classification import Y_COLS, Y_COLS_BINARY, Y_COLS_MULTICLASS
     from app.dataset import Dataset
 
     ds = Dataset()
 
-    for y_col in Y_COLS_BINARY:
+    for y_col in Y_COLS:
 
         pipeline = XGBoostPipeline(ds=ds, y_col=y_col)
         pipeline.perform()
