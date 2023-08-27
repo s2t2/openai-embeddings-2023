@@ -131,10 +131,11 @@ class ClassificationPipeline(ABC):
 
         # for logistic and xgboost:
         #print("COEFS:")
-        #coefs = Series(best_est.coef_[0], index=features).sort_values(ascending=False)
+        #coefs = Series(model.coef_[0], index=features).sort_values(ascending=False)
 
         # for xgboost:
         # model.feature_importances_
+        # Series(model.feature_importances_, index=feature_names).sort_values(ascending=False)
 
         print("-----------------")
         print("EVALUATION...")
@@ -150,7 +151,7 @@ class ClassificationPipeline(ABC):
         self.results_json = {
             "grid_search": {
                 "x_scaled": self.x_scale,
-                "model_type": self.model_type, #self.gs.best_estimator_.named_steps["classifier"].__class__.__name__,
+                "model_type": self.model_type,
                 "k_folds": self.k_folds,
                 "param_grid": self.param_grid,
                 "best_params": self.gs.best_params_,
