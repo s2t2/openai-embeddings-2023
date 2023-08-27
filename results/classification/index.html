@@ -62,6 +62,12 @@
                     News Quality
                 </button>
             </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="fourway-label-tab" data-bs-toggle="tab" data-bs-target="#fourway-label" type="button" role="tab" aria-controls="fourway-label" aria-selected="false">
+                    Fourway (Bot x Opinion)
+                </button>
+            </li>
         </ul>
 
         <div class="tab-content" id="myTabContent">
@@ -88,6 +94,10 @@
             <div class="tab-pane fade show" id="is-factual" role="tabpanel" aria-labelledby="is-factual-tab">
                 <h4>News Quality</h4>
             </div>
+
+            <div class="tab-pane fade show" id="fourway-label" role="tabpanel" aria-labelledby="fourway-label-tab">
+                <h4>Fourway (Bot x Opinion)</h4>
+            </div>
         </div>
 
 
@@ -112,14 +122,18 @@
         const bomAstroTab = document.getElementById("bom-astroturf")
         const toxicTab = document.getElementById("is-toxic")
         const factualTab = document.getElementById("is-factual")
+        const fourwayTab = document.getElementById("fourway-label")
 
         const Y_LABELS = {
+            // binary:
             "is_bot": "Bot Status",
             "opinion_community": "Opinion Community",
             "is_bom_overall": "Botometer Overall Score",
             "is_bom_astroturf": "Botometer Astroturf Score",
             "is_toxic": "Language Toxicity",
-            "is_factual": "News Quality"
+            "is_factual": "News Quality",
+            // multiclass:
+            "fourway_label": "Fourway (Bot x Opinion)"
         }
 
         const MODELS_MAP = {
@@ -226,6 +240,7 @@
         ReactDOM.render(<Page y_col="is_bom_astroturf"/>, bomAstroTab)
         ReactDOM.render(<Page y_col="is_toxic"/>, toxicTab)
         ReactDOM.render(<Page y_col="is_factual"/>, factualTab)
+        ReactDOM.render(<Page y_col="fourway_label"/>, fourwayTab)
     </script>
 </body>
 </html>
