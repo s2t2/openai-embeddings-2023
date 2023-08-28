@@ -14,7 +14,6 @@
 # https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.XGBClassifier
 
 from xgboost import XGBClassifier
-from sklearn.preprocessing import label_binarize, LabelBinarizer, LabelEncoder
 
 from app.classification.pipeline import ClassificationPipeline
 
@@ -29,8 +28,7 @@ class XGBoostPipeline(ClassificationPipeline):
 
         # ValueError: Experimental support for categorical data is not implemented for current tree method yet.
 
-        self.model = XGBClassifier(random_state=99 #, enable_categorical=True
-                                   )
+        self.model = XGBClassifier(random_state=99) #, enable_categorical=True
         self.model_dirname = "xgboost"
 
         self.param_grid = param_grid or {
