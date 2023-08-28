@@ -69,6 +69,12 @@
                     News Quality
                 </button>
             </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="fourway-label-tab" data-bs-toggle="tab" data-bs-target="#fourway-label" type="button" role="tab" aria-controls="fourway-label" aria-selected="false">
+                    Fourway (Bot x Opinion)
+                </button>
+            </li>
         </ul>
 
         <div class="tab-content" id="myTabContent">
@@ -95,6 +101,10 @@
             <div class="tab-pane fade show" id="is-factual" role="tabpanel" aria-labelledby="is-factual-tab">
                 <h4>News Quality</h4>
             </div>
+
+            <div class="tab-pane fade show" id="fourway-label" role="tabpanel" aria-labelledby="fourway-label-tab">
+                <h4>Fourway (Bot x Opinion)</h4>
+            </div>
         </div>
 
 
@@ -119,6 +129,7 @@
         const bomAstroTab = document.getElementById("bom-astroturf")
         const toxicTab = document.getElementById("is-toxic")
         const factualTab = document.getElementById("is-factual")
+        const fourwayTab = document.getElementById("fourway-label")
 
         const Y_LABELS = {
             "is_bot": "Bot Status",
@@ -126,7 +137,8 @@
             "is_bom_overall": "Botometer Overall Score",
             "is_bom_astroturf": "Botometer Astroturf Score",
             "is_toxic": "Language Toxicity",
-            "is_factual": "News Quality"
+            "is_factual": "News Quality",
+            "fourway_label": "Fourway (Bot x Opinion)"
         }
         const LABELS_MAP = {
             "is_bot": "bot_label",
@@ -134,7 +146,8 @@
             "is_bom_overall": "bom_overall_label",
             "is_bom_astroturf": "bom_astroturf_label",
             "is_toxic": "toxic_label",
-            "is_factual": "factual_label"
+            "is_factual": "factual_label",
+            "fourway_label": "fourway_label"
         }
 
         const REDUCERS_MAP = {"pca": "PCA","tsne": "T-SNE","umap": "UMAP"}
@@ -223,6 +236,7 @@
             ReactDOM.render(<Page n_components={n_components} y_col="is_bom_astroturf"/>, bomAstroTab)
             ReactDOM.render(<Page n_components={n_components} y_col="is_toxic"/>, toxicTab)
             ReactDOM.render(<Page n_components={n_components} y_col="is_factual"/>, factualTab)
+            ReactDOM.render(<Page n_components={n_components} y_col="fourway_label"/>, fourwayTab)
         }
 
         dropdown.addEventListener("change", selectNComponents, false)
