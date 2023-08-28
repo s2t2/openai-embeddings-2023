@@ -149,6 +149,8 @@ class ClassificationPipeline(ABC):
         self.results.show_classification_report()
 
         self.results_json = {
+            "y_col": self.y_col,
+            "x_scale": self.x_scale,
             "grid_search": {
                 "x_scaled": self.x_scale,
                 "model_type": self.model_type,

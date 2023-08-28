@@ -162,7 +162,9 @@
                 this.y_col = this.props.y_col || "is_bot"
                 this.model_dirname = MODELS_MAP[this.props.model_name]
                 this.confusion_matrix_filepath = `./${this.y_col}/${this.model_dirname}/confusion.png`
+                this.confusion_matrix_html_filepath = `./${this.y_col}/${this.model_dirname}/confusion.html`
                 this.roc_curve_filepath = `./${this.y_col}/${this.model_dirname}/roc_curve.png`
+                this.roc_curve_html_filepath = `./${this.y_col}/${this.model_dirname}/roc_curve.html`
 
                 this.results_filepath = `./${this.y_col}/${this.model_dirname}/results.json`
                 //this.results = this.loadJSONData(this.results_filepath)
@@ -175,13 +177,13 @@
                         <a href={this.results_filepath}>Results JSON</a>
 
                         <div class="row row-cols-2">
-                            <div class="card col" style={{width:"26rem", margin:"20px"}}>
+                            <a class="card col" style={{width:"26rem", margin:"20px"}} href={this.roc_curve_html_filepath}>
                                 <img src={this.roc_curve_filepath} alt="ROC Curve"/>
-                            </div>
+                            </a>
 
-                            <div class="card col" style={{width:"26rem", margin:"20px",
+                            <a class="card col" style={{width:"26rem", margin:"20px",
                                     overflow:"hidden", height: "26rem",
-                                }}>
+                                }} href={this.confusion_matrix_html_filepath}>
                                 <img src={this.confusion_matrix_filepath} style={{
                                     //maxHeight:"480px", height: "150%", width: "auto", overflow:"hidden"
                                     //height: "100%", width: "100%",
@@ -189,7 +191,7 @@
                                     position: "relative",  top: "5%", right: "20%"  //transform: "translateY(-20%)"
 
                                 }} alt="Confusion Matrix"/>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 )
