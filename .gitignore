@@ -13,7 +13,7 @@ results/*/*.json
 results/*/*/*.json
 
 #results/*/*/*/*.png
-results/*/*/*/*.html
+#results/*/*/*/*.html
 #results/*/*/*/*.json
 
 
