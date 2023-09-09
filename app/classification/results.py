@@ -24,11 +24,25 @@ class ClassificationResults:
         self.class_labels =  [str(l) for l in self.class_labels] # ensure values are strings (for classification report)
 
     @cached_property
+    def target_names(self):
+        # ValueError: Number of classes, 14, does not match size of target_names, 15. Try specifying the labels parameter
+        # there are no members of the 'Pro-Trump Bot Toxic High Quality' class in the test dataset
+        classes_present = list(set(self.y_test)) #> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14]
+        if len(self.class_labels) != len(classes_present):
+            target_names = [self.class_labels[i] for i in classes_present]
+        else:
+            target_names = self.class_labels
+        return target_names
+
+    @cached_property
     def classification_report(self):
-        return classification_report(self.y_test, self.y_pred, target_names=self.class_labels, output_dict=True)
+        return classification_report(self.y_test, self.y_pred, target_names=self.target_names, output_dict=True)
 
     def show_classification_report(self):
-        print(classification_report(self.y_test, self.y_pred, target_names=self.class_labels))
+        print(classification_report(self.y_test, self.y_pred, target_names=self.target_names))
+
+
+
 
     @cached_property
     def confusion_matrix(self):

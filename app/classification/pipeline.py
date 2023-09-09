@@ -103,9 +103,9 @@ class ClassificationPipeline(ABC):
         #print(Series(self.y_train).value_counts())
 
         if self.class_labels:
-            print(Series(self.y_train).map(lambda i: self.class_labels[i]).value_counts())
+            print(Series(self.y_train).map(lambda i: self.class_labels[i]).value_counts(dropna=False))
         else:
-            print(self.y_train.value_counts())
+            print(self.y_train.value_counts(dropna=False))
 
         steps = [("classifier", self.model)]
         pipeline = Pipeline(steps=steps)
@@ -126,6 +126,7 @@ class ClassificationPipeline(ABC):
         print("BEST SCORE:", self.gs.best_score_)
         clf = self.gs.best_estimator_.named_steps["classifier"]
 
+        #breakpoint()
         self.class_names = self.class_names or list(clf.classes_)
         self.class_labels = self.class_labels or class_labels(y_col=self.y_col, class_names=self.class_names)
 

@@ -22,6 +22,7 @@ class Dataset():
         self.version = version # downstream (writing out)
 
         # consider:
+        # self.y_col
         #self.bom_overall_threshold
         #self.bom_astroturf_threshold
         #self.toxicity_threshold
