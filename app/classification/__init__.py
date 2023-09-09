@@ -18,6 +18,7 @@ Y_COLS_BINARY = [
 Y_COLS_MULTICLASS = [
     # multiclass classification with categorical classes:
     "fourway_label", #"bom_overall_fourway_label", "bom_astroturf_fourway_label"
+    "allway_label"
 ]
 Y_COLS = Y_COLS_BINARY + Y_COLS_MULTICLASS
 

@@ -38,7 +38,7 @@ class ReductionPipeline:
                         results_dirpath=REDUCTION_RESULTS_DIRPATH):
 
         self.ds = ds or Dataset()
-        self.labels_df = self.ds.labels
+        self.labels_df = self.ds.labels_df
         #self.x = self.df.drop(columns=label_cols)
 
         self.x_scale = x_scale

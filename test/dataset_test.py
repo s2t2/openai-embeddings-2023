@@ -1,25 +1,26 @@
 
 
 from numpy import nan, isclose
+from pandas import DataFrame
 
-from conftest import N_USERS, N_FEATURES, N_LABELS
-
+from conftest import N_USERS, N_FEATURES #, N_LABELS
+from app.dataset import DATASET_VERSION, CSV_FILEPATH
 
 def test_dataset(ds):
-    n_cols = N_FEATURES + N_LABELS
-    assert ds.df.shape == (N_USERS, n_cols)
+    assert ds.csv_filepath == CSV_FILEPATH # upstream (reading in)
+    assert ds.version == DATASET_VERSION # downstream (writing out)
+    assert len(ds.feature_cols) == N_FEATURES
 
+def test_df(ds):
+    assert isinstance(ds.df, DataFrame)
+    assert len(ds.df) == N_USERS
 
-def test_labels(ds):
-    assert ds.labels.shape == (N_USERS, N_LABELS) # 32 label cols
-
-    assert ds.df["fourway_label"].value_counts().to_dict() == {
-        'Anti-Trump Human': 3010, 'Anti-Trump Bot': 1881,
-        'Pro-Trump Human': 1456, 'Pro-Trump Bot': 1219
-    }
-
+def test_labels_df(ds):
+    assert isinstance(ds.labels_df, DataFrame)
+    assert len(ds.labels_df) == N_USERS
 
 def test_x(ds):
+    assert isinstance(ds.x, DataFrame)
     assert ds.x.shape == (N_USERS, N_FEATURES)
 
 
@@ -34,6 +35,16 @@ def test_x_scaled(ds):
 
     assert isclose(scaled_vals.max(), 6.79286)
     assert isclose(scaled_vals.min(), -7.80073)
+
+
+
+
+
+def test_custom_labels(ds):
+    assert ds.df["fourway_label"].value_counts().to_dict() == {
+        'Anti-Trump Human': 3010, 'Anti-Trump Bot': 1881,
+        'Pro-Trump Human': 1456, 'Pro-Trump Bot': 1219
+    }
 
 
 def test_score_thresholding(ds):

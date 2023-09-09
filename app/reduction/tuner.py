@@ -17,7 +17,7 @@ class ReductionTuner(ABC):
         self.ds = ds or Dataset()
         #self.df = self.ds.df
         #self.label_cols = self.ds.label_cols
-        self.feature_names = self.ds.feature_names # self.df.drop(columns=self.label_cols).columns.tolist()
+        self.feature_names = self.ds.feature_cols # self.df.drop(columns=self.label_cols).columns.tolist()
 
         self.reducer_type = reducer_type
         if max_components:
@@ -37,7 +37,7 @@ class ReductionTuner(ABC):
         self.results = []
 
         # if we have lots of columns / features, we might want to abbreviate the search space and override with a max value, otherwise search over all available features
-        max_components = self.max_components or len(self.feature_names)
+        max_components = self.max_components or len(self.feature_cols)
         # get the explained variance for each n up to the max number of components to search over
         for n_components in range(1, max_components+1):
             # we need to use PCA specifically because unlike other methods it gives us the explainability metrics

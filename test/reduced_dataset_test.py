@@ -16,8 +16,8 @@ def test_dataset(reduced_ds):
     N_COLS = N_FEATURES + N_REDUCTION_FEATURES + N_LABELS
     assert reduced_ds.df.shape == (N_USERS, N_COLS)
 
-def test_labels(reduced_ds):
-    assert reduced_ds.labels.shape == (N_USERS, N_LABELS)
+def test_labels_df(reduced_ds):
+    assert reduced_ds.labels_df.shape == (N_USERS, N_LABELS)
 
 
 def test_feature_cols(reduced_ds):

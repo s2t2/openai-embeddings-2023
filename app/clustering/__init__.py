@@ -28,7 +28,13 @@ class ClusteringPipeline(ABC):
         self.x_scale = bool(x_scale)
 
         self.x = self.ds.x_scaled if self.x_scale else self.ds.x
-        self.labels_df = self.ds.labels_slim
+
+        slim_label_cols = [
+            "user_id", "is_bot", "opinion_community", #"is_q",
+            "bot_label", "opinion_label", #"q_label",
+            "fourway_label", "sixway_label", "allway_label"
+        ]
+        self.labels_df = ds.df[slim_label_cols].copy()
 
         self.model = None # set this in the child class
         self.results_filestem = None # set this in the child class
