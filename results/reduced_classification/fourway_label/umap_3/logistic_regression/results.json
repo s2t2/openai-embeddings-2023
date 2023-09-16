@@ -1,0 +1,97 @@
+{
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot",
+        "Anti-Trump Human",
+        "Pro-Trump Bot",
+        "Pro-Trump Human"
+    ],
+    "classification_report": {
+        "Anti-Trump Bot": {
+            "precision": 0.5901639344262295,
+            "recall": 0.672,
+            "f1-score": 0.628428927680798,
+            "support": 375.0
+        },
+        "Anti-Trump Human": {
+            "precision": 0.6504559270516718,
+            "recall": 0.6793650793650794,
+            "f1-score": 0.6645962732919255,
+            "support": 630.0
+        },
+        "Pro-Trump Bot": {
+            "precision": 0.6666666666666666,
+            "recall": 0.8185654008438819,
+            "f1-score": 0.7348484848484848,
+            "support": 237.0
+        },
+        "Pro-Trump Human": {
+            "precision": 0.4855072463768116,
+            "recall": 0.24632352941176472,
+            "f1-score": 0.32682926829268294,
+            "support": 272.0
+        },
+        "accuracy": 0.6215323645970938,
+        "macro avg": {
+            "precision": 0.5981984436303448,
+            "recall": 0.6040635024051815,
+            "f1-score": 0.5886757385284728,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.6084258127258138,
+            "recall": 0.6215323645970938,
+            "f1-score": 0.6059532047152661,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            252,
+            120,
+            2,
+            1
+        ],
+        [
+            154,
+            428,
+            14,
+            34
+        ],
+        [
+            4,
+            3,
+            194,
+            36
+        ],
+        [
+            17,
+            107,
+            81,
+            67
+        ]
+    ],
+    "roc_auc_score": 0.8338588950922026,
+    "y_col": "fourway_label",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__max_iter": [
+                25,
+                1000,
+                10000
+            ]
+        },
+        "best_params": {
+            "classifier__max_iter": 1000
+        },
+        "best_score": 0.8297182653216654
+    }
+}

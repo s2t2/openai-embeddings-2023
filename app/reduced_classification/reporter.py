@@ -50,6 +50,7 @@ class Results:
             return round(self.data["roc_auc_score"], 3)
 
 
+
 if __name__ == "__main__":
 
     records = []
@@ -81,7 +82,7 @@ if __name__ == "__main__":
                 }
                 records.append(record)
             except FileNotFoundError as err:
-                    print("OOPS, MISSING RESULTS:", os.path.abspath(results_filepath))
+                    print("MISSING:", results_filepath.replace(RESULTS_DIRPATH, ""))
 
             #
             # REDUCED CLASSIFICATION RESULTS
@@ -111,14 +112,14 @@ if __name__ == "__main__":
                     }
                     records.append(record)
                 except FileNotFoundError as err:
-                    print("OOPS, MISSING RESULTS:", os.path.abspath(results_filepath))
+                    print("MISSING:", results_filepath.replace(RESULTS_DIRPATH, ""))
 
 
 
     df = DataFrame(records)
     print(df.shape)
     df.sort_values(by="roc_auc_score", ascending=False, inplace=True)
-    print(df.head())
+    print(df.head(15))
 
     csv_filepath = os.path.join(RESULTS_DIRPATH, "reduced_classification", "all_results.csv")
     df.to_csv(csv_filepath, index=False)

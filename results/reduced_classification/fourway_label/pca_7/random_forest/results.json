@@ -1,0 +1,112 @@
+{
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot",
+        "Anti-Trump Human",
+        "Pro-Trump Bot",
+        "Pro-Trump Human"
+    ],
+    "classification_report": {
+        "Anti-Trump Bot": {
+            "precision": 0.8574821852731591,
+            "recall": 0.9626666666666667,
+            "f1-score": 0.907035175879397,
+            "support": 375.0
+        },
+        "Anti-Trump Human": {
+            "precision": 0.8150375939849624,
+            "recall": 0.8603174603174604,
+            "f1-score": 0.8370656370656372,
+            "support": 630.0
+        },
+        "Pro-Trump Bot": {
+            "precision": 0.876984126984127,
+            "recall": 0.9324894514767933,
+            "f1-score": 0.9038854805725973,
+            "support": 237.0
+        },
+        "Pro-Trump Human": {
+            "precision": 0.7386363636363636,
+            "recall": 0.47794117647058826,
+            "f1-score": 0.5803571428571429,
+            "support": 272.0
+        },
+        "accuracy": 0.8282694848084544,
+        "macro avg": {
+            "precision": 0.822035067469653,
+            "recall": 0.8083536887328772,
+            "f1-score": 0.8070858590936936,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8215216860583159,
+            "recall": 0.8282694848084544,
+            "f1-score": 0.8187368190614093,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            361,
+            5,
+            9,
+            0
+        ],
+        [
+            48,
+            542,
+            2,
+            38
+        ],
+        [
+            8,
+            0,
+            221,
+            8
+        ],
+        [
+            4,
+            118,
+            20,
+            130
+        ]
+    ],
+    "roc_auc_score": 0.9488370993043456,
+    "y_col": "fourway_label",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
+            ],
+            "classifier__min_samples_leaf": [
+                1,
+                5,
+                10,
+                25,
+                50,
+                100
+            ]
+        },
+        "best_params": {
+            "classifier__criterion": "log_loss",
+            "classifier__min_samples_leaf": 1,
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.9444964053614511
+    }
+}

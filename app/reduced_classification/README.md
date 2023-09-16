@@ -6,7 +6,7 @@ Now produce classification results using the reduced embeddings:
 
 
 ```sh
-python -m app.reduced_classification.pipeline
+python -m app.reduced_classification.job
 ```
 
 
