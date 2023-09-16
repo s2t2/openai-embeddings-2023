@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Normal",
+        "Toxic"
+    ],
     "classification_report": {
-        "0": {
+        "Normal": {
             "precision": 0.8766617429837519,
             "recall": 0.968189233278956,
             "f1-score": 0.9201550387596901,
             "support": 1226.0
         },
-        "1": {
+        "Toxic": {
             "precision": 0.75625,
             "recall": 0.4201388888888889,
             "f1-score": 0.5401785714285714,
@@ -26,10 +34,6 @@
             "support": 1514.0
         }
     },
-    "class_names": [
-        0,
-        1
-    ],
     "confusion_matrix": [
         [
             1187,
@@ -40,11 +44,10 @@
             121
         ]
     ],
-    "roc_auc_score": 0.6941640610839223,
-    "roc_auc_score_proba": 0.82381304377379,
-    "roc_curve_auc": 0.82381304377379,
+    "roc_auc_score": 0.82381304377379,
+    "y_col": "is_toxic",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {

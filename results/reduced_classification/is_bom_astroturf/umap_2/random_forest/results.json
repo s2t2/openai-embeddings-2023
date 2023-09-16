@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0.0",
+        "1.0"
+    ],
+    "class_labels": [
+        "Human",
+        "Bot"
+    ],
     "classification_report": {
-        "0.0": {
+        "Human": {
             "precision": 0.7788117394416607,
             "recall": 0.945264986967854,
             "f1-score": 0.8540031397174254,
             "support": 1151.0
         },
-        "1.0": {
+        "Bot": {
             "precision": 0.46153846153846156,
             "recall": 0.1487603305785124,
             "f1-score": 0.22499999999999998,
@@ -26,10 +34,6 @@
             "support": 1514.0
         }
     },
-    "class_names": [
-        0.0,
-        1.0
-    ],
     "confusion_matrix": [
         [
             1088,
@@ -40,11 +44,10 @@
             54
         ]
     ],
-    "roc_auc_score": 0.5470126587731832,
-    "roc_auc_score_proba": 0.7513325339326444,
-    "roc_curve_auc": 0.7513325339326444,
+    "roc_auc_score": 0.7513325339326444,
+    "y_col": "is_bom_astroturf",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {

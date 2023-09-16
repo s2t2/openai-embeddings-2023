@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Anti-Trump",
+        "Pro-Trump"
+    ],
     "classification_report": {
-        "0": {
+        "Anti-Trump": {
             "precision": 0.8979400749063671,
             "recall": 0.954228855721393,
             "f1-score": 0.925229136517125,
             "support": 1005.0
         },
-        "1": {
+        "Pro-Trump": {
             "precision": 0.8968609865470852,
             "recall": 0.7858546168958742,
             "f1-score": 0.8376963350785339,
@@ -26,10 +34,6 @@
             "support": 1514.0
         }
     },
-    "class_names": [
-        0,
-        1
-    ],
     "confusion_matrix": [
         [
             959,
@@ -40,11 +44,10 @@
             400
         ]
     ],
-    "roc_auc_score": 0.8700417363086336,
-    "roc_auc_score_proba": 0.9421272810798659,
-    "roc_curve_auc": 0.9421272810798659,
+    "roc_auc_score": 0.9421272810798659,
+    "y_col": "opinion_community",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {

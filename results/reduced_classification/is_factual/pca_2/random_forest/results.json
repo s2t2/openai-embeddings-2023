@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0.0",
+        "1.0"
+    ],
+    "class_labels": [
+        "Low Quality",
+        "High Quality"
+    ],
     "classification_report": {
-        "0.0": {
+        "Low Quality": {
             "precision": 0.8551724137931035,
             "recall": 0.6946778711484594,
             "f1-score": 0.7666151468315301,
             "support": 357.0
         },
-        "1.0": {
+        "High Quality": {
             "precision": 0.7046070460704607,
             "recall": 0.8609271523178808,
             "f1-score": 0.7749627421758569,
@@ -26,10 +34,6 @@
             "support": 659.0
         }
     },
-    "class_names": [
-        0.0,
-        1.0
-    ],
     "confusion_matrix": [
         [
             248,
@@ -40,11 +44,10 @@
             260
         ]
     ],
-    "roc_auc_score": 0.7778025117331702,
-    "roc_auc_score_proba": 0.8412729330142653,
-    "roc_curve_auc": 0.8412729330142653,
+    "roc_auc_score": 0.8412729330142653,
+    "y_col": "is_factual",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {

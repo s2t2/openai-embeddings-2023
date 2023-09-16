@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0.0",
+        "1.0"
+    ],
+    "class_labels": [
+        "Human",
+        "Bot"
+    ],
     "classification_report": {
-        "0.0": {
+        "Human": {
             "precision": 0.7523117569352709,
             "recall": 1.0,
             "f1-score": 0.8586505842442518,
             "support": 1139.0
         },
-        "1.0": {
+        "Bot": {
             "precision": 0.0,
             "recall": 0.0,
             "f1-score": 0.0,
@@ -26,10 +34,6 @@
             "support": 1514.0
         }
     },
-    "class_names": [
-        0.0,
-        1.0
-    ],
     "confusion_matrix": [
         [
             1139,
@@ -40,17 +44,17 @@
             0
         ]
     ],
-    "roc_auc_score": 0.5,
-    "roc_auc_score_proba": 0.6149113257243196,
-    "roc_curve_auc": 0.6149113257243196,
+    "roc_auc_score": 0.6149113257243196,
+    "y_col": "is_bom_overall",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "LogisticRegression",
         "k_folds": 5,
         "param_grid": {
             "classifier__max_iter": [
                 25,
-                1000
+                1000,
+                10000
             ]
         },
         "best_params": {
