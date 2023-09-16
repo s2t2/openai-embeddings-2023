@@ -70,7 +70,7 @@ if __name__ == "__main__":
                 results = Results(results_filepath)
                 record = {
                     # methods:
-                    "dataset": "original",
+                    "dataset": "openai_embeddings",
                     "reducer_type": None, #"reducer_name": None,
                     "n_components": 1536,
                     "y_col": y_col,
@@ -100,7 +100,7 @@ if __name__ == "__main__":
                     results = Results(results_filepath)
                     record = {
                         # methods:
-                        "dataset": results_dirname,
+                        "dataset": results_dirname, # f"openai_{results_dirname}",
                         "reducer_type": reducer_type, #"reducer_name": reducer_name,
                         "n_components": n_components,
                         "y_col": y_col,
