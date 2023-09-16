@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0.0",
+        "1.0"
+    ],
+    "class_labels": [
+        "Human",
+        "Bot"
+    ],
     "classification_report": {
-        "0.0": {
+        "Human": {
             "precision": 0.774888558692422,
             "recall": 0.9157155399473222,
             "f1-score": 0.8394366197183097,
             "support": 1139.0
         },
-        "1.0": {
+        "Bot": {
             "precision": 0.42857142857142855,
             "recall": 0.192,
             "f1-score": 0.26519337016574585,
@@ -26,10 +34,6 @@
             "support": 1514.0
         }
     },
-    "class_names": [
-        0.0,
-        1.0
-    ],
     "confusion_matrix": [
         [
             1043,
@@ -40,11 +44,10 @@
             72
         ]
     ],
-    "roc_auc_score": 0.5538577699736611,
-    "roc_auc_score_proba": 0.7063096283289435,
-    "roc_curve_auc": 0.7063096283289435,
+    "roc_auc_score": 0.7063096283289435,
+    "y_col": "is_bom_overall",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "XGBClassifier",
         "k_folds": 5,
         "param_grid": {},

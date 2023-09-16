@@ -77,8 +77,9 @@
         ]
     ],
     "roc_auc_score": 0.9551626982156016,
+    "y_col": "fourway_label",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "LogisticRegression",
         "k_folds": 5,
         "param_grid": {

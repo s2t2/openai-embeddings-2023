@@ -43,11 +43,13 @@ class Results:
     def roc_auc_score(self):
         # return round(self.data["roc_auc_score"], 3)
 
-        if "roc_auc_score_proba" in self.data.keys():
-            # deprecated legacy name from old runs. need to re-generate all results again and then update this method to look at roc_auc_score only
-            return round(self.data["roc_auc_score_proba"], 3)
-        else:
-            return round(self.data["roc_auc_score"], 3)
+        #if "roc_auc_score_proba" in self.data.keys():
+        #    # deprecated legacy name from old runs. need to re-generate all results again and then update this method to look at roc_auc_score only
+        #    return round(self.data["roc_auc_score_proba"], 3)
+        #else:
+        #    return round(self.data["roc_auc_score"], 3)
+
+        return round(self.data["roc_auc_score"], 3)
 
 
 
@@ -68,7 +70,7 @@ if __name__ == "__main__":
                 results = Results(results_filepath)
                 record = {
                     # methods:
-                    "dataset": "openai_embeddings",
+                    "dataset": "original",
                     "reducer_type": None, #"reducer_name": None,
                     "n_components": 1536,
                     "y_col": y_col,

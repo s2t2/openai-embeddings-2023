@@ -77,8 +77,9 @@
         ]
     ],
     "roc_auc_score": 0.9583437380062635,
+    "y_col": "fourway_label",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "XGBClassifier",
         "k_folds": 5,
         "param_grid": {},

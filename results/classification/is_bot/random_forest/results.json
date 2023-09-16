@@ -45,23 +45,29 @@
         ]
     ],
     "roc_auc_score": 0.9753941857600393,
+    "y_col": "is_bot",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
             "classifier__criterion": [
-                "gini"
+                "gini",
+                "log_loss"
             ],
             "classifier__min_samples_leaf": [
-                3,
+                1,
                 5,
-                8
-            ],
-            "classifier__n_estimators": [
-                250,
-                500,
-                1000
+                10,
+                25,
+                50,
+                100
             ]
         },
         "best_params": {

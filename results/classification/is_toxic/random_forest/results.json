@@ -9,66 +9,72 @@
     ],
     "classification_report": {
         "Normal": {
-            "precision": 0.8678977272727273,
-            "recall": 0.9967373572593801,
-            "f1-score": 0.9278663629460896,
+            "precision": 0.8692253020611229,
+            "recall": 0.9975530179445351,
+            "f1-score": 0.9289783516900874,
             "support": 1226.0
         },
         "Toxic": {
-            "precision": 0.9622641509433962,
-            "recall": 0.3541666666666667,
-            "f1-score": 0.5177664974619289,
+            "precision": 0.9719626168224299,
+            "recall": 0.3611111111111111,
+            "f1-score": 0.5265822784810127,
             "support": 288.0
         },
-        "accuracy": 0.8745046235138706,
+        "accuracy": 0.8764861294583883,
         "macro avg": {
-            "precision": 0.9150809391080618,
-            "recall": 0.6754520119630234,
-            "f1-score": 0.7228164302040092,
+            "precision": 0.9205939594417765,
+            "recall": 0.6793320645278231,
+            "f1-score": 0.72778031508555,
             "support": 1514.0
         },
         "weighted avg": {
-            "precision": 0.8858485397014939,
-            "recall": 0.8745046235138706,
-            "f1-score": 0.8498552921010182,
+            "precision": 0.8887684636537626,
+            "recall": 0.8764861294583883,
+            "f1-score": 0.8524327314231036,
             "support": 1514.0
         }
     },
     "confusion_matrix": [
         [
-            1222,
-            4
+            1223,
+            3
         ],
         [
-            186,
-            102
+            184,
+            104
         ]
     ],
-    "roc_auc_score": 0.9069920246510784,
+    "roc_auc_score": 0.9127412996193585,
+    "y_col": "is_toxic",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
             "classifier__criterion": [
-                "gini"
+                "gini",
+                "log_loss"
             ],
             "classifier__min_samples_leaf": [
-                3,
+                1,
                 5,
-                8
-            ],
-            "classifier__n_estimators": [
-                250,
-                500,
-                1000
+                10,
+                25,
+                50,
+                100
             ]
         },
         "best_params": {
-            "classifier__criterion": "gini",
+            "classifier__criterion": "log_loss",
             "classifier__min_samples_leaf": 5,
-            "classifier__n_estimators": 1000
+            "classifier__n_estimators": 250
         },
-        "best_score": 0.8829506753697609
+        "best_score": 0.8913603337364775
     }
 }
