@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Anti-Trump",
+        "Pro-Trump"
+    ],
     "classification_report": {
-        "0": {
+        "Anti-Trump": {
             "precision": 0.7583947583947583,
             "recall": 0.9213930348258706,
             "f1-score": 0.8319856244384547,
             "support": 1005.0
         },
-        "1": {
+        "Pro-Trump": {
             "precision": 0.7303754266211604,
             "recall": 0.4204322200392927,
             "f1-score": 0.5336658354114713,
@@ -26,10 +34,6 @@
             "support": 1514.0
         }
     },
-    "class_names": [
-        0,
-        1
-    ],
     "confusion_matrix": [
         [
             926,
@@ -40,17 +44,17 @@
             214
         ]
     ],
-    "roc_auc_score": 0.6709126274325816,
-    "roc_auc_score_proba": 0.7333059652620981,
-    "roc_curve_auc": 0.7333059652620981,
+    "roc_auc_score": 0.7333059652620981,
+    "y_col": "opinion_community",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "LogisticRegression",
         "k_folds": 5,
         "param_grid": {
             "classifier__max_iter": [
                 25,
-                1000
+                1000,
+                10000
             ]
         },
         "best_params": {

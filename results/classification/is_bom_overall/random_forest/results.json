@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0.0",
+        "1.0"
+    ],
+    "class_labels": [
+        "Human",
+        "Bot"
+    ],
     "classification_report": {
-        "0.0": {
+        "Human": {
             "precision": 0.7521480502313285,
             "recall": 0.9991220368744512,
             "f1-score": 0.8582202111613875,
             "support": 1139.0
         },
-        "1.0": {
+        "Bot": {
             "precision": 0.0,
             "recall": 0.0,
             "f1-score": 0.0,
@@ -26,10 +34,6 @@
             "support": 1514.0
         }
     },
-    "class_names": [
-        0.0,
-        1.0
-    ],
     "confusion_matrix": [
         [
             1138,
@@ -40,33 +44,37 @@
             0
         ]
     ],
-    "roc_auc_score": 0.4995610184372256,
-    "roc_auc_score_proba": 0.7547860696517413,
-    "roc_curve_auc": 0.7547860696517413,
+    "roc_auc_score": 0.7525431665203394,
+    "y_col": "is_bom_overall",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ],
             "classifier__criterion": [
-                "gini"
+                "gini",
+                "log_loss"
             ],
             "classifier__min_samples_leaf": [
-                3,
+                1,
                 5,
-                8
-            ],
-            "classifier__n_estimators": [
-                250,
-                500,
-                1000
+                10,
+                25,
+                50,
+                100
             ]
         },
         "best_params": {
             "classifier__criterion": "gini",
-            "classifier__min_samples_leaf": 8,
-            "classifier__n_estimators": 1000
+            "classifier__min_samples_leaf": 25,
+            "classifier__n_estimators": 250
         },
-        "best_score": 0.7292263597204633
+        "best_score": 0.7273515900787881
     }
 }

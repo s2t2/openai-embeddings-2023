@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0.0",
+        "1.0"
+    ],
+    "class_labels": [
+        "Low Quality",
+        "High Quality"
+    ],
     "classification_report": {
-        "0.0": {
+        "Low Quality": {
             "precision": 0.8407643312101911,
             "recall": 0.7394957983193278,
             "f1-score": 0.7868852459016394,
             "support": 357.0
         },
-        "1.0": {
+        "High Quality": {
             "precision": 0.7304347826086957,
             "recall": 0.8344370860927153,
             "f1-score": 0.7789799072642968,
@@ -26,10 +34,6 @@
             "support": 659.0
         }
     },
-    "class_names": [
-        0.0,
-        1.0
-    ],
     "confusion_matrix": [
         [
             264,
@@ -40,11 +44,10 @@
             252
         ]
     ],
-    "roc_auc_score": 0.7869664422060215,
-    "roc_auc_score_proba": 0.8258760457825516,
-    "roc_curve_auc": 0.8258760457825516,
+    "roc_auc_score": 0.8258760457825516,
+    "y_col": "is_factual",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "XGBClassifier",
         "k_folds": 5,
         "param_grid": {},

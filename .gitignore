@@ -16,6 +16,8 @@ results/*/*/*.json
 #results/*/*/*/*.html
 #results/*/*/*/*.json
 
+# keep this:
+!results/reduced_classification/all_results.csv
 
 
 

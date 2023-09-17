@@ -1,0 +1,89 @@
+{
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot",
+        "Anti-Trump Human",
+        "Pro-Trump Bot",
+        "Pro-Trump Human"
+    ],
+    "classification_report": {
+        "Anti-Trump Bot": {
+            "precision": 0.663594470046083,
+            "recall": 0.768,
+            "f1-score": 0.7119901112484548,
+            "support": 375.0
+        },
+        "Anti-Trump Human": {
+            "precision": 0.7115384615384616,
+            "recall": 0.7047619047619048,
+            "f1-score": 0.7081339712918662,
+            "support": 630.0
+        },
+        "Pro-Trump Bot": {
+            "precision": 0.7142857142857143,
+            "recall": 0.8016877637130801,
+            "f1-score": 0.7554671968190855,
+            "support": 237.0
+        },
+        "Pro-Trump Human": {
+            "precision": 0.5578947368421052,
+            "recall": 0.3897058823529412,
+            "f1-score": 0.4588744588744589,
+            "support": 272.0
+        },
+        "accuracy": 0.678996036988111,
+        "macro avg": {
+            "precision": 0.661828345678091,
+            "recall": 0.6660388877069815,
+            "f1-score": 0.6586164345584664,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.6724902508211882,
+            "recall": 0.678996036988111,
+            "f1-score": 0.6717174848692353,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            288,
+            80,
+            4,
+            3
+        ],
+        [
+            130,
+            444,
+            9,
+            47
+        ],
+        [
+            7,
+            6,
+            190,
+            34
+        ],
+        [
+            9,
+            94,
+            63,
+            106
+        ]
+    ],
+    "roc_auc_score": 0.881409060542723,
+    "y_col": "fourway_label",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "XGBClassifier",
+        "k_folds": 5,
+        "param_grid": {},
+        "best_params": {},
+        "best_score": 0.8781599410555089
+    }
+}

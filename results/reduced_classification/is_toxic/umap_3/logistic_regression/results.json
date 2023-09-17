@@ -1,12 +1,20 @@
 {
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Normal",
+        "Toxic"
+    ],
     "classification_report": {
-        "0": {
+        "Normal": {
             "precision": 0.8454873646209387,
             "recall": 0.9551386623164764,
             "f1-score": 0.8969743393335887,
             "support": 1226.0
         },
-        "1": {
+        "Toxic": {
             "precision": 0.5736434108527132,
             "recall": 0.2569444444444444,
             "f1-score": 0.35491606714628293,
@@ -26,10 +34,6 @@
             "support": 1514.0
         }
     },
-    "class_names": [
-        0,
-        1
-    ],
     "confusion_matrix": [
         [
             1171,
@@ -40,17 +44,17 @@
             74
         ]
     ],
-    "roc_auc_score": 0.6060415533804604,
-    "roc_auc_score_proba": 0.7140174687330072,
-    "roc_curve_auc": 0.7140174687330072,
+    "roc_auc_score": 0.7140174687330072,
+    "y_col": "is_toxic",
+    "x_scaled": false,
     "grid_search": {
-        "x_scaled": false,
         "model_type": "LogisticRegression",
         "k_folds": 5,
         "param_grid": {
             "classifier__max_iter": [
                 25,
-                1000
+                1000,
+                10000
             ]
         },
         "best_params": {
