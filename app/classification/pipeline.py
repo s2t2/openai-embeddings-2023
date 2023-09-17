@@ -266,11 +266,18 @@ class ClassificationPipeline(ABC):
 
         chart_data = []
         for i, class_name in enumerate(class_names):
+
             fpr, tpr, _ = roc_curve(y_test_encoded[:,i], self.y_pred_proba[:,i])
             score = auc(fpr, tpr)
+
+            try:
+                color = ORANGES[i+2]
+            except IndexError:
+                color = ORANGES[-1] # just use the same color once we run out of oranges
+
             trace = go.Scatter(x=fpr, y=tpr,
                 mode='lines',
-                line=dict(color=ORANGES[i+2], width=2),
+                line=dict(color=color, width=2),
                 name=f"'{str(class_name).title()}' vs Rest (AUC = {score.round(3)})"
             )
             chart_data.append(trace)

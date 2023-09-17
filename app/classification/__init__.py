@@ -18,10 +18,9 @@ Y_COLS_BINARY = [
 Y_COLS_MULTICLASS = [
     # multiclass classification with categorical classes:
     "fourway_label", #"bom_overall_fourway_label", "bom_astroturf_fourway_label"
-    # sixway_q_label
-    #"sixway_fact_label"
+    "sixway_fact_label" #, sixway_q_label
 ]
-Y_COLS = Y_COLS_BINARY + Y_COLS_MULTICLASS
+Y_COLS = ["sixway_fact_label"] #= Y_COLS_BINARY + Y_COLS_MULTICLASS
 
 BOT_CLASSES_MAP = {True:"Bot", False:"Human"}
 CLASSES_MAP = {
