@@ -29,17 +29,6 @@ FOURWAY_COLORS_MAP = {
     "Pro-Trump Human": REDS[3],
     "Pro-Trump Bot": REDS[6],
 }
-SIXWAY_COLORS_MAP = {
-    "Anti-Trump Human": BLUES[3],
-    "Anti-Trump Bot": BLUES[6],
-
-    "Pro-Trump Human": REDS[3],
-    "Pro-Trump Bot": REDS[6],
-
-    "Q-anon Human": REDS[4], # "Pro-Trump Q-anon Human"
-    "Q-anon Bot": REDS[7], # "Pro-Trump Q-anon Bot"
-}
-
 
 COLORS_MAP = {
     "bot_label": BOT_COLORS_MAP,
@@ -49,7 +38,7 @@ COLORS_MAP = {
     "factual_label": FACT_COLORS_MAP,
 
     "fourway_label": FOURWAY_COLORS_MAP,
-    "sixway_label": SIXWAY_COLORS_MAP,
+
     "bom_overall_label": BOT_COLORS_MAP,
     "bom_astroturf_label": BOT_COLORS_MAP,
 }
@@ -67,5 +56,4 @@ CATEGORY_ORDERS = {
     "factual_label": ["High Quality", "Low Quality"],
 
     "fourway_label": list(FOURWAY_COLORS_MAP.keys()),
-    "sixway_label": list(SIXWAY_COLORS_MAP.keys()),
 }

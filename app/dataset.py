@@ -22,8 +22,9 @@ LABEL_COLS = [
 
     'opinion_label', 'bot_label', 'q_label',
     "toxic_label", "factual_label",
-    'bom_overall_label', 'bom_astroturf_label', #'group_label'
-    'fourway_label', 'sixway_label', "bom_overall_fourway_label", "bom_astroturf_fourway_label"
+    'bom_overall_label', 'bom_astroturf_label',
+    'fourway_label', 'sixway_q_label', # "sixway_fact_label"
+    "bom_overall_fourway_label", "bom_astroturf_fourway_label"
 ]
 
 
@@ -37,7 +38,7 @@ class Dataset():
     def df(self):
         df = read_csv(self.csv_filepath)
 
-        df.rename(columns={"group_label": "sixway_label"}, inplace=True)
+        df.rename(columns={"group_label": "sixway_q_label"}, inplace=True)
         #print(df["sixway_label"].value_counts())
 
         df["fourway_label"] = df["opinion_label"] + " " + df["bot_label"]
@@ -60,6 +61,8 @@ class Dataset():
         df["is_factual"] = df["avg_fact_score"].apply(lambda score: score if isnull(score) else score >= fact_threshold)
         df["is_factual"] = df["is_factual"].map({True: 1, False :0 })
         df["factual_label"] = df["is_factual"].map({1: "High Quality", 0 :"Low Quality" })
+
+        #df["sixway_fact_label"] = df["opinion_label"] + " " + df["bot_label"] + " " + df["factual_label"]
 
         return df
 
