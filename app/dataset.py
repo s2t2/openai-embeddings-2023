@@ -23,7 +23,7 @@ LABEL_COLS = [
     'opinion_label', 'bot_label', 'q_label',
     "toxic_label", "factual_label",
     'bom_overall_label', 'bom_astroturf_label',
-    'fourway_label', 'sixway_q_label', # "sixway_fact_label"
+    'fourway_label', 'sixway_q_label', "sixway_fact_label",
     "bom_overall_fourway_label", "bom_astroturf_fourway_label"
 ]
 
@@ -39,17 +39,12 @@ class Dataset():
         df = read_csv(self.csv_filepath)
 
         df.rename(columns={"group_label": "sixway_q_label"}, inplace=True)
-        #print(df["sixway_label"].value_counts())
 
-        df["fourway_label"] = df["opinion_label"] + " " + df["bot_label"]
-        #print(df["fourway_label"].value_counts())
 
         df["is_bom_overall"] = df["bom_overall"].round()
         df["is_bom_astroturf"] = df["bom_astroturf"].round()
         df["bom_overall_label"] = df["is_bom_overall"].map({1:"Bot", 0:"Human"})
         df["bom_astroturf_label"] = df["is_bom_astroturf"].map({1:"Bot", 0:"Human"})
-        df["bom_overall_fourway_label"] = df["opinion_label"] + " " + df["bom_overall_label"]
-        df["bom_astroturf_fourway_label"] = df["opinion_label"] + " " + df["bom_astroturf_label"]
 
         toxic_threshold = 0.1 # set threshold and check robustness
         df["is_toxic"] = df["avg_toxicity"] >= toxic_threshold
@@ -60,9 +55,15 @@ class Dataset():
         fact_threshold = 3.0 # set threshold and check robustness
         df["is_factual"] = df["avg_fact_score"].apply(lambda score: score if isnull(score) else score >= fact_threshold)
         df["is_factual"] = df["is_factual"].map({True: 1, False :0 })
-        df["factual_label"] = df["is_factual"].map({1: "High Quality", 0 :"Low Quality" })
+        df["factual_label"] = df["is_factual"].map({1: "High-Quality", 0 :"Low-Quality" })
 
-        #df["sixway_fact_label"] = df["opinion_label"] + " " + df["bot_label"] + " " + df["factual_label"]
+        # COMBINATIONS
+
+        df["fourway_label"] = df["opinion_label"] + " " + df["bot_label"]
+        df["bom_overall_fourway_label"] = df["opinion_label"] + " " + df["bom_overall_label"]
+        df["bom_astroturf_fourway_label"] = df["opinion_label"] + " " + df["bom_astroturf_label"]
+
+        df["sixway_fact_label"] = df["opinion_label"] + " " + df["bot_label"] + " " + df["factual_label"]
 
         return df
 

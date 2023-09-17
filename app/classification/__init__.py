@@ -30,7 +30,7 @@ CLASSES_MAP = {
     "is_bom_astroturf": BOT_CLASSES_MAP,
     "opinion_community": {0:"Anti-Trump", 1:"Pro-Trump"},
     "is_toxic": {0: "Normal", 1: "Toxic"},
-    "is_factual": {0: "Low Quality", 1: "High Quality"},
+    "is_factual": {0: "Low-Quality", 1: "High-Quality"},
 }
 
 
