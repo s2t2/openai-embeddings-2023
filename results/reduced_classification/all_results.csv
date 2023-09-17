@@ -1,7 +1,7 @@
-dataset,reducer_type,n_components,y_col,model_type,best_params,accuracy,f1_macro,f1_weighted,roc_auc_score
-original,,1536,is_bot,LogisticRegression,{'classifier__max_iter': 25},0.945,0.943,0.945,0.979
-original,,1536,is_bot,XGBClassifier,{},0.95,0.949,0.95,0.976
-original,,1536,is_bot,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 5, 'classifier__n_estimators': 250}",0.942,0.941,0.942,0.975
+features,reducer_type,n_components,y_col,model_type,best_params,accuracy,f1_macro,f1_weighted,roc_auc_score
+openai_embeddings,,1536,is_bot,LogisticRegression,{'classifier__max_iter': 25},0.945,0.943,0.945,0.979
+openai_embeddings,,1536,is_bot,XGBClassifier,{},0.95,0.949,0.95,0.976
+openai_embeddings,,1536,is_bot,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 5, 'classifier__n_estimators': 250}",0.942,0.941,0.942,0.975
 pca_7,PCA,7,is_bot,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 10, 'classifier__n_estimators': 150}",0.939,0.938,0.94,0.974
 pca_7,PCA,7,is_bot,LogisticRegression,{'classifier__max_iter': 1000},0.943,0.942,0.944,0.974
 pca_3,PCA,3,is_bot,LogisticRegression,{'classifier__max_iter': 25},0.941,0.94,0.942,0.972
@@ -11,20 +11,20 @@ pca_7,PCA,7,is_bot,XGBClassifier,{},0.937,0.936,0.938,0.969
 pca_3,PCA,3,is_bot,XGBClassifier,{},0.933,0.932,0.934,0.969
 pca_2,PCA,2,is_bot,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 50, 'classifier__n_estimators': 100}",0.939,0.937,0.939,0.969
 pca_2,PCA,2,is_bot,XGBClassifier,{},0.933,0.931,0.933,0.967
-original,,1536,opinion_community,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.891,0.868,0.886,0.964
-original,,1536,opinion_community,XGBClassifier,{},0.9,0.886,0.899,0.963
-original,,1536,fourway_label,XGBClassifier,{},0.848,0.833,0.841,0.958
-original,,1536,fourway_label,LogisticRegression,{'classifier__max_iter': 1000},0.847,0.828,0.837,0.955
-original,,1536,opinion_community,LogisticRegression,{'classifier__max_iter': 25},0.895,0.877,0.892,0.951
+openai_embeddings,,1536,opinion_community,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.891,0.868,0.886,0.964
+openai_embeddings,,1536,opinion_community,XGBClassifier,{},0.9,0.886,0.899,0.963
+openai_embeddings,,1536,fourway_label,XGBClassifier,{},0.848,0.833,0.841,0.958
+openai_embeddings,,1536,fourway_label,LogisticRegression,{'classifier__max_iter': 1000},0.847,0.828,0.837,0.955
+openai_embeddings,,1536,opinion_community,LogisticRegression,{'classifier__max_iter': 25},0.895,0.877,0.892,0.951
 pca_7,PCA,7,fourway_label,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.828,0.807,0.819,0.949
 tsne_3,T-SNE,3,opinion_community,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.896,0.88,0.895,0.949
-original,,1536,fourway_label,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.815,0.761,0.783,0.948
+openai_embeddings,,1536,fourway_label,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.815,0.761,0.783,0.948
 pca_7,PCA,7,opinion_community,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.88,0.861,0.878,0.947
 tsne_4,T-SNE,4,opinion_community,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.889,0.873,0.888,0.943
 tsne_3,T-SNE,3,opinion_community,XGBClassifier,{},0.893,0.877,0.892,0.943
 umap_3,UMAP,3,opinion_community,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 5, 'classifier__n_estimators': 150}",0.898,0.881,0.896,0.942
 pca_7,PCA,7,fourway_label,XGBClassifier,{},0.816,0.799,0.81,0.941
-original,,1536,is_toxic,XGBClassifier,{},0.912,0.836,0.905,0.941
+openai_embeddings,,1536,is_toxic,XGBClassifier,{},0.912,0.836,0.905,0.941
 pca_7,PCA,7,opinion_community,XGBClassifier,{},0.871,0.853,0.87,0.937
 tsne_2,T-SNE,2,opinion_community,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.903,0.89,0.902,0.937
 tsne_2,T-SNE,2,opinion_community,XGBClassifier,{},0.898,0.883,0.897,0.937
@@ -34,10 +34,10 @@ umap_2,UMAP,2,opinion_community,XGBClassifier,{},0.897,0.881,0.895,0.934
 pca_7,PCA,7,fourway_label,LogisticRegression,{'classifier__max_iter': 1000},0.797,0.774,0.785,0.934
 umap_3,UMAP,3,opinion_community,XGBClassifier,{},0.892,0.875,0.89,0.933
 pca_3,PCA,3,fourway_label,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 10, 'classifier__n_estimators': 250}",0.787,0.744,0.767,0.931
-original,,1536,is_toxic,LogisticRegression,{'classifier__max_iter': 25},0.892,0.784,0.879,0.925
+openai_embeddings,,1536,is_toxic,LogisticRegression,{'classifier__max_iter': 25},0.892,0.784,0.879,0.925
 pca_3,PCA,3,fourway_label,XGBClassifier,{},0.785,0.757,0.774,0.925
 pca_3,PCA,3,fourway_label,LogisticRegression,{'classifier__max_iter': 25},0.784,0.75,0.768,0.916
-original,,1536,is_toxic,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 5, 'classifier__n_estimators': 250}",0.876,0.728,0.852,0.913
+openai_embeddings,,1536,is_toxic,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 5, 'classifier__n_estimators': 250}",0.876,0.728,0.852,0.913
 pca_7,PCA,7,is_toxic,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.891,0.797,0.883,0.913
 pca_3,PCA,3,opinion_community,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 10, 'classifier__n_estimators': 250}",0.843,0.812,0.837,0.911
 pca_7,PCA,7,opinion_community,LogisticRegression,{'classifier__max_iter': 25},0.846,0.823,0.844,0.909
@@ -59,20 +59,20 @@ pca_7,PCA,7,is_toxic,LogisticRegression,{'classifier__max_iter': 25},0.88,0.772,
 umap_3,UMAP,3,fourway_label,XGBClassifier,{},0.678,0.661,0.671,0.882
 tsne_4,T-SNE,4,fourway_label,XGBClassifier,{},0.679,0.659,0.672,0.881
 pca_2,PCA,2,fourway_label,LogisticRegression,{'classifier__max_iter': 1000},0.741,0.62,0.669,0.881
-original,,1536,is_bom_astroturf,LogisticRegression,{'classifier__max_iter': 1000},0.816,0.728,0.809,0.879
+openai_embeddings,,1536,is_bom_astroturf,LogisticRegression,{'classifier__max_iter': 1000},0.816,0.728,0.809,0.879
 umap_2,UMAP,2,fourway_label,XGBClassifier,{},0.665,0.647,0.656,0.878
 tsne_2,T-SNE,2,is_bot,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.795,0.791,0.797,0.871
 tsne_3,T-SNE,3,is_bot,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.783,0.776,0.784,0.871
-original,,1536,is_bom_astroturf,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 10, 'classifier__n_estimators': 250}",0.806,0.704,0.794,0.871
+openai_embeddings,,1536,is_bom_astroturf,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 10, 'classifier__n_estimators': 250}",0.806,0.704,0.794,0.871
 tsne_2,T-SNE,2,is_bot,XGBClassifier,{},0.797,0.794,0.799,0.871
-original,,1536,is_factual,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.819,0.819,0.819,0.87
+openai_embeddings,,1536,is_factual,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.819,0.819,0.819,0.87
 tsne_4,T-SNE,4,is_bot,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 1, 'classifier__n_estimators': 250}",0.79,0.785,0.791,0.868
 tsne_3,T-SNE,3,is_bot,XGBClassifier,{},0.781,0.774,0.782,0.866
 pca_7,PCA,7,is_bom_astroturf,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 25, 'classifier__n_estimators': 250}",0.81,0.737,0.809,0.866
-original,,1536,is_bom_astroturf,XGBClassifier,{},0.808,0.721,0.802,0.865
+openai_embeddings,,1536,is_bom_astroturf,XGBClassifier,{},0.808,0.721,0.802,0.865
 umap_2,UMAP,2,opinion_community,LogisticRegression,{'classifier__max_iter': 25},0.869,0.849,0.867,0.865
-original,,1536,is_factual,XGBClassifier,{},0.807,0.807,0.807,0.865
-original,,1536,is_factual,LogisticRegression,{'classifier__max_iter': 25},0.821,0.821,0.82,0.864
+openai_embeddings,,1536,is_factual,XGBClassifier,{},0.807,0.807,0.807,0.865
+openai_embeddings,,1536,is_factual,LogisticRegression,{'classifier__max_iter': 25},0.821,0.821,0.82,0.864
 pca_3,PCA,3,is_bom_astroturf,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 50, 'classifier__n_estimators': 100}",0.806,0.729,0.804,0.862
 umap_3,UMAP,3,is_bot,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 10, 'classifier__n_estimators': 250}",0.779,0.775,0.78,0.862
 tsne_4,T-SNE,4,is_bot,XGBClassifier,{},0.777,0.772,0.778,0.859
@@ -142,10 +142,10 @@ umap_2,UMAP,2,is_toxic,XGBClassifier,{},0.857,0.704,0.836,0.774
 umap_3,UMAP,3,is_bot,LogisticRegression,{'classifier__max_iter': 25},0.699,0.691,0.701,0.766
 umap_3,UMAP,3,is_bom_astroturf,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 25, 'classifier__n_estimators': 250}",0.749,0.562,0.711,0.765
 tsne_2,T-SNE,2,is_bot,LogisticRegression,{'classifier__max_iter': 25},0.692,0.677,0.691,0.763
-original,,1536,is_bom_overall,LogisticRegression,{'classifier__max_iter': 25},0.758,0.468,0.666,0.759
+openai_embeddings,,1536,is_bom_overall,LogisticRegression,{'classifier__max_iter': 25},0.758,0.468,0.666,0.759
 umap_2,UMAP,2,is_bot,LogisticRegression,{'classifier__max_iter': 25},0.688,0.677,0.688,0.758
 tsne_3,T-SNE,3,is_bom_astroturf,XGBClassifier,{},0.748,0.617,0.734,0.756
-original,,1536,is_bom_overall,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 25, 'classifier__n_estimators': 250}",0.752,0.429,0.646,0.753
+openai_embeddings,,1536,is_bom_overall,RandomForestClassifier,"{'classifier__criterion': 'gini', 'classifier__min_samples_leaf': 25, 'classifier__n_estimators': 250}",0.752,0.429,0.646,0.753
 umap_2,UMAP,2,is_bom_astroturf,RandomForestClassifier,"{'classifier__criterion': 'log_loss', 'classifier__min_samples_leaf': 50, 'classifier__n_estimators': 250}",0.754,0.54,0.703,0.751
 tsne_4,T-SNE,4,is_bom_astroturf,XGBClassifier,{},0.744,0.593,0.722,0.748
 umap_3,UMAP,3,is_bom_astroturf,XGBClassifier,{},0.738,0.603,0.723,0.747
@@ -163,7 +163,7 @@ pca_3,PCA,3,is_bom_overall,LogisticRegression,{'classifier__max_iter': 25},0.752
 pca_7,PCA,7,is_bom_overall,LogisticRegression,{'classifier__max_iter': 25},0.752,0.429,0.646,0.712
 pca_2,PCA,2,is_bom_overall,LogisticRegression,{'classifier__max_iter': 25},0.752,0.429,0.646,0.711
 umap_2,UMAP,2,is_toxic,LogisticRegression,{'classifier__max_iter': 25},0.829,0.632,0.799,0.707
-original,,1536,is_bom_overall,XGBClassifier,{},0.736,0.552,0.697,0.706
+openai_embeddings,,1536,is_bom_overall,XGBClassifier,{},0.736,0.552,0.697,0.706
 pca_7,PCA,7,is_bom_overall,XGBClassifier,{},0.729,0.568,0.701,0.704
 umap_3,UMAP,3,is_bom_astroturf,LogisticRegression,{'classifier__max_iter': 1000},0.738,0.457,0.66,0.704
 pca_3,PCA,3,is_bom_overall,XGBClassifier,{},0.734,0.574,0.706,0.701
