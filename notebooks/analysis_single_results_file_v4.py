@@ -23,7 +23,7 @@ print("Y COLS:", y_cols)
 
 print(df["y_col"].value_counts())
 
-print(df["dataset"].value_counts())
+print(df["features"].value_counts())
 
 df["roc_auc_score"].isna().sum()
 
@@ -74,35 +74,35 @@ It happens that all the best results are produced by using the full 1536 embeddi
 
 best_rows = df.groupby("y_col")[metric_col].idxmax()
 best = df.loc[best_rows].copy()
-best[["dataset", "y_col", "model_type", metric_col]].sort_values(by=metric_col, ascending=False)
+best[["features", "y_col", "model_type", metric_col]].sort_values(by=metric_col, ascending=False)
 
 import plotly.express as px
 
 chart_df = best.sort_values(by=metric_col, ascending=True)
 px.bar(chart_df, orientation="h", x=metric_col, y="y_col",
        title="Best results for each classification target",
-       hover_data=["model_type", "dataset", "best_params"],
-       text= metric_col # "dataset" #"model_type" #metric_col, # "model_type",
+       hover_data=["model_type", "features", "best_params"],
+       text= metric_col # "features" #"model_type" #metric_col, # "model_type",
     )
 
-"""#### ... for just the reduced datasets?"""
+"""#### ... for just the reduced features?"""
 
 reduced_df = df[df["reducer_type"] != "N/A"].copy()
-reduced_df["dataset"].value_counts()
+reduced_df["features"].value_counts()
 
 #reduced_df.groupby("y_col")[metric_col].max().sort_values(ascending=False)
 
 best_rows_reduced = reduced_df.groupby("y_col")[metric_col].idxmax()
 best_reduced = reduced_df.loc[best_rows_reduced]
-best_reduced[["dataset", "y_col", "model_type", metric_col]].sort_values(by=metric_col, ascending=False)
+best_reduced[["features", "y_col", "model_type", metric_col]].sort_values(by=metric_col, ascending=False)
 
 import plotly.express as px
 
 chart_df = best_reduced.sort_values(by=metric_col, ascending=True)
 fig = px.bar(chart_df, orientation="h", x=metric_col, y="y_col",
-       title="Best results for each classification target (reduced datasets)",
-       hover_data=["model_type", "dataset", "best_params"],
-       text="dataset", # metric_col, # "model_type",
+       title="Best results for each classification target (reduced features)",
+       hover_data=["model_type", "features", "best_params"],
+       text="features", # metric_col, # "model_type",
        #color="model_type", color_discrete_map=PASTELS_MAP
     )
 # for some reason, coloring messes up sort order, so re-sort:
@@ -114,54 +114,19 @@ fig.show()
 #### Bar Chart Maker
 """
 
-#y_col="is_bot"
-#
-#chart_df = df[df["y_col"] == y_col].copy()
-#
-#chart_df.groupby(["dataset", "model_type"])[metric_col].max()
-
-
-
-#import plotly.express as px
-#
-#def chart_maker(y_col="is_bot", metric_col="roc_auc_score", fig_show=False, height=500, color_map=PASTELS_MAP):
-#    chart_df = df[df["y_col"] == y_col].copy()
-#    chart_df.reset_index(inplace=True)
-#    # chart_df[["dataset", "model_type", "accuracy", "f1_weighted", "f1_macro", "roc_auc_score"]].head()
-#    print(chart_df[["dataset", "model_type", metric_col]].head())
-#
-#    fig = px.bar(chart_df, y=metric_col, facet_col="dataset",
-#        height=height, title=f"Classification Results (y_col='{y_col}')",
-#        text=metric_col,
-#        labels={"index": ""},
-#        color="model_type", color_discrete_map=color_map
-#    )
-#    fig.for_each_annotation(lambda a: a.update(text=a.text.replace("dataset=", "")))
-#    fig.update_xaxes(showticklabels=False)
-#
-#    if fig_show:
-#        fig.show()
-#
-#    return fig
-#
-
-#for y_col in y_cols:
-#    print("-------------------")
-#    chart_maker(y_col=y_col, fig_show=True)
-
 import plotly.express as px
 
 def chart_maker(y_col="is_bot", metric_col="roc_auc_score", fig_show=False, height=500, color_map=PASTELS_MAP):
     chart_df = df[df["y_col"] == y_col].copy()
-    #print(chart_df[["dataset", "model_type", metric_col]].head())
+    #print(chart_df[["features", "model_type", metric_col]].head())
 
-    fig = px.bar(chart_df, y=metric_col, facet_col="dataset", x="model_type",
+    fig = px.bar(chart_df, y=metric_col, facet_col="features", x="model_type",
         height=height, title=f"Classification Results (y_col='{y_col}')",
         text=metric_col,
         labels={"index": "", "model_type":""},
         color="model_type", color_discrete_map=color_map
     )
-    fig.for_each_annotation(lambda a: a.update(text=a.text.replace("dataset=", "")))
+    fig.for_each_annotation(lambda a: a.update(text=a.text.replace("features=", "")))
 
     fig.update_xaxes(showticklabels=False)
 
