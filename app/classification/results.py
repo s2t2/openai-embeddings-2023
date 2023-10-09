@@ -2,6 +2,7 @@
 from functools import cached_property
 
 import numpy as np
+from pandas import DataFrame
 from sklearn.preprocessing import label_binarize, LabelBinarizer
 from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, roc_curve, auc, RocCurveDisplay
 
@@ -123,3 +124,14 @@ class ClassificationResults:
             #"roc_curve_auc": self.roc_curve_auc,
             #"roc_auc_score_proba": self.roc_auc_score_proba,
         }
+
+    #@cached_property
+    #def predictions_df(self) -> DataFrame:
+    #    if self.is_multiclass:
+    #        breakpoint()
+    #        # 'numpy.ndarray' object has no attribute 'index'
+    #        #return None # TODO:
+    #        df = DataFrame({"y_test": self.y_test, "y_pred": self.y_pred}, index=self.y_test.index)
+    #    else:
+    #        df = DataFrame({"y_test": self.y_test, "y_pred": self.y_pred}, index=self.y_test.index)
+    #        return df

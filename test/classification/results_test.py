@@ -32,6 +32,15 @@ def results_ok(pipeline):
     for metric in ['accuracy', 'macro avg', 'weighted avg']:
         assert metric in results_json["classification_report"].keys()
 
+    # PREDICTIONS REPORT
+
+    preds_df = pipeline.predictions_df #results.predictions_df
+    assert preds_df.shape == (len(results.y_test), 9)
+    assert preds_df.columns.tolist() == [
+        "user_id", "is_bot", "opinion_community", "is_toxic", "is_factual", "fourway_label", "tweet_texts",
+        "y_test", "y_pred"
+    ]
+
 
 def plots_ok(pipeline):
     pipeline.plot_confusion_matrix(fig_save=False, fig_show=False)
