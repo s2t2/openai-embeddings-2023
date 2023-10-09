@@ -16,6 +16,9 @@ results/*/*/*.json
 #results/*/*/*/*.html
 #results/*/*/*/*.json
 
+# ignore these files b/c they contains user ids:
+results/classification/*/*/predictions.csv
+
 # keep this:
 !results/reduced_classification/all_results.csv
 

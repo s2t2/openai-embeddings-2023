@@ -4,7 +4,7 @@ from pprint import pprint
 from abc import ABC
 from functools import cached_property
 
-#import numpy as np
+import numpy as np
 from pandas import Series, DataFrame
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
@@ -51,7 +51,6 @@ class ClassificationPipeline(ABC):
             remaining_indices = self.y.index
             self.x = self.x.loc[remaining_indices]
 
-
         self.n_classes = len(set(self.y))
         self.is_multiclass = bool(self.n_classes > 2)
 
@@ -86,6 +85,7 @@ class ClassificationPipeline(ABC):
     def perform(self):
         self.train_eval()
         self.save_results()
+        self.save_predictions()
         self.plot_confusion_matrix()
 
         if self.is_multiclass:
@@ -163,10 +163,32 @@ class ClassificationPipeline(ABC):
         pprint(self.results_json)
 
 
+    @cached_property
+    def predictions_df(self) -> DataFrame:
+        """Returns a dataframe of predictions, and corresponding text and labels, for human investigation into the mis-classifications"""
+        #if self.is_multiclass:
+        if isinstance(self.y_test, np.ndarray):
+            # 'numpy.ndarray' object has no attribute 'index'
+            index = self.x_test.index # if y test is missing index, use x test index instead
+        else:
+            index = self.y_test.index
+
+        df = DataFrame({"y_test": self.y_test, "y_pred": self.y_pred}, index=index)
+        text_and_labels = self.ds.df[["user_id", "is_bot", "opinion_community", "is_toxic", "is_factual", "fourway_label", "tweet_texts"]]
+        df = text_and_labels.merge(df, how="right", left_index=True, right_index=True)
+        return df
+
     def save_results(self):
         json_filepath = os.path.join(self.results_dirpath, "results.json")
         save_results_json(self.results_json, json_filepath)
 
+    def save_predictions(self): # confusion_only=False
+        df = self.predictions_df
+        csv_filepath = os.path.join(self.results_dirpath, "predictions.csv")
+        #if confusion_only:
+        #    df = df[df["y_pred"] != df["y_true"]]
+        #    csv_filepath = os.path.join(self.results_dirpath, "confusions.csv")
+        df.to_csv(csv_filepath, index=False)
 
     @cached_property
     def results_dirpath(self):
