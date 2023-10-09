@@ -169,7 +169,7 @@ class ClassificationPipeline(ABC):
         #if self.is_multiclass:
         if isinstance(self.y_test, np.ndarray):
             # 'numpy.ndarray' object has no attribute 'index'
-            index = self.x_test.index # use x train index instead
+            index = self.x_test.index # if y test is missing index, use x test index instead
         else:
             index = self.y_test.index
 
