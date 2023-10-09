@@ -182,13 +182,13 @@ class ClassificationPipeline(ABC):
         json_filepath = os.path.join(self.results_dirpath, "results.json")
         save_results_json(self.results_json, json_filepath)
 
-    def save_predictions(self):
-        #df = self.results.predictions_df
+    def save_predictions(self): # confusion_only=False
         df = self.predictions_df
-        if not df.empty:
-            #df = df[df["y_pred"] != df["y_true"]]
-            csv_filepath = os.path.join(self.results_dirpath, "predictions.csv")
-            df.to_csv(csv_filepath, index=False)
+        csv_filepath = os.path.join(self.results_dirpath, "predictions.csv")
+        #if confusion_only:
+        #    df = df[df["y_pred"] != df["y_true"]]
+        #    csv_filepath = os.path.join(self.results_dirpath, "confusions.csv")
+        df.to_csv(csv_filepath, index=False)
 
     @cached_property
     def results_dirpath(self):
