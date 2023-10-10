@@ -224,7 +224,7 @@ if __name__ == "__main__":
         "bot_label", "opinion_label", "bom_overall_label", "bom_astroturf_label",
         "toxic_label", "factual_label",
 
-        "fourway_label", #"sixway_label",
+        "fourway_label", #"sixway_fact_label",
                         ]:
         color_map = COLORS_MAP[groupby_col]
         category_orders = {groupby_col: CATEGORY_ORDERS[groupby_col]}
