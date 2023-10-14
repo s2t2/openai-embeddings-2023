@@ -17,7 +17,7 @@ if __name__ == "__main__":
         # not the most ideal that we are loading the dataset multiple times instead of just choosing different col names from a dataset that has been loaded once, however integration with previous dataset API has led us here
         ds = ReducedDataset(reducer_name=reducer_name, n_components=n_components)
 
-        for y_col in Y_COLS:
+        for y_col in ["eightway_label", "allway_label"]:  #Y_COLS:
             results_dirpath = os.path.join(RESULTS_DIRPATH, "reduced_classification", y_col, results_dirname, "logistic_regression")
             pipeline = LogisticRegressionPipeline(ds=ds, y_col=y_col, results_dirpath=results_dirpath)
             pipeline.perform()

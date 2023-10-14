@@ -19,6 +19,7 @@ from app.classification.results import ClassificationResults
 K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
 #X_SCALE = bool(os.getenv("X_SCALE", default="false").lower() == "true")
 #SCALER_TYPE = os.getenv("SCALER_TYPE")
+SAMPLES_MIN = int(os.getenv("SAMPLES_MIN", default="10")) # number of rows minimum to keep that class in the classification task
 
 FIG_SHOW = bool(os.getenv("FIG_SHOW", default="false").lower() == "true")
 FIG_SAVE = bool(os.getenv("FIG_SAVE", default="true").lower() == "true")
@@ -44,12 +45,30 @@ class ClassificationPipeline(ABC):
            self.x = self.ds.x
 
         self.y = self.ds.df[self.y_col]
+
         # if there are null values, consider imputing them or dropping, based on specified strategy
+        # ... (because in this case many users who don't share links have null fact scores)
         if self.y.isna().sum() > 0:
             # "drop" strategy
             self.y.dropna(inplace=True) # need to drop x as well
             remaining_indices = self.y.index
             self.x = self.x.loc[remaining_indices]
+
+        # if we have low support, let's consider dropping those classes
+        #UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+        counts = self.y.value_counts()
+        print(counts)
+        low_support_classes = counts[ counts < SAMPLES_MIN ].index # index of a series are the class names (e.g. 'Pro-Trump Human Toxic High Quality')
+        for low_support_class in low_support_classes:
+            print("CLASS WITH LOW SUPPORT (DROPPING):", low_support_class)
+            rows_to_drop = self.y[self.y == low_support_class]
+            self.y.drop(rows_to_drop.index, inplace=True) # need to drop x as well
+            self.x.drop(rows_to_drop.index, inplace=True)
+
+
+
+
+
 
         self.n_classes = len(set(self.y))
         self.is_multiclass = bool(self.n_classes > 2)
@@ -64,6 +83,9 @@ class ClassificationPipeline(ABC):
             self.label_encoder = None
             self.class_labels = None
             self.class_names = None
+
+
+
 
         self.k_folds = k_folds
         self._results_dirpath = results_dirpath
@@ -106,6 +128,11 @@ class ClassificationPipeline(ABC):
             print(Series(self.y_train).map(lambda i: self.class_labels[i]).value_counts(dropna=False))
         else:
             print(self.y_train.value_counts(dropna=False))
+
+        # the roc auc scoring metric doesn't work if the same classes aren't in the train and test set
+        # ... (this may happen if we have low support)
+        # ... mitigate with strategy to drop classes with low support (see init)
+        # ValueError: Number of classes in y_true not equal to the number of columns in 'y_score'
 
         steps = [("classifier", self.model)]
         pipeline = Pipeline(steps=steps)
@@ -291,9 +318,12 @@ class ClassificationPipeline(ABC):
         for i, class_name in enumerate(class_names):
             fpr, tpr, _ = roc_curve(y_test_encoded[:,i], self.y_pred_proba[:,i])
             score = auc(fpr, tpr)
+            # increase darkness of orange until we can't go anymore, then just keep using the darkest orange
+            color = ORANGES[i+2] if i+2 < len(ORANGES) else ORANGES[-1]
+
             trace = go.Scatter(x=fpr, y=tpr,
                 mode='lines',
-                line=dict(color=ORANGES[i+2], width=2),
+                line=dict(color=color, width=2),
                 name=f"'{str(class_name).title()}' vs Rest (AUC = {score.round(3)})"
             )
             chart_data.append(trace)

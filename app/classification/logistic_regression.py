@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     ds = Dataset()
 
-    for y_col in ["allway_label"]: # Y_COLS:
+    for y_col in Y_COLS:
 
         pipeline = LogisticRegressionPipeline(ds=ds, y_col=y_col)
         pipeline.perform()

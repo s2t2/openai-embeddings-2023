@@ -75,11 +75,17 @@ class ClassificationResults:
         #
         # UPDATE: we are converting string values at the beginning, so this is no longer necessary
 
+        #ValueError: Number of classes in y_true not equal to the number of columns in 'y_score'
+        # ... mitigate by dropping classes with low support (see pipeline init)
+        #breakpoint()
+
         if self.is_multiclass:
            return roc_auc_score(y_true=self.y_test, y_score=self.y_pred_proba, multi_class="ovr")
         else:
             y_pred_proba_pos = self.y_pred_proba[:,1] # positive class (for binary classification)
             return roc_auc_score(y_true=self.y_test, y_score=y_pred_proba_pos)
+
+
 
     #@cached_property
     #def roc_auc_score_proba(self):

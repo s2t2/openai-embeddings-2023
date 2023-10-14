@@ -1,0 +1,160 @@
+{
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot High Quality",
+        "Anti-Trump Bot Low Quality",
+        "Anti-Trump Human High Quality",
+        "Anti-Trump Human Low Quality",
+        "Pro-Trump Bot High Quality",
+        "Pro-Trump Bot Low Quality",
+        "Pro-Trump Human Low Quality"
+    ],
+    "classification_report": {
+        "Anti-Trump Bot High Quality": {
+            "precision": 0.6976744186046512,
+            "recall": 1.0,
+            "f1-score": 0.8219178082191781,
+            "support": 270.0
+        },
+        "Anti-Trump Bot Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 89.0
+        },
+        "Anti-Trump Human High Quality": {
+            "precision": 0.8571428571428571,
+            "recall": 0.23076923076923078,
+            "f1-score": 0.36363636363636365,
+            "support": 26.0
+        },
+        "Anti-Trump Human Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 9.0
+        },
+        "Pro-Trump Bot High Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 5.0
+        },
+        "Pro-Trump Bot Low Quality": {
+            "precision": 0.908745247148289,
+            "recall": 0.991701244813278,
+            "f1-score": 0.9484126984126984,
+            "support": 241.0
+        },
+        "Pro-Trump Human Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 17.0
+        },
+        "accuracy": 0.7838660578386606,
+        "macro avg": {
+            "precision": 0.3519375032708282,
+            "recall": 0.3174957822260727,
+            "f1-score": 0.30485241003832003,
+            "support": 657.0
+        },
+        "weighted avg": {
+            "precision": 0.6539808399873787,
+            "recall": 0.7838660578386606,
+            "f1-score": 0.7000605996821673,
+            "support": 657.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            270,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            87,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+        ],
+        [
+            20,
+            0,
+            6,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            8,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+        ],
+        [
+            2,
+            0,
+            0,
+            0,
+            0,
+            239,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            17,
+            0
+        ]
+    ],
+    "roc_auc_score": 0.8242949584232777,
+    "y_col": "eightway_label",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__max_iter": [
+                25,
+                1000,
+                10000
+            ]
+        },
+        "best_params": {
+            "classifier__max_iter": 1000
+        },
+        "best_score": 0.8220530211788116
+    }
+}

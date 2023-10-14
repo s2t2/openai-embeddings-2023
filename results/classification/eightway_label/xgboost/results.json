@@ -1,0 +1,152 @@
+{
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot High Quality",
+        "Anti-Trump Bot Low Quality",
+        "Anti-Trump Human High Quality",
+        "Anti-Trump Human Low Quality",
+        "Pro-Trump Bot High Quality",
+        "Pro-Trump Bot Low Quality",
+        "Pro-Trump Human Low Quality"
+    ],
+    "classification_report": {
+        "Anti-Trump Bot High Quality": {
+            "precision": 0.6906666666666667,
+            "recall": 0.9592592592592593,
+            "f1-score": 0.8031007751937984,
+            "support": 270.0
+        },
+        "Anti-Trump Bot Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 89.0
+        },
+        "Anti-Trump Human High Quality": {
+            "precision": 0.7142857142857143,
+            "recall": 0.38461538461538464,
+            "f1-score": 0.5,
+            "support": 26.0
+        },
+        "Anti-Trump Human Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 9.0
+        },
+        "Pro-Trump Bot High Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 5.0
+        },
+        "Pro-Trump Bot Low Quality": {
+            "precision": 0.9073359073359073,
+            "recall": 0.975103734439834,
+            "f1-score": 0.9400000000000001,
+            "support": 241.0
+        },
+        "Pro-Trump Human Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 17.0
+        },
+        "accuracy": 0.7671232876712328,
+        "macro avg": {
+            "precision": 0.33032689832689827,
+            "recall": 0.33128262547349685,
+            "f1-score": 0.32044296788482834,
+            "support": 657.0
+        },
+        "weighted avg": {
+            "precision": 0.6449305665744022,
+            "recall": 0.7671232876712328,
+            "f1-score": 0.6946380659091713,
+            "support": 657.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            259,
+            9,
+            0,
+            0,
+            0,
+            2,
+            0
+        ],
+        [
+            86,
+            0,
+            1,
+            0,
+            0,
+            2,
+            0
+        ],
+        [
+            16,
+            0,
+            10,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            6,
+            0,
+            2,
+            0,
+            0,
+            1,
+            0
+        ],
+        [
+            1,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0
+        ],
+        [
+            6,
+            0,
+            0,
+            0,
+            0,
+            235,
+            0
+        ],
+        [
+            1,
+            0,
+            1,
+            0,
+            0,
+            15,
+            0
+        ]
+    ],
+    "roc_auc_score": 0.7530588141421349,
+    "y_col": "eightway_label",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "XGBClassifier",
+        "k_folds": 5,
+        "param_grid": {},
+        "best_params": {},
+        "best_score": 0.7781846683331766
+    }
+}
