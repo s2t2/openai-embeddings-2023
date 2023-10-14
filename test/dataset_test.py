@@ -42,9 +42,42 @@ def test_x_scaled(ds):
 
 def test_custom_labels(ds):
     assert ds.df["fourway_label"].value_counts().to_dict() == {
-        'Anti-Trump Human': 3010, 'Anti-Trump Bot': 1881,
-        'Pro-Trump Human': 1456, 'Pro-Trump Bot': 1219
+        'Anti-Trump Human': 3010,
+        'Anti-Trump Bot': 1881,
+        'Pro-Trump Human': 1456,
+        'Pro-Trump Bot': 1219
     }
+
+    assert ds.df["eightway_label"].value_counts().to_dict() == {
+        'Anti-Trump Bot High Quality': 1384,
+        'Pro-Trump Bot Low Quality': 1105,
+        'Anti-Trump Bot Low Quality': 463,
+        'Anti-Trump Human High Quality': 171,
+        'Pro-Trump Human Low Quality': 74,
+        'Anti-Trump Human Low Quality': 54,
+        'Pro-Trump Bot High Quality': 33,
+        'Pro-Trump Human High Quality': 8 # LOW SUPPORT
+    }
+
+    assert ds.df["allway_label"].value_counts().to_dict() == {
+        'Anti-Trump Bot Non-toxic High Quality': 1339,
+        'Pro-Trump Bot Non-toxic Low Quality': 1073,
+        'Anti-Trump Bot Non-toxic Low Quality': 439,
+        'Anti-Trump Human Non-toxic High Quality': 130,
+        'Pro-Trump Human Non-toxic Low Quality': 66,
+        'Anti-Trump Bot Toxic High Quality': 45,
+        'Anti-Trump Human Toxic High Quality': 41,
+        'Anti-Trump Human Non-toxic Low Quality': 39,
+        'Pro-Trump Bot Non-toxic High Quality': 33,
+        'Pro-Trump Bot Toxic Low Quality': 32,
+        'Anti-Trump Bot Toxic Low Quality': 24,
+        'Anti-Trump Human Toxic Low Quality': 15,
+        'Pro-Trump Human Toxic Low Quality': 8, # LOW SUPPORT
+        'Pro-Trump Human Non-toxic High Quality': 7, # LOW SUPPORT
+        'Pro-Trump Human Toxic High Quality': 1 #  LOW SUPPORT
+    }
+
+
 
 
 def test_score_thresholding(ds):

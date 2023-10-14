@@ -73,6 +73,7 @@ class Dataset():
         df["bom_overall_fourway_label"] = df["opinion_label"] + " " + df["bom_overall_label"]
         df["bom_astroturf_fourway_label"] = df["opinion_label"] + " " + df["bom_astroturf_label"]
 
+        df["eightway_label"] = df["opinion_label"] + " " + df["bot_label"] + " " + df["factual_label"]
         df["allway_label"] = df["opinion_label"] + " " + df["bot_label"] + " " + df["toxic_label"] + " " + df["factual_label"]
 
         return df
