@@ -2,13 +2,13 @@ import os
 from functools import cached_property
 from pandas import read_csv
 
-from app.dataset import Dataset
+from app.dataset import Dataset, OPENAI_FEATURE_COLS
 from app.reduction.pipeline import REDUCTION_RESULTS_DIRPATH
 
 FORCE_RECOMPILE = bool(os.getenv("FORCE_RECOMPILE", default="false") == "true")
 
 
-REDUCED_DATASET_PATH = os.path.join(REDUCTION_RESULTS_DIRPATH, "botometer_sample_openai_tweet_embeddings_reduced_20230825.csv.gz")
+REDUCED_DATASET_PATH = os.path.join(REDUCTION_RESULTS_DIRPATH, "botometer_sample_openai_tweet_embeddings_reduced_20231013.csv.gz")
 REDUCTIONS = [
     ("pca", 2), ("pca", 3), ("pca", 7),
     ("tsne", 2), ("tsne", 3), ("tsne", 4),
@@ -17,6 +17,8 @@ REDUCTIONS = [
 
 def feature_colnames(reducer_name="pca", n_components=2):
     return [f"{reducer_name}_{n_components}_component_{i}" for i in range(1, n_components+1)]
+
+
 
 
 class ReducedDataset(Dataset):
@@ -63,6 +65,25 @@ class ReducedDataset(Dataset):
         """Override parent method, use feature cols for the given reduction method and n components."""
         return self.df[self.feature_cols].copy()
 
+    @cached_property
+    def reduced_cols(self):
+        #REDUCED_FEATURES = (
+        #    feature_colnames("pca", 2) + feature_colnames("pca", 3) + feature_colnames("pca", 7) +
+        #    feature_colnames("tsne", 2) + feature_colnames("tsne", 3) + feature_colnames("tsne", 4) +
+        #    feature_colnames("umap", 2) + feature_colnames("umap", 3)
+        #)
+        #REDUCED_FEATURES = [feature_colnames(method, n) for method, n in REDUCTIONS]
+        reduced_features = []
+        for method, n in REDUCTIONS:
+            reduced_features += feature_colnames(method, n)
+        return reduced_features
+
+    @cached_property
+    def labels_df(self):
+        #label_cols = list(set(self.df.columns.tolist()) - set(super().feature_cols) - set(self.reduced_cols))
+        label_cols = list(set(self.df.columns.tolist()) - set(OPENAI_FEATURE_COLS) - set(self.reduced_cols))
+        return self.df[label_cols].copy()
+
 
 if __name__ == "__main__":
 
@@ -70,4 +91,4 @@ if __name__ == "__main__":
 
     df = ds.df
     print(df.shape)
-    print(df.columns)
+    print(df.columns.tolist())

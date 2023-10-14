@@ -1,9 +1,8 @@
 
 
 
-from app.dataset import LABEL_COLS
 from app.reduction.pipeline import ReductionPipeline
-from conftest import N_USERS, N_FEATURES
+from conftest import N_USERS, N_FEATURES, N_LABELS
 
 
 def verify_embeddings(pipeline):
@@ -11,8 +10,8 @@ def verify_embeddings(pipeline):
 
     n_components = pipeline.n_components
     component_names = pipeline.component_names
-    col_names = component_names + LABEL_COLS
-    n_cols = len(col_names)
+    label_cols = pipeline.labels_df.columns.tolist()
+    expected_cols = component_names + label_cols
 
     # embeddings resulting from dimensionality reduction (no labels)
     embeddings = pipeline.embeddings
@@ -20,8 +19,9 @@ def verify_embeddings(pipeline):
 
     # embeddings resulting from dimensionality reduction (plus labels)
     embeddings_df = pipeline.embeddings_df
-    assert embeddings_df.shape == (N_USERS, n_cols)
-    assert embeddings_df.columns.tolist() == col_names
+
+    assert embeddings_df.shape == (N_USERS, len(expected_cols))
+    assert embeddings_df.columns.tolist() == expected_cols
 
 def verify_pca_explainability(pipeline, dataset):
     """A helper method for testing the explainability metrics returned by PCA specifically."""

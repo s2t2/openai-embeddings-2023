@@ -3,20 +3,25 @@
 import numpy as np
 
 from conftest import N_USERS, N_FEATURES, N_LABELS
-from app.reduced_dataset import feature_colnames
+from app.dataset import OPENAI_FEATURE_COLS
+from app.reduced_dataset import feature_colnames #, REDUCED_FEATURES
 
 REDUCED_N_FEATURES = len(feature_colnames("pca", 2)) # because the fixture is for pca 2
 
 
-def test_dataset(reduced_ds):
-    pca_features = feature_colnames("pca", 2) + feature_colnames("pca", 3) + feature_colnames("pca", 7)
-    tsne_features = feature_colnames("tsne", 2) + feature_colnames("tsne", 3) + feature_colnames("tsne", 4)
-    umap_features = feature_colnames("umap", 2) + feature_colnames("umap", 3)
-    N_REDUCTION_FEATURES = len(pca_features) + len(tsne_features) + len(umap_features)
-    N_COLS = N_FEATURES + N_REDUCTION_FEATURES + N_LABELS
+def test_dataset(ds, reduced_ds):
+    # the reduced dataset has all the columns of the original dataset, plus columns for each reduction result:
+    N_COLS = len(ds.df.columns) + len(reduced_ds.reduced_cols)
     assert reduced_ds.df.shape == (N_USERS, N_COLS)
 
-def test_labels_df(reduced_ds):
+
+def test_reduced_features(reduced_ds):
+    assert len(reduced_ds.reduced_cols) == 26
+
+
+def test_labels_df(ds, reduced_ds):
+    # the reduced dataset has the same LABELS as the dataset:
+    assert sorted(ds.labels_df.columns.tolist()) == sorted(reduced_ds.labels_df.columns.tolist())
     assert reduced_ds.labels_df.shape == (N_USERS, N_LABELS)
 
 

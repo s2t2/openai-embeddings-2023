@@ -9,13 +9,13 @@ from app import DATA_DIRPATH
 
 CSV_FILEPATH = os.path.join(DATA_DIRPATH, "text-embedding-ada-002", "botometer_sample_openai_tweet_embeddings_20230724.csv.gz")
 
-FEATURE_COLS = [str(i) for i in list(range(0, 1536))] # 0 through 1535
+OPENAI_FEATURE_COLS = [str(i) for i in list(range(0, 1536))] # 0 through 1535
 
-DATASET_VERSION = "20230909" # downstream dataset version. bump this when you update the cols
+DATASET_VERSION = "20231013" # downstream dataset version. bump this when you update the cols
 
 
 class Dataset():
-    def __init__(self, csv_filepath=CSV_FILEPATH, feature_cols=FEATURE_COLS, version=DATASET_VERSION):
+    def __init__(self, csv_filepath=CSV_FILEPATH, feature_cols=OPENAI_FEATURE_COLS, version=DATASET_VERSION):
         #self.title = "OpenAI Embeddings"
         self.csv_filepath = csv_filepath # upstream (reading in)
         self.feature_cols = feature_cols
@@ -96,12 +96,13 @@ class Dataset():
         df.index = self.x.index
         return df
 
-    #@cached_property
-    #def feature_names(self):
-    #    # FYI - PCA get_feature_names_out only works if the feature names are strings
-    #    # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
-    #    # update: consider returning self.feature_cols
-    #    return [str(colname) for colname in self.x.columns.tolist()]
+    @cached_property
+    def feature_names(self):
+        """Returns string versions of the feature column names"""
+        # FYI - PCA get_feature_names_out only works if the feature names are strings
+        # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+        # update: consider returning self.feature_cols
+        return [str(colname) for colname in self.x.columns.tolist()]
 
 
 
