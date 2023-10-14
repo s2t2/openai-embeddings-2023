@@ -1,0 +1,297 @@
+{
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot Non-toxic High Quality",
+        "Anti-Trump Bot Non-toxic Low Quality",
+        "Anti-Trump Bot Toxic High Quality",
+        "Anti-Trump Bot Toxic Low Quality",
+        "Anti-Trump Human Non-toxic High Quality",
+        "Anti-Trump Human Non-toxic Low Quality",
+        "Anti-Trump Human Toxic High Quality",
+        "Anti-Trump Human Toxic Low Quality",
+        "Pro-Trump Bot Non-toxic High Quality",
+        "Pro-Trump Bot Non-toxic Low Quality",
+        "Pro-Trump Bot Toxic Low Quality",
+        "Pro-Trump Human Non-toxic Low Quality"
+    ],
+    "classification_report": {
+        "Anti-Trump Bot Non-toxic High Quality": {
+            "precision": 0.6441102756892231,
+            "recall": 0.9625468164794008,
+            "f1-score": 0.7717717717717718,
+            "support": 267.0
+        },
+        "Anti-Trump Bot Non-toxic Low Quality": {
+            "precision": 0.3333333333333333,
+            "recall": 0.039603960396039604,
+            "f1-score": 0.07079646017699116,
+            "support": 101.0
+        },
+        "Anti-Trump Bot Toxic High Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 10.0
+        },
+        "Anti-Trump Bot Toxic Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 7.0
+        },
+        "Anti-Trump Human Non-toxic High Quality": {
+            "precision": 0.7142857142857143,
+            "recall": 0.2,
+            "f1-score": 0.3125,
+            "support": 25.0
+        },
+        "Anti-Trump Human Non-toxic Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 6.0
+        },
+        "Anti-Trump Human Toxic High Quality": {
+            "precision": 0.3333333333333333,
+            "recall": 0.3333333333333333,
+            "f1-score": 0.3333333333333333,
+            "support": 3.0
+        },
+        "Anti-Trump Human Toxic Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 4.0
+        },
+        "Pro-Trump Bot Non-toxic High Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 7.0
+        },
+        "Pro-Trump Bot Non-toxic Low Quality": {
+            "precision": 0.8553191489361702,
+            "recall": 0.9852941176470589,
+            "f1-score": 0.9157175398633257,
+            "support": 204.0
+        },
+        "Pro-Trump Bot Toxic Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 7.0
+        },
+        "Pro-Trump Human Non-toxic Low Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 15.0
+        },
+        "accuracy": 0.7134146341463414,
+        "macro avg": {
+            "precision": 0.24003181713148122,
+            "recall": 0.21006485232131936,
+            "f1-score": 0.20034325876211848,
+            "support": 656.0
+        },
+        "weighted avg": {
+            "precision": 0.6082109138960531,
+            "recall": 0.7134146341463414,
+            "f1-score": 0.6232200970625879,
+            "support": 656.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            257,
+            8,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+        ],
+        [
+            95,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+        ],
+        [
+            10,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            7,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            18,
+            0,
+            0,
+            0,
+            5,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+        ],
+        [
+            5,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            7,
+            0,
+            0
+        ],
+        [
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            201,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            7,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            15,
+            0,
+            0
+        ]
+    ],
+    "roc_auc_score": 0.7830311935027101,
+    "y_col": "allway_label",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "XGBClassifier",
+        "k_folds": 5,
+        "param_grid": {},
+        "best_params": {},
+        "best_score": 0.772893386076017
+    }
+}
