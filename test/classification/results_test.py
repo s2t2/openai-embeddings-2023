@@ -1,4 +1,6 @@
 
+from pandas import Series
+
 from app.classification.logistic_regression import LogisticRegressionPipeline
 from app.classification.random_forest import RandomForestPipeline
 from app.classification.xgboost import XGBoostPipeline
@@ -51,6 +53,15 @@ def plots_ok(pipeline):
         pipeline.plot_roc_curve(fig_save=False, fig_show=False)
 
 
+def logistic_explainable(pipeline):
+    assert isinstance(pipeline.coefs, Series)
+    assert isinstance(pipeline.intercept, float)
+    assert isinstance(pipeline.explainability_json, dict)
+    assert list(pipeline.explainability_json.keys()) == ["intercept", "coefs"]
+
+
+
+
 
 def test_logistic_regression_binary(ds):
     pipeline = LogisticRegressionPipeline(ds=ds, y_col="is_bot", param_grid=logistic_params_grid)
@@ -58,6 +69,7 @@ def test_logistic_regression_binary(ds):
     pipeline.train_eval()
     results_ok(pipeline)
     plots_ok(pipeline)
+    logistic_explainable(pipeline)
 
 
 def test_random_forest_binary(ds):
@@ -83,7 +95,7 @@ def test_logistic_regression_multiclass(ds):
     pipeline.train_eval()
     results_ok(pipeline)
     plots_ok(pipeline)
-
+    logistic_explainable(pipeline)
 
 def test_random_forest_multiclass(ds):
     pipeline = RandomForestPipeline(ds=ds, y_col="fourway_label", param_grid=forest_params_grid)

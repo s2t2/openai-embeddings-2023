@@ -4,11 +4,11 @@
         "1"
     ],
     "class_labels": [
-        "Normal",
+        "Non-toxic",
         "Toxic"
     ],
     "classification_report": {
-        "Normal": {
+        "Non-toxic": {
             "precision": 0.8915929203539823,
             "recall": 0.9861337683523654,
             "f1-score": 0.9364833462432224,
