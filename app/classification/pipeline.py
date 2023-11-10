@@ -94,6 +94,8 @@ class ClassificationPipeline(ABC):
         else:
             self.plot_roc_curve()
 
+        #self.save_and_upload_model()
+
 
     def train_eval(self):
 
@@ -152,7 +154,8 @@ class ClassificationPipeline(ABC):
                 "param_grid": self.param_grid,
                 "best_params": self.gs.best_params_,
                 "best_score": self.gs.best_score_
-            }
+            },
+            "model_params": self.model.get_params() # all params used by the model!
         }
         self.results_json = {**self.results.as_json, **self.results_json} # merge dicts
         pprint(self.results_json)

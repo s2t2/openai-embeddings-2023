@@ -22,9 +22,15 @@ def results_ok(pipeline):
 
     results_json = pipeline.results_json
     assert sorted(results_json.keys()) == [
-        'class_labels', 'class_names',
-        'classification_report', 'confusion_matrix', 'grid_search',
-        'roc_auc_score', 'x_scaled', 'y_col'
+        'class_labels',
+        'class_names',
+        'classification_report',
+        'confusion_matrix',
+        'grid_search',
+        'model_params',
+        'roc_auc_score',
+        'x_scaled',
+        'y_col'
     ]
     assert isinstance(results_json["roc_auc_score"], float)
     assert sorted(results_json["grid_search"].keys()) == [
