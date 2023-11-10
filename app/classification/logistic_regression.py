@@ -1,8 +1,12 @@
+import os
 
 # https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
 from sklearn.linear_model import LogisticRegression
+from pandas import Series
 
+from app.classification import save_results_json
 from app.classification.pipeline import ClassificationPipeline
+
 
 class LogisticRegressionPipeline(ClassificationPipeline):
 
@@ -33,6 +37,22 @@ class LogisticRegressionPipeline(ClassificationPipeline):
             #"classifier__solver": ["liblinear", "newton-cg", "lbfgs", "sag", "saga"],
         }
 
+
+    @property
+    def explainability_json(self):
+        return {
+            "intercept": self.intercept.round(4),
+           # "coefs": self.coefs.round(4).tolist(),
+            "coefs": self.coefs.round(4).to_dict(), # includes feature names!!
+        }
+
+    @property
+    def coefs(self):
+        return Series(self.model.coef_[0], index=self.model.feature_names_in_) #.sort_values(ascending=False) # don't sort? preserve order with features?
+
+    @property
+    def intercept(self):
+        return self.model.intercept_[0]
 
 
 if __name__ == "__main__":

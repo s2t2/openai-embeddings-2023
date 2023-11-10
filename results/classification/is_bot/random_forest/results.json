@@ -51,23 +51,18 @@
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {
-            "classifier__n_estimators": [
-                50,
-                100,
-                150,
-                250
-            ],
             "classifier__criterion": [
-                "gini",
-                "log_loss"
+                "gini"
             ],
             "classifier__min_samples_leaf": [
-                1,
+                3,
                 5,
-                10,
-                25,
-                50,
-                100
+                8
+            ],
+            "classifier__n_estimators": [
+                250,
+                500,
+                1000
             ]
         },
         "best_params": {
@@ -76,5 +71,25 @@
             "classifier__n_estimators": 250
         },
         "best_score": 0.9772588827285714
+    },
+    "model_params": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_depth": null,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 5,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "n_estimators": 250,
+        "n_jobs": null,
+        "oob_score": false,
+        "random_state": 99,
+        "verbose": 0,
+        "warm_start": false
     }
 }

@@ -14,6 +14,7 @@
 # https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.XGBClassifier
 
 from xgboost import XGBClassifier
+from pandas import Series
 
 from app.classification.pipeline import ClassificationPipeline
 
@@ -123,6 +124,17 @@ class XGBoostPipeline(ClassificationPipeline):
 
         }
 
+
+    @property
+    def explainability_json(self):
+        return {
+            "coefs": self.coefs.round(4).to_dict(), # includes feature names!!
+        }
+
+    @property
+    def coefs(self):
+        """random forest has .feature_importances_ instead of .coef_ """
+        return Series(self.model.feature_importances_, index=self.model.feature_names_in_) #.sort_values(ascending=False) # don't sort? preserve order with features?
 
 
 

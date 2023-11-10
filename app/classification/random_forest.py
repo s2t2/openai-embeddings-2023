@@ -1,5 +1,6 @@
 # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
 from sklearn.ensemble import RandomForestClassifier
+from pandas import Series
 
 from app.classification.pipeline import ClassificationPipeline
 
@@ -51,6 +52,21 @@ class RandomForestPipeline(ClassificationPipeline):
             # ... If None then unlimited number of leaf nodes.
             #"classifier__max_leaf_nodes": [],
         }
+
+
+    @property
+    def explainability_json(self):
+        return {
+            "coefs": self.coefs.round(4).to_dict(), # includes feature names!!
+        }
+
+    @property
+    def coefs(self):
+        """random forest has .feature_importances_ instead of .coef_ """
+        return Series(self.model.feature_importances_, index=self.model.feature_names_in_) #.sort_values(ascending=False) # don't sort? preserve order with features?
+
+
+
 
 
 if __name__ == "__main__":

@@ -85,6 +85,7 @@ class ClassificationPipeline(ABC):
     def perform(self):
         self.train_eval()
         self.save_results()
+        self.save_coefs()
         self.save_predictions()
         self.plot_confusion_matrix()
 
@@ -92,6 +93,8 @@ class ClassificationPipeline(ABC):
             self.plot_roc_curve_multiclass()
         else:
             self.plot_roc_curve()
+
+        #self.save_and_upload_model()
 
 
     def train_eval(self):
@@ -124,18 +127,12 @@ class ClassificationPipeline(ABC):
         print("-----------------")
         print("BEST PARAMS:", self.gs.best_params_)
         print("BEST SCORE:", self.gs.best_score_)
-        clf = self.gs.best_estimator_.named_steps["classifier"]
 
-        self.class_names = self.class_names or list(clf.classes_)
+        # overwriting / updating self.model here, because this has the learned coefs, whereas the old self.model does not!
+        self.model = self.gs.best_estimator_.named_steps["classifier"]
+
+        self.class_names = self.class_names or list(self.model.classes_)
         self.class_labels = self.class_labels or class_labels(y_col=self.y_col, class_names=self.class_names)
-
-        # for logistic and xgboost:
-        #print("COEFS:")
-        #coefs = Series(model.coef_[0], index=features).sort_values(ascending=False)
-
-        # for xgboost:
-        # model.feature_importances_
-        # Series(model.feature_importances_, index=feature_names).sort_values(ascending=False)
 
         print("-----------------")
         print("EVALUATION...")
@@ -157,10 +154,16 @@ class ClassificationPipeline(ABC):
                 "param_grid": self.param_grid,
                 "best_params": self.gs.best_params_,
                 "best_score": self.gs.best_score_
-            }
+            },
+            "model_params": self.model.get_params() # all params used by the model!
         }
         self.results_json = {**self.results.as_json, **self.results_json} # merge dicts
         pprint(self.results_json)
+
+    @property
+    def explainability_json(self) -> dict:
+        """implement this in child class"""
+        raise NotImplementedError("Please implement in child class. Return a serializable dictionary for JSON conversion.")
 
 
     @cached_property
@@ -178,6 +181,7 @@ class ClassificationPipeline(ABC):
         df = text_and_labels.merge(df, how="right", left_index=True, right_index=True)
         return df
 
+
     def save_results(self):
         json_filepath = os.path.join(self.results_dirpath, "results.json")
         save_results_json(self.results_json, json_filepath)
@@ -189,6 +193,11 @@ class ClassificationPipeline(ABC):
         #    df = df[df["y_pred"] != df["y_true"]]
         #    csv_filepath = os.path.join(self.results_dirpath, "confusions.csv")
         df.to_csv(csv_filepath, index=False)
+
+    def save_coefs(self):
+        json_filepath = os.path.join(self.results_dirpath, "explainability.json")
+        save_results_json(self.explainability_json, json_filepath)
+
 
     @cached_property
     def results_dirpath(self):
@@ -218,8 +227,6 @@ class ClassificationPipeline(ABC):
         if fig_save:
             fig.write_image(os.path.join(self.results_dirpath, "confusion.png"))
             fig.write_html(os.path.join(self.results_dirpath, "confusion.html"))
-
-
 
 
     def plot_roc_curve(self, fig_show=FIG_SHOW, fig_save=FIG_SAVE, height=500):
