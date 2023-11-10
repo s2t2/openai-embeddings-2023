@@ -169,12 +169,14 @@
                 this.results_filepath = `./${this.y_col}/${this.model_dirname}/results.json`
                 //this.results = this.loadJSONData(this.results_filepath)
                 //this.results = this.state.results
+                this.coefs_filepath = `./${this.y_col}/${this.model_dirname}/explainability.json`
 
                 return (
                     <div class="classification-results">
                         <h5>{this.props.model_name}</h5>
 
-                        <a href={this.results_filepath}>Results JSON</a>
+                        <a href={this.results_filepath}>Results JSON</a>&nbsp;|&nbsp;
+                        <a href={this.coefs_filepath}>Explainability JSON</a>
 
                         <div class="row row-cols-2">
                             <a class="card col" style={{width:"26rem", margin:"20px"}} href={this.roc_curve_html_filepath}>
