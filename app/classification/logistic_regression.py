@@ -38,14 +38,6 @@ class LogisticRegressionPipeline(ClassificationPipeline):
         }
 
 
-    def perform(self):
-        super().perform()
-        self.save_coefs()
-
-    def save_coefs(self):
-        json_filepath = os.path.join(self.results_dirpath, "explainability.json")
-        save_results_json(self.explainability_json, json_filepath)
-
     @property
     def explainability_json(self):
         return {

@@ -59,6 +59,16 @@ def logistic_explainable(pipeline):
     assert isinstance(pipeline.explainability_json, dict)
     assert list(pipeline.explainability_json.keys()) == ["intercept", "coefs"]
 
+def forest_explainable(pipeline):
+    assert isinstance(pipeline.coefs, Series)
+    assert isinstance(pipeline.explainability_json, dict)
+    assert list(pipeline.explainability_json.keys()) == ["coefs"]
+
+def boost_explainable(pipeline):
+    assert isinstance(pipeline.coefs, Series)
+    assert isinstance(pipeline.explainability_json, dict)
+    assert list(pipeline.explainability_json.keys()) == ["coefs"]
+
 
 
 
@@ -78,6 +88,8 @@ def test_random_forest_binary(ds):
     pipeline.train_eval()
     results_ok(pipeline)
     plots_ok(pipeline)
+    forest_explainable(pipeline)
+
 
 def test_xgboost_binary(ds):
     pipeline = XGBoostPipeline(ds=ds, y_col="is_bot", param_grid={})
@@ -85,7 +97,7 @@ def test_xgboost_binary(ds):
     pipeline.train_eval()
     results_ok(pipeline)
     plots_ok(pipeline)
-
+    boost_explainable(pipeline)
 
 
 
@@ -103,6 +115,7 @@ def test_random_forest_multiclass(ds):
     pipeline.train_eval()
     results_ok(pipeline)
     plots_ok(pipeline)
+    forest_explainable(pipeline)
 
 def test_xgboost_multiclass(ds):
     pipeline = XGBoostPipeline(ds=ds, y_col="fourway_label", param_grid={})
@@ -110,3 +123,4 @@ def test_xgboost_multiclass(ds):
     pipeline.train_eval()
     results_ok(pipeline)
     plots_ok(pipeline)
+    boost_explainable(pipeline)

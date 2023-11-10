@@ -85,6 +85,7 @@ class ClassificationPipeline(ABC):
     def perform(self):
         self.train_eval()
         self.save_results()
+        self.save_coefs()
         self.save_predictions()
         self.plot_confusion_matrix()
 
@@ -131,19 +132,6 @@ class ClassificationPipeline(ABC):
         self.class_names = self.class_names or list(self.model.classes_)
         self.class_labels = self.class_labels or class_labels(y_col=self.y_col, class_names=self.class_names)
 
-        #print("-----------------")
-        #print("EXPLAINABILITY...")
-
-        # CONSIDER MOVING THESE INTO THE CHILD CLASSES AFTER A SUPER CALL
-
-        # for logistic and xgboost:
-        #print("COEFS:")
-        #coefs = Series(model.coef_[0], index=features).sort_values(ascending=False)
-
-        # for xgboost:
-        # model.feature_importances_
-        # Series(model.feature_importances_, index=feature_names).sort_values(ascending=False)
-
         print("-----------------")
         print("EVALUATION...")
 
@@ -168,6 +156,11 @@ class ClassificationPipeline(ABC):
         }
         self.results_json = {**self.results.as_json, **self.results_json} # merge dicts
         pprint(self.results_json)
+
+    @property
+    def explainability_json(self) -> dict:
+        """implement this in child class"""
+        raise NotImplementedError("Please implement in child class. Return a serializable dictionary for JSON conversion.")
 
 
     @cached_property
@@ -198,8 +191,9 @@ class ClassificationPipeline(ABC):
         #    csv_filepath = os.path.join(self.results_dirpath, "confusions.csv")
         df.to_csv(csv_filepath, index=False)
 
-    #def save_coefs(self):
-    #    breakpoint()
+    def save_coefs(self):
+        json_filepath = os.path.join(self.results_dirpath, "explainability.json")
+        save_results_json(self.explainability_json, json_filepath)
 
 
     @cached_property

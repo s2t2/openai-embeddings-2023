@@ -25,6 +25,7 @@ python -m app.classification.decision_tree
 
 ```sh
 python -m app.classification.random_forest
+FIG_SHOW=false FIG_SAVE=false python -m app.classification.random_forest
 ```
 
 
@@ -33,4 +34,6 @@ python -m app.classification.random_forest
 
 ```sh
 python -m app.classification.xgboost
+
+FIG_SHOW=false FIG_SAVE=false python -m app.classification.xgboost
 ```
