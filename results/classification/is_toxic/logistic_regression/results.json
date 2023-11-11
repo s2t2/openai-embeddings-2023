@@ -4,62 +4,96 @@
         "1"
     ],
     "class_labels": [
-        "Non-toxic",
+        "Normal",
         "Toxic"
     ],
     "classification_report": {
-        "Non-toxic": {
-            "precision": 0.8915929203539823,
-            "recall": 0.9861337683523654,
-            "f1-score": 0.9364833462432224,
+        "Normal": {
+            "precision": 0.9353312302839116,
+            "recall": 0.967373572593801,
+            "f1-score": 0.9510825982357658,
             "support": 1226.0
         },
         "Toxic": {
-            "precision": 0.8924050632911392,
-            "recall": 0.4895833333333333,
-            "f1-score": 0.632286995515695,
+            "precision": 0.8373983739837398,
+            "recall": 0.7152777777777778,
+            "f1-score": 0.7715355805243446,
             "support": 288.0
         },
-        "accuracy": 0.8916776750330251,
+        "accuracy": 0.9194187582562747,
         "macro avg": {
-            "precision": 0.8919989918225608,
-            "recall": 0.7378585508428493,
-            "f1-score": 0.7843851708794587,
+            "precision": 0.8863648021338257,
+            "recall": 0.8413256751857894,
+            "f1-score": 0.8613090893800552,
             "support": 1514.0
         },
         "weighted avg": {
-            "precision": 0.8917474098955286,
-            "recall": 0.8916776750330251,
-            "f1-score": 0.8786177260255685,
+            "precision": 0.9167019947393611,
+            "recall": 0.9194187582562747,
+            "f1-score": 0.9169283438758653,
             "support": 1514.0
         }
     },
     "confusion_matrix": [
         [
-            1209,
-            17
+            1186,
+            40
         ],
         [
-            147,
-            141
+            82,
+            206
         ]
     ],
-    "roc_auc_score": 0.9245513866231647,
+    "roc_auc_score": 0.947443696755483,
     "y_col": "is_toxic",
     "x_scaled": false,
     "grid_search": {
         "model_type": "LogisticRegression",
         "k_folds": 5,
         "param_grid": {
-            "classifier__max_iter": [
+            "classifier__C": [
+                0.5,
+                1,
+                2,
+                5,
+                10,
                 25,
+                50,
+                100
+            ],
+            "classifier__max_iter": [
+                10,
+                25,
+                50,
+                100,
+                250,
+                500,
                 1000,
+                5000,
                 10000
             ]
         },
         "best_params": {
-            "classifier__max_iter": 25
+            "classifier__C": 25,
+            "classifier__max_iter": 250
         },
-        "best_score": 0.9052469595536656
+        "best_score": 0.9303800873999742
+    },
+    "model_params": {
+        "C": 25,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 250,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
     }
 }

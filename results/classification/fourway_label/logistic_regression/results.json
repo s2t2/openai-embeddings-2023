@@ -13,85 +13,119 @@
     ],
     "classification_report": {
         "Anti-Trump Bot": {
-            "precision": 0.8587962962962963,
-            "recall": 0.9893333333333333,
-            "f1-score": 0.919454770755886,
+            "precision": 0.8913043478260869,
+            "recall": 0.984,
+            "f1-score": 0.9353612167300379,
             "support": 375.0
         },
         "Anti-Trump Human": {
-            "precision": 0.8366718027734977,
-            "recall": 0.861904761904762,
-            "f1-score": 0.8491008600469115,
+            "precision": 0.8723747980613893,
+            "recall": 0.8571428571428571,
+            "f1-score": 0.8646917534027222,
             "support": 630.0
         },
         "Pro-Trump Bot": {
-            "precision": 0.8764044943820225,
+            "precision": 0.9105058365758755,
             "recall": 0.9873417721518988,
-            "f1-score": 0.9285714285714286,
+            "f1-score": 0.9473684210526316,
             "support": 237.0
         },
         "Pro-Trump Human": {
-            "precision": 0.8132530120481928,
-            "recall": 0.4963235294117647,
-            "f1-score": 0.6164383561643835,
+            "precision": 0.7857142857142857,
+            "recall": 0.6470588235294118,
+            "f1-score": 0.7096774193548386,
             "support": 272.0
         },
-        "accuracy": 0.8474240422721269,
+        "accuracy": 0.8712021136063408,
         "macro avg": {
-            "precision": 0.8462814013750023,
-            "recall": 0.8337258492004396,
-            "f1-score": 0.8283913538846525,
+            "precision": 0.8649748170444093,
+            "recall": 0.8688858632060419,
+            "f1-score": 0.8642747026350576,
             "support": 1514.0
         },
         "weighted avg": {
-            "precision": 0.8441641554187995,
-            "recall": 0.8474240422721269,
-            "f1-score": 0.8371675972993082,
+            "precision": 0.8674632907504797,
+            "recall": 0.8712021136063408,
+            "f1-score": 0.867288530232146,
             "support": 1514.0
         }
     },
     "confusion_matrix": [
         [
-            371,
-            0,
+            369,
             4,
+            2,
             0
         ],
         [
-            56,
-            543,
+            43,
+            540,
             0,
-            31
-        ],
-        [
-            3,
-            0,
-            234,
-            0
+            47
         ],
         [
             2,
-            106,
-            29,
-            135
+            0,
+            234,
+            1
+        ],
+        [
+            0,
+            75,
+            21,
+            176
         ]
     ],
-    "roc_auc_score": 0.9551626982156016,
+    "roc_auc_score": 0.9642774818844534,
     "y_col": "fourway_label",
     "x_scaled": false,
     "grid_search": {
         "model_type": "LogisticRegression",
         "k_folds": 5,
         "param_grid": {
-            "classifier__max_iter": [
+            "classifier__C": [
+                0.5,
+                1,
+                2,
+                5,
+                10,
                 25,
+                50,
+                100
+            ],
+            "classifier__max_iter": [
+                10,
+                25,
+                50,
+                100,
+                250,
+                500,
                 1000,
+                5000,
                 10000
             ]
         },
         "best_params": {
-            "classifier__max_iter": 1000
+            "classifier__C": 10,
+            "classifier__max_iter": 250
         },
-        "best_score": 0.952610419906996
+        "best_score": 0.9612295542708796
+    },
+    "model_params": {
+        "C": 10,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 250,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
     }
 }

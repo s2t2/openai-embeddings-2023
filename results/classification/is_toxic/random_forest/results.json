@@ -9,83 +9,79 @@
     ],
     "classification_report": {
         "Normal": {
-            "precision": 0.8678977272727273,
-            "recall": 0.9967373572593801,
-            "f1-score": 0.9278663629460896,
+            "precision": 0.8696581196581197,
+            "recall": 0.9959216965742251,
+            "f1-score": 0.9285171102661598,
             "support": 1226.0
         },
         "Toxic": {
-            "precision": 0.9622641509433962,
-            "recall": 0.3541666666666667,
-            "f1-score": 0.5177664974619289,
+            "precision": 0.9545454545454546,
+            "recall": 0.3645833333333333,
+            "f1-score": 0.5276381909547739,
             "support": 288.0
         },
-        "accuracy": 0.8745046235138706,
+        "accuracy": 0.8758256274768824,
         "macro avg": {
-            "precision": 0.9150809391080618,
-            "recall": 0.6754520119630234,
-            "f1-score": 0.7228164302040092,
+            "precision": 0.9121017871017871,
+            "recall": 0.6802525149537793,
+            "f1-score": 0.7280776506104669,
             "support": 1514.0
         },
         "weighted avg": {
-            "precision": 0.8858485397014939,
-            "recall": 0.8745046235138706,
-            "f1-score": 0.8498552921010182,
+            "precision": 0.8858057764926986,
+            "recall": 0.8758256274768824,
+            "f1-score": 0.8522600899480096,
             "support": 1514.0
         }
     },
     "confusion_matrix": [
         [
-            1222,
-            4
+            1221,
+            5
         ],
         [
-            186,
-            102
+            183,
+            105
         ]
     ],
-    "roc_auc_score": 0.9069920246510784,
+    "roc_auc_score": 0.9130754939278594,
     "y_col": "is_toxic",
     "x_scaled": false,
     "grid_search": {
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {
-            "classifier__criterion": [
-                "gini"
-            ],
-            "classifier__min_samples_leaf": [
-                3,
-                5,
-                8
-            ],
             "classifier__n_estimators": [
-                250,
-                500,
-                1000
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
             ]
         },
         "best_params": {
-            "classifier__criterion": "gini",
-            "classifier__min_samples_leaf": 5,
-            "classifier__n_estimators": 1000
+            "classifier__criterion": "log_loss",
+            "classifier__n_estimators": 250
         },
-        "best_score": 0.8829506753697609
+        "best_score": 0.8908673112293929
     },
     "model_params": {
         "bootstrap": true,
         "ccp_alpha": 0.0,
         "class_weight": null,
-        "criterion": "gini",
+        "criterion": "log_loss",
         "max_depth": null,
         "max_features": "sqrt",
         "max_leaf_nodes": null,
         "max_samples": null,
         "min_impurity_decrease": 0.0,
-        "min_samples_leaf": 5,
+        "min_samples_leaf": 1,
         "min_samples_split": 2,
         "min_weight_fraction_leaf": 0.0,
-        "n_estimators": 1000,
+        "n_estimators": 250,
         "n_jobs": null,
         "oob_score": false,
         "random_state": 99,

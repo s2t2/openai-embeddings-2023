@@ -13,77 +13,128 @@
     ],
     "classification_report": {
         "Anti-Trump Bot": {
-            "precision": 0.8690476190476191,
-            "recall": 0.9733333333333334,
-            "f1-score": 0.9182389937106918,
+            "precision": 0.8714285714285714,
+            "recall": 0.976,
+            "f1-score": 0.920754716981132,
             "support": 375.0
         },
         "Anti-Trump Human": {
-            "precision": 0.8403100775193798,
-            "recall": 0.8603174603174604,
-            "f1-score": 0.8501960784313725,
+            "precision": 0.8423493044822257,
+            "recall": 0.8650793650793651,
+            "f1-score": 0.8535630383711824,
             "support": 630.0
         },
         "Pro-Trump Bot": {
-            "precision": 0.8812260536398467,
+            "precision": 0.8846153846153846,
             "recall": 0.9704641350210971,
-            "f1-score": 0.9236947791164658,
+            "f1-score": 0.925553319919517,
             "support": 237.0
         },
         "Pro-Trump Human": {
-            "precision": 0.7819148936170213,
-            "recall": 0.5404411764705882,
-            "f1-score": 0.6391304347826086,
+            "precision": 0.7914438502673797,
+            "recall": 0.5441176470588235,
+            "f1-score": 0.644880174291939,
             "support": 272.0
         },
-        "accuracy": 0.8480845442536328,
+        "accuracy": 0.8513870541611624,
         "macro avg": {
-            "precision": 0.8431246609559667,
-            "recall": 0.8361390262856198,
-            "f1-score": 0.8328150715102847,
+            "precision": 0.8474592776983904,
+            "recall": 0.8389152867898214,
+            "f1-score": 0.8361878123909425,
             "support": 1514.0
         },
         "weighted avg": {
-            "precision": 0.8433418968008851,
-            "recall": 0.8480845442536328,
-            "f1-score": 0.840635596410004,
+            "precision": 0.8470226879366511,
+            "recall": 0.8513870541611624,
+            "f1-score": 0.8439836705879145,
             "support": 1514.0
         }
     },
     "confusion_matrix": [
         [
-            365,
-            4,
+            366,
+            3,
             6,
             0
         ],
         [
-            51,
-            542,
+            49,
+            545,
             0,
-            37
+            36
         ],
         [
-            3,
+            4,
             0,
             230,
-            4
+            3
         ],
         [
             1,
             99,
-            25,
-            147
+            24,
+            148
         ]
     ],
-    "roc_auc_score": 0.9583437380062635,
+    "roc_auc_score": 0.9615973683138278,
     "y_col": "fourway_label",
     "x_scaled": false,
     "grid_search": {
         "model_type": "XGBClassifier",
         "k_folds": 5,
-        "param_grid": {},
-        "best_params": {},
-        "best_score": 0.9575557471565801
+        "param_grid": {
+            "classifier__n_estimators": [
+                100,
+                150,
+                250,
+                500
+            ]
+        },
+        "best_params": {
+            "classifier__n_estimators": 500
+        },
+        "best_score": 0.9604360869460805
+    },
+    "model_params": {
+        "objective": "multi:softprob",
+        "use_label_encoder": null,
+        "base_score": null,
+        "booster": null,
+        "callbacks": null,
+        "colsample_bylevel": null,
+        "colsample_bynode": null,
+        "colsample_bytree": null,
+        "early_stopping_rounds": null,
+        "enable_categorical": false,
+        "eval_metric": null,
+        "feature_types": null,
+        "gamma": null,
+        "gpu_id": null,
+        "grow_policy": null,
+        "importance_type": null,
+        "interaction_constraints": null,
+        "learning_rate": null,
+        "max_bin": null,
+        "max_cat_threshold": null,
+        "max_cat_to_onehot": null,
+        "max_delta_step": null,
+        "max_depth": null,
+        "max_leaves": null,
+        "min_child_weight": null,
+        "missing": NaN,
+        "monotone_constraints": null,
+        "n_estimators": 500,
+        "n_jobs": null,
+        "num_parallel_tree": null,
+        "predictor": null,
+        "random_state": 99,
+        "reg_alpha": null,
+        "reg_lambda": null,
+        "sampling_method": null,
+        "scale_pos_weight": null,
+        "subsample": null,
+        "tree_method": null,
+        "validate_parameters": null,
+        "verbosity": null
     }
 }

@@ -12,14 +12,13 @@ data/*/*.csv.gz
 results/*/*.csv
 results/*/*.csv.gz
 results/*/*.json
+results/*/*.json
 
 #results/*/*/*.png
 #results/*/*/*.html
 results/*/*/*.json
 
-#results/*/*/*/*.png
-#results/*/*/*/*.html
-#results/*/*/*/*.json
+results/classification/*/*/model.joblib
 
 # ignore these files b/c they contains user ids:
 results/classification/*/*/predictions.csv

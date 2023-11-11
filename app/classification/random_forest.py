@@ -16,12 +16,14 @@ class RandomForestPipeline(ClassificationPipeline):
         self.param_grid = param_grid or {
 
             # default=100
-            "classifier__n_estimators": [50, 100, 150, 250],
+            "classifier__n_estimators": [50,
+                                         100, 150, 250, 500
+                                         ],
 
             # criterion {"gini", "entropy", "log_loss"}, default="gini"
             # ... The function to measure the quality of a split.
             # ... "gini" for Gini impurity, "log_loss" / "entropy" for Shannon information gain
-            "classifier__criterion": ["gini", "log_loss"],
+            #"classifier__criterion": ["gini", "log_loss"],
 
             # min_samples_split (int or float), default=2
             #The minimum number (or percentage) of samples required to split an internal node
@@ -31,12 +33,12 @@ class RandomForestPipeline(ClassificationPipeline):
             #... The minimum number of samples required to be at a leaf node.
             # ... A split point at any depth will only be considered if it leaves at least min_samples_leaf training samples in each of the left and right branches.
             # ... This may have the effect of smoothing the model, especially in regression.
-            "classifier__min_samples_leaf": (1,  5,
-                                             10, 25,
-                                             50, #75,
-                                             #90,
-                                             100, #110, #125, 150
-                                             ),
+            #"classifier__min_samples_leaf": (1,  5,
+            #                                 10, 25,
+            #                                 50, #75,
+            #                                 #90,
+            #                                 100, #110, #125, 150
+            #                                 ),
 
             # max_depth (int), default=None
             # ... The maximum depth of the tree. If None, then nodes are expanded until all leaves are pure or until all leaves contain less than min_samples_split samples.
@@ -78,9 +80,7 @@ if __name__ == "__main__":
 
     for y_col in Y_COLS:
 
-        pipeline = RandomForestPipeline(ds=ds, y_col=y_col, param_grid={
-            "classifier__criterion": ["gini"],
-            "classifier__min_samples_leaf": [3, 5, 8],
-            "classifier__n_estimators": [250, 500, 1000],
-        })
+        pipeline = RandomForestPipeline(ds=ds, y_col=y_col)
         pipeline.perform()
+
+        #breakpoint()
