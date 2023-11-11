@@ -66,7 +66,7 @@ class ModelStorage(StorageService):
         self.local_dirpath = local_dirpath
         print("RESULTS DIR:", self.local_dirpath)
 
-        self.storage_dirpath = storage_dirpath or self.local_dirpath.split("..")[-1] #> "results/onwards/"
+        self.storage_dirpath = storage_dirpath or self.local_dirpath.split("..")[-1] #> "/results/onwards/" # TODO: this leaves an initial slash, which may create a redundant "/" directory on cloud storage, so consider removing initial slash if possible in the future (oops already saved all the models there :-D)
         print("STORAGE DIR:", self.storage_dirpath)
 
         self.model_filename = "model.joblib" # needs to be called 'model.joblib' specifically, for hosting from cloud storage on Google Vertex AI

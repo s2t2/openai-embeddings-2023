@@ -9,28 +9,28 @@
     ],
     "classification_report": {
         "Anti-Trump": {
-            "precision": 0.8604852686308492,
+            "precision": 0.8664921465968587,
             "recall": 0.9880597014925373,
-            "f1-score": 0.9198703103288559,
+            "f1-score": 0.9232914923291493,
             "support": 1005.0
         },
         "Pro-Trump": {
-            "precision": 0.9666666666666667,
-            "recall": 0.6836935166994106,
-            "f1-score": 0.8009205983889528,
+            "precision": 0.967391304347826,
+            "recall": 0.6994106090373281,
+            "f1-score": 0.8118586088939567,
             "support": 509.0
         },
-        "accuracy": 0.8857331571994715,
+        "accuracy": 0.8910171730515192,
         "macro avg": {
-            "precision": 0.9135759676487579,
-            "recall": 0.8358766090959739,
-            "f1-score": 0.8603954543589043,
+            "precision": 0.9169417254723424,
+            "recall": 0.8437351552649327,
+            "f1-score": 0.8675750506115529,
             "support": 1514.0
         },
         "weighted avg": {
-            "precision": 0.8961829777459291,
-            "recall": 0.8857331571994715,
-            "f1-score": 0.8798799514269995,
+            "precision": 0.9004139902528971,
+            "recall": 0.8910171730515192,
+            "f1-score": 0.8858282574093918,
             "support": 1514.0
         }
     },
@@ -40,37 +40,33 @@
             12
         ],
         [
-            161,
-            348
+            153,
+            356
         ]
     ],
-    "roc_auc_score": 0.9642924864870148,
+    "roc_auc_score": 0.9638526424850209,
     "y_col": "opinion_community",
     "x_scaled": false,
     "grid_search": {
         "model_type": "RandomForestClassifier",
         "k_folds": 5,
         "param_grid": {
-            "classifier__criterion": [
-                "gini"
-            ],
-            "classifier__min_samples_leaf": [
-                3,
-                5,
-                8
-            ],
             "classifier__n_estimators": [
-                250,
-                500,
-                1000
+                50,
+                100,
+                150,
+                250
+            ],
+            "classifier__criterion": [
+                "gini",
+                "log_loss"
             ]
         },
         "best_params": {
             "classifier__criterion": "gini",
-            "classifier__min_samples_leaf": 3,
-            "classifier__n_estimators": 1000
+            "classifier__n_estimators": 250
         },
-        "best_score": 0.9575828222724795
+        "best_score": 0.9574166908138636
     },
     "model_params": {
         "bootstrap": true,
@@ -82,10 +78,10 @@
         "max_leaf_nodes": null,
         "max_samples": null,
         "min_impurity_decrease": 0.0,
-        "min_samples_leaf": 3,
+        "min_samples_leaf": 1,
         "min_samples_split": 2,
         "min_weight_fraction_leaf": 0.0,
-        "n_estimators": 1000,
+        "n_estimators": 250,
         "n_jobs": null,
         "oob_score": false,
         "random_state": 99,
