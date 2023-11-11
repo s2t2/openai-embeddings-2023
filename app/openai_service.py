@@ -3,6 +3,7 @@
 import os
 from time import sleep
 from pprint import pprint
+import json
 
 import openai
 from openai import Model, Embedding
@@ -200,6 +201,11 @@ class OpenAIService():
 
 
 
+
+
+
+
+
 if __name__ == "__main__":
 
     from app import DATA_DIRPATH
@@ -239,13 +245,20 @@ if __name__ == "__main__":
     print(df)
 
     print("-----------------")
+    # UNpacK EMBEdDINGS tO THEIR OWN COLUMNS
+    embeds_df = DataFrame(df["openai_embeddings"].values.tolist())
+    embeds_df.columns = [str(i) for i in range(0, len(embeds_df.columns))]
+    embeds_df = df.drop(columns=["openai_embeddings"]).merge(embeds_df, left_index=True, right_index=True)
+    print(embeds_df)
+
+    print("-----------------")
     print("SAVING...")
 
     model_dirpath = os.path.join(DATA_DIRPATH, ai.model_id)
     os.makedirs(model_dirpath, exist_ok=True)
 
     embeddings_csv_filepath = os.path.join(model_dirpath, "example_openai_embeddings.csv")
-    df.to_csv(embeddings_csv_filepath)
-
     embeddings_json_filepath = os.path.join(model_dirpath, "example_openai_embeddings.json")
+
+    embeds_df.to_csv(embeddings_csv_filepath)
     df.to_json(embeddings_json_filepath)

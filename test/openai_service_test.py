@@ -1,3 +1,5 @@
+from pytest import fixture
+
 from app.openai_service import split_into_batches, dynamic_batches
 
 
@@ -25,3 +27,14 @@ def test_batchmakers():
         ['This is a tweet about bananas'],
         ['Drink apple juice!']
  ]
+
+
+
+
+#@fixture(scope="module")
+#def example_embeddings_df();
+
+
+def test_load_embeddings():
+
+    embeddings_csv_filepath =
