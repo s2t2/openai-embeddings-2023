@@ -1,5 +1,10 @@
-from pytest import fixture
 
+import os
+
+from pytest import fixture
+from pandas import read_csv
+
+from app import DATA_DIRPATH
 from app.openai_service import split_into_batches, dynamic_batches
 
 
@@ -37,4 +42,10 @@ def test_batchmakers():
 
 def test_load_embeddings():
 
-    embeddings_csv_filepath =
+    example_embeddings_csv_filepath = os.path.join(os.path.dirname(__file__), "data", "text-embedding-ada-002", "example_openai_embeddings.csv")
+    print(os.path.isfile(example_embeddings_csv_filepath))
+    embeds_df = read_csv(example_embeddings_csv_filepath)
+    embeds_df.drop(columns=["Unnamed: 0"], inplace=True)
+
+    assert "text" in embeds_df.columns
+    assert embeds_df.drop(columns=["text"]).shape == (5, 1536)

@@ -177,7 +177,8 @@ class OpenAIService():
 
             Params:
 
-                batch_char_limit : Number of max characters to request per API call. Should be less than around 32_000 based on API docs.
+                batch_char_limit : Number of max characters to request per API call.
+                                    Should be less than around 32_000 based on API docs.
 
                 sleep : Wait for a minute before requesting the next batch
 
