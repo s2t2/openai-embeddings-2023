@@ -9,49 +9,100 @@
     ],
     "classification_report": {
         "Low Quality": {
-            "precision": 0.8833333333333333,
-            "recall": 0.742296918767507,
-            "f1-score": 0.806697108066971,
+            "precision": 0.8841059602649006,
+            "recall": 0.7478991596638656,
+            "f1-score": 0.8103186646433991,
             "support": 357.0
         },
         "High Quality": {
-            "precision": 0.7437325905292479,
+            "precision": 0.7478991596638656,
             "recall": 0.8841059602649006,
-            "f1-score": 0.8078668683812404,
+            "f1-score": 0.8103186646433991,
             "support": 302.0
         },
-        "accuracy": 0.8072837632776935,
+        "accuracy": 0.8103186646433991,
         "macro avg": {
-            "precision": 0.8135329619312905,
-            "recall": 0.8132014395162038,
-            "f1-score": 0.8072819882241058,
+            "precision": 0.8160025599643831,
+            "recall": 0.8160025599643831,
+            "f1-score": 0.8103186646433991,
             "support": 659.0
         },
         "weighted avg": {
-            "precision": 0.8193584860998981,
-            "recall": 0.8072837632776935,
-            "f1-score": 0.8072331742504449,
+            "precision": 0.8216864552853671,
+            "recall": 0.8103186646433991,
+            "f1-score": 0.8103186646433991,
             "support": 659.0
         }
     },
     "confusion_matrix": [
         [
-            265,
-            92
+            267,
+            90
         ],
         [
             35,
             267
         ]
     ],
-    "roc_auc_score": 0.8652865119557757,
+    "roc_auc_score": 0.8677815497059752,
     "y_col": "is_factual",
     "x_scaled": false,
     "grid_search": {
         "model_type": "XGBClassifier",
         "k_folds": 5,
-        "param_grid": {},
-        "best_params": {},
-        "best_score": 0.8539978655451398
+        "param_grid": {
+            "classifier__n_estimators": [
+                100,
+                150,
+                250,
+                500
+            ]
+        },
+        "best_params": {
+            "classifier__n_estimators": 500
+        },
+        "best_score": 0.854723661611193
+    },
+    "model_params": {
+        "objective": "binary:logistic",
+        "use_label_encoder": null,
+        "base_score": null,
+        "booster": null,
+        "callbacks": null,
+        "colsample_bylevel": null,
+        "colsample_bynode": null,
+        "colsample_bytree": null,
+        "early_stopping_rounds": null,
+        "enable_categorical": false,
+        "eval_metric": null,
+        "feature_types": null,
+        "gamma": null,
+        "gpu_id": null,
+        "grow_policy": null,
+        "importance_type": null,
+        "interaction_constraints": null,
+        "learning_rate": null,
+        "max_bin": null,
+        "max_cat_threshold": null,
+        "max_cat_to_onehot": null,
+        "max_delta_step": null,
+        "max_depth": null,
+        "max_leaves": null,
+        "min_child_weight": null,
+        "missing": NaN,
+        "monotone_constraints": null,
+        "n_estimators": 500,
+        "n_jobs": null,
+        "num_parallel_tree": null,
+        "predictor": null,
+        "random_state": 99,
+        "reg_alpha": null,
+        "reg_lambda": null,
+        "sampling_method": null,
+        "scale_pos_weight": null,
+        "subsample": null,
+        "tree_method": null,
+        "validate_parameters": null,
+        "verbosity": null
     }
 }
