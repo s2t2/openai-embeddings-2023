@@ -245,5 +245,7 @@ if __name__ == "__main__":
     os.makedirs(model_dirpath, exist_ok=True)
 
     embeddings_csv_filepath = os.path.join(model_dirpath, "example_openai_embeddings.csv")
-    print(embeddings_csv_filepath)
     df.to_csv(embeddings_csv_filepath)
+
+    embeddings_json_filepath = os.path.join(model_dirpath, "example_openai_embeddings.json")
+    df.to_json(embeddings_json_filepath)
