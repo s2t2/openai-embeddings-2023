@@ -9,57 +9,91 @@
     ],
     "classification_report": {
         "Human": {
-            "precision": 1.0,
-            "recall": 0.9068736141906873,
-            "f1-score": 0.9511627906976745,
+            "precision": 0.9940828402366864,
+            "recall": 0.9312638580931264,
+            "f1-score": 0.961648540354894,
             "support": 902.0
         },
         "Bot": {
-            "precision": 0.8793103448275862,
-            "recall": 1.0,
-            "f1-score": 0.9357798165137614,
+            "precision": 0.9073243647234679,
+            "recall": 0.9918300653594772,
+            "f1-score": 0.9476971116315378,
             "support": 612.0
         },
-        "accuracy": 0.9445178335535006,
+        "accuracy": 0.9557463672391017,
         "macro avg": {
-            "precision": 0.9396551724137931,
-            "recall": 0.9534368070953436,
-            "f1-score": 0.943471303605718,
+            "precision": 0.9507036024800771,
+            "recall": 0.9615469617263017,
+            "f1-score": 0.9546728259932159,
             "support": 1514.0
         },
         "weighted avg": {
-            "precision": 0.9512139570901471,
-            "recall": 0.9445178335535006,
-            "f1-score": 0.9449445739205576,
+            "precision": 0.9590127035034699,
+            "recall": 0.9557463672391017,
+            "f1-score": 0.9560089932091254,
             "support": 1514.0
         }
     },
     "confusion_matrix": [
         [
-            818,
-            84
+            840,
+            62
         ],
         [
-            0,
-            612
+            5,
+            607
         ]
     ],
-    "roc_auc_score": 0.979140399692767,
+    "roc_auc_score": 0.9820170862136429,
     "y_col": "is_bot",
     "x_scaled": false,
     "grid_search": {
         "model_type": "LogisticRegression",
         "k_folds": 5,
         "param_grid": {
-            "classifier__max_iter": [
+            "classifier__C": [
+                0.5,
+                1,
+                2,
+                5,
+                10,
                 25,
+                50,
+                100
+            ],
+            "classifier__max_iter": [
+                10,
+                25,
+                50,
+                100,
+                250,
+                500,
                 1000,
+                5000,
                 10000
             ]
         },
         "best_params": {
-            "classifier__max_iter": 25
+            "classifier__C": 25,
+            "classifier__max_iter": 100
         },
-        "best_score": 0.9798485502202505
+        "best_score": 0.9831519506001296
+    },
+    "model_params": {
+        "C": 25,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 100,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
     }
 }

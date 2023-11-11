@@ -15,7 +15,6 @@ BUCKET_NAME = os.getenv("BUCKET_NAME") # "my-bucket" needs to be globally unique
 
 class StorageService:
     def __init__(self, project_id=PROJECT_ID, bucket_name=BUCKET_NAME):
-        """ Params model_dirname like 'my-model' """
         self.project_id = project_id
         self.bucket_name = bucket_name
         print("-----------------------")
@@ -46,19 +45,34 @@ class StorageService:
         return self.find_or_create_bucket()
 
 
+    def model_blobs(self):
+        breakpoint()
+        blobs = self.client.list_blobs(self.bucket_name, prefix="model.joblib")
+        # Note: The call returns a response only when the iterator is consumed.
+        print("Blobs:")
+        for blob in blobs:
+            print(blob.name)
+
+
+
 
 
 class ModelStorage(StorageService):
 
-    def __init__(self, model_dirname:str, project_id=PROJECT_ID, bucket_name=BUCKET_NAME):
-        """ Params model_dirname like 'my-model' """
-        super().__init(project_id=project_id, bucket_name=bucket_name)
+    def __init__(self, local_dirpath:str, project_id=PROJECT_ID, bucket_name=BUCKET_NAME, storage_dirpath=None):
+        """ Params local_dirpath, assumed to be somewhere in the results dir"""
+        super().__init__(project_id=project_id, bucket_name=bucket_name)
 
-        self.model_dirname = model_dirname
-        self.model_filepath = os.path.join(self.model_dirname, "model.joblib") # needs to be called 'model.joblib' specifically, for hosting from cloud storage on Google Vertex AI
-        self.local_model_filepath = self.model_filepath
-        self.hosted_model_filepath = self.model_filepath
-        print("MODEL DIRNAME:", self.model_dirname)
+        self.local_dirpath = local_dirpath
+        print("RESULTS DIR:", self.local_dirpath)
+
+        self.storage_dirpath = storage_dirpath or self.local_dirpath.split("..")[-1] #> "results/onwards/"
+        print("STORAGE DIR:", self.storage_dirpath)
+
+        self.model_filename = "model.joblib" # needs to be called 'model.joblib' specifically, for hosting from cloud storage on Google Vertex AI
+        self.local_model_filepath = os.path.join(self.local_dirpath, self.model_filename)
+        self.hosted_model_filepath =  os.path.join(self.storage_dirpath, self.model_filename)
+
 
     @property
     def model_blob(self):
@@ -66,7 +80,7 @@ class ModelStorage(StorageService):
 
     def save_model(self, model):
         print("SAVING MODEL (LOCAL)...")
-        os.makedirs(self.model_dirname, exist_ok=True)
+        os.makedirs(self.local_dirpath, exist_ok=True)
         joblib.dump(model, self.local_model_filepath)
 
     def upload_model_from_file(self):

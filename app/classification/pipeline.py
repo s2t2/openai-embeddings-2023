@@ -6,15 +6,20 @@ from functools import cached_property
 
 import numpy as np
 from pandas import Series, DataFrame
-from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.pipeline import Pipeline
-#import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objs as go
 
+from sklearn.preprocessing import LabelBinarizer, LabelEncoder
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import roc_curve, auc
+
+from app.colors import ORANGES
 from app.dataset import Dataset
+from app.model_storage import ModelStorage
 from app.classification import CLASSIFICATION_RESULTS_DIRPATH, save_results_json, class_labels
 from app.classification.results import ClassificationResults
+
 
 K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
 #X_SCALE = bool(os.getenv("X_SCALE", default="false").lower() == "true")
@@ -23,10 +28,6 @@ K_FOLDS = int(os.getenv("K_FOLDS", default="5"))
 FIG_SHOW = bool(os.getenv("FIG_SHOW", default="false").lower() == "true")
 FIG_SAVE = bool(os.getenv("FIG_SAVE", default="true").lower() == "true")
 
-from sklearn.metrics import roc_curve, roc_auc_score, auc
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import label_binarize, LabelBinarizer, LabelEncoder
-from app.colors import ORANGES
 
 
 class ClassificationPipeline(ABC):
@@ -72,6 +73,7 @@ class ClassificationPipeline(ABC):
         self.gs = None
         self.results = None
         self.results_json = {}
+        self.storage = None
 
         # set in child class:
         self.model = None
@@ -94,7 +96,9 @@ class ClassificationPipeline(ABC):
         else:
             self.plot_roc_curve()
 
-        #self.save_and_upload_model()
+        # upload to cloud storage :-D
+        self.storage = ModelStorage(local_dirpath=self.results_dirpath)
+        self.storage.save_and_upload_model(self.model)
 
 
     def train_eval(self):

@@ -22,18 +22,22 @@ class LogisticRegressionPipeline(ClassificationPipeline):
 
             # C (float), default=1.0
             # Inverse of regularization strength; must be a positive float. Like in support vector machines, smaller values specify stronger regularization.
-            #"classifier__C": [0.5, 1, 2, 10, 100],
+            "classifier__C": [
+                #0.1,
+                0.5,
+                1, 2, 5,
+                10, 25, 50,
+                100
+            ],
 
             # default max_iter is 100
-            "classifier__max_iter": [#5, #15,
-                                    #20,
-                                    25, #30, #35,
-                                    #50,
-                                    #100, #250,
-                                    #500,
-                                    1_000,
-                                    10_000
-                            ],
+            "classifier__max_iter": [10, 25,
+                                     50,
+                                     100,
+                                     250,
+                                     500, 1_000, 5_000, 10_000
+                                     ],
+
             #"classifier__solver": ["liblinear", "newton-cg", "lbfgs", "sag", "saga"],
         }
 
@@ -66,3 +70,5 @@ if __name__ == "__main__":
 
         pipeline = LogisticRegressionPipeline(ds=ds, y_col=y_col)
         pipeline.perform()
+
+        breakpoint()
