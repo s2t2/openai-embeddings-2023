@@ -44,14 +44,9 @@ class StorageService:
     def bucket(self):
         return self.find_or_create_bucket()
 
-
-    def model_blobs(self):
-        breakpoint()
-        blobs = self.client.list_blobs(self.bucket_name, prefix="model.joblib")
-        # Note: The call returns a response only when the iterator is consumed.
-        print("Blobs:")
-        for blob in blobs:
-            print(blob.name)
+    def list_model_blobs(self):
+        # https://cloud.google.com/storage/docs/json_api/v1/objects/list#list-object-glob
+        return self.client.list_blobs(self.bucket_name, match_glob="**/model.joblib")
 
 
 
@@ -116,3 +111,5 @@ if __name__ == "__main__":
     blobs = list(storage.bucket.list_blobs())
     for blob in blobs:
         print("...", blob)
+
+    breakpoint()
