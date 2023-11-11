@@ -70,5 +70,3 @@ if __name__ == "__main__":
 
         pipeline = LogisticRegressionPipeline(ds=ds, y_col=y_col)
         pipeline.perform()
-
-        breakpoint()
