@@ -9,23 +9,23 @@ load_dotenv()
 
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS") # implicit check by google.cloud for env var
 
-PROJECT_ID = os.getenv("GOOGLE_PROJECT_NAME") # "my-project"
+#PROJECT_ID = os.getenv("GOOGLE_PROJECT_NAME") # "my-project"
 BUCKET_NAME = os.getenv("BUCKET_NAME") # "my-bucket" needs to be globally unique!
 
 
 class StorageService:
-    def __init__(self, project_id=PROJECT_ID, bucket_name=BUCKET_NAME):
-        self.project_id = project_id
+    def __init__(self, bucket_name=BUCKET_NAME): # project_id=PROJECT_ID
+        #self.project_id = project_id
         self.bucket_name = bucket_name
         print("-----------------------")
         print("CLOUD STORAGE SERVICE...")
-        print("PROJECT ID:", self.project_id)
+        #print("PROJECT ID:", self.project_id)
         print("BUCKET NAME:", self.bucket_name)
 
 
     @property
     def client(self):
-        return gcs.Client(project=self.project_id)
+        return gcs.Client() # project=self.project_id
 
     @cached_property
     def buckets(self):
@@ -59,9 +59,9 @@ class StorageService:
 
 class ModelStorage(StorageService):
 
-    def __init__(self, local_dirpath:str, project_id=PROJECT_ID, bucket_name=BUCKET_NAME, storage_dirpath=None):
+    def __init__(self, local_dirpath:str, bucket_name=BUCKET_NAME, storage_dirpath=None): # project_id=PROJECT_ID
         """ Params local_dirpath, assumed to be somewhere in the results dir"""
-        super().__init__(project_id=project_id, bucket_name=bucket_name)
+        super().__init__(bucket_name=bucket_name) # project_id=project_id
 
         self.local_dirpath = local_dirpath
         print("RESULTS DIR:", self.local_dirpath)
@@ -110,3 +110,9 @@ if __name__ == "__main__":
 
     print("---------------------")
     print(storage.bucket)
+
+    print("---------------------")
+
+    blobs = list(storage.bucket.list_blobs())
+    for blob in blobs:
+        print("...", blob)

@@ -29,7 +29,7 @@ Obtain a copy of the "botometer_sample_openai_tweet_embeddings_20230724.csv.gz" 
 
 ### Cloud Storage
 
-We are saving trained models to Google Cloud Storage. You will need to create a project on Google Cloud, note the project name (i.e. `GOOGLE_PROJECT_NAME`), and enable the Cloud Storage API as necessary. Then create a service account and download the service account JSON credentials file, and store it in the root directory, called "google-credentials.json". This file has been ignored from version control.
+We are saving trained models to Google Cloud Storage. You will need to create a project on Google Cloud, and enable the Cloud Storage API as necessary. Then create a service account and download the service account JSON credentials file, and store it in the root directory, called "google-credentials.json". This file has been ignored from version control.
 
 From the cloud storage console, create a new bucket, and note its name (i.e. `BUCKET_NAME`).
 
@@ -41,7 +41,6 @@ Create a local ".env" file and add contents like the following:
 # this is the ".env" file...
 
 GOOGLE_APPLICATION_CREDENTIALS="/path/to/openai-embeddings-2023/google-credentials.json"
-GOOGLE_PROJECT_NAME="my-project"
 BUCKET_NAME="my-bucket"
 
 ```

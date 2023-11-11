@@ -11,4 +11,4 @@ def test_storage_service():
     # the bucket exists:
     assert storage.bucket.name == BUCKET_NAME
 
-    breakpoint()
+    #breakpoint()
