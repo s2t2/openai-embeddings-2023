@@ -9,57 +9,91 @@
     ],
     "classification_report": {
         "Anti-Trump": {
-            "precision": 0.8895027624309392,
-            "recall": 0.9611940298507463,
-            "f1-score": 0.9239598278335724,
+            "precision": 0.9236043095004897,
+            "recall": 0.9383084577114428,
+            "f1-score": 0.930898321816387,
             "support": 1005.0
         },
         "Pro-Trump": {
-            "precision": 0.9088785046728972,
-            "recall": 0.7642436149312377,
-            "f1-score": 0.8303094983991463,
+            "precision": 0.8742393509127789,
+            "recall": 0.8467583497053045,
+            "f1-score": 0.8602794411177644,
             "support": 509.0
         },
-        "accuracy": 0.8949801849405549,
+        "accuracy": 0.9075297225891678,
         "macro avg": {
-            "precision": 0.8991906335519182,
-            "recall": 0.8627188223909921,
-            "f1-score": 0.8771346631163593,
+            "precision": 0.8989218302066343,
+            "recall": 0.8925334037083736,
+            "f1-score": 0.8955888814670757,
             "support": 1514.0
         },
         "weighted avg": {
-            "precision": 0.8960167999482156,
-            "recall": 0.8949801849405549,
-            "f1-score": 0.8924750077000698,
+            "precision": 0.9070080321417414,
+            "recall": 0.9075297225891678,
+            "f1-score": 0.9071565713041024,
             "support": 1514.0
         }
     },
     "confusion_matrix": [
         [
-            966,
-            39
+            943,
+            62
         ],
         [
-            120,
-            389
+            78,
+            431
         ]
     ],
-    "roc_auc_score": 0.9509994233156418,
+    "roc_auc_score": 0.9636161041550596,
     "y_col": "opinion_community",
     "x_scaled": false,
     "grid_search": {
         "model_type": "LogisticRegression",
         "k_folds": 5,
         "param_grid": {
-            "classifier__max_iter": [
+            "classifier__C": [
+                0.5,
+                1,
+                2,
+                5,
+                10,
                 25,
+                50,
+                100
+            ],
+            "classifier__max_iter": [
+                10,
+                25,
+                50,
+                100,
+                250,
+                500,
                 1000,
+                5000,
                 10000
             ]
         },
         "best_params": {
+            "classifier__C": 25,
             "classifier__max_iter": 25
         },
-        "best_score": 0.9454953548422974
+        "best_score": 0.9592740415655212
+    },
+    "model_params": {
+        "C": 25,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 25,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
     }
 }

@@ -24,7 +24,7 @@ class LogisticRegressionPipeline(ClassificationPipeline):
             # Inverse of regularization strength; must be a positive float. Like in support vector machines, smaller values specify stronger regularization.
             "classifier__C": [
                 #0.1,
-                0.5,
+                #0.5,
                 1, 2, 5,
                 10, 25, 50,
                 100
