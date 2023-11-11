@@ -35,10 +35,9 @@ class XGBoostPipeline(ClassificationPipeline):
         self.param_grid = param_grid or {
 
             # n_estimators (Optional[int]) – Number of boosting rounds.
-
+            'classifier__n_estimators': [50, 100, 150, 250],
 
             # max_depth (Optional[int]) – Maximum tree depth for base learners.
-            #"max_depth": [2, 4, 8, 16],
 
             # max_leaves – Maximum number of leaves; 0 indicates no limit.
             #"max_leaves": [0, 2, 4, 8, 16]
@@ -48,6 +47,8 @@ class XGBoostPipeline(ClassificationPipeline):
             # grow_policy – Tree growing policy. 0: favor splitting at nodes closest to the node, i.e. grow depth-wise. 1: favor splitting at nodes with highest loss change.
             #
             # learning_rate (Optional[float]) – Boosting learning rate (xgb’s “eta”)
+            'classifier__learning_rate': [0.01, 0.1, 0.2, 0.3, 0.5],
+
             #
             # verbosity (Optional[int]) – The degree of verbosity. Valid values are 0 (silent) - 3 (debug).
             #
@@ -133,7 +134,7 @@ class XGBoostPipeline(ClassificationPipeline):
 
     @property
     def coefs(self):
-        """random forest has .feature_importances_ instead of .coef_ """
+        """xgboost has .feature_importances_ instead of .coef_ """
         return Series(self.model.feature_importances_, index=self.model.feature_names_in_) #.sort_values(ascending=False) # don't sort? preserve order with features?
 
 
@@ -153,3 +154,5 @@ if __name__ == "__main__":
 
         pipeline = XGBoostPipeline(ds=ds, y_col=y_col)
         pipeline.perform()
+
+        breakpoint()
