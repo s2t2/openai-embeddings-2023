@@ -1,6 +1,8 @@
 
 import os
 import shutil
+from functools import cached_property
+from pprint import pprint
 
 #from datetime import datetime
 from itertools import chain
@@ -9,139 +11,136 @@ from collections import Counter
 from gensim.models import Word2Vec
 from gensim.utils import simple_preprocess as tokenizer
 from pandas import DataFrame, Series
+import numpy as np
 
 from app import RESULTS_DIRPATH
-from app.reduction.pipeline import ReductionPipeline, REDUCER_TYPE, N_COMPONENTS
+from app.classification import Y_COLS
 
 WORD2VEC_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "embeddings", "word2vec")
 WORD2VEC_DESTRUCTIVE = bool(os.getenv("WORD2VEC_DESTRUCTIVE", default="false") == 'true')
 
 #VECTOR_LENGTH = 100
 
-import numpy as np
-
-
-
-
 
 class WordPipe:
-    def __init__(self):
-        pass
+    def __init__(self, corpus_tokens, results_dirpath=WORD2VEC_RESULTS_DIRPATH, destructive=WORD2VEC_DESTRUCTIVE):
+        """Param corpus a pandas series of arrays (tokens for each document)"""
+        self.corpus_tokens = corpus_tokens
+
+        self.destructive = bool(destructive)
+        self.results_dirpath = results_dirpath
+        self.model_filepath = os.path.join(self.results_dirpath, f"w2v.model")
+        #self.kv_filepath = os.path.join(self.results_dirpath, f"w2v.kv")
+        self.word_vectors_csv_filepath = os.path.join(self.results_dirpath, "word_vectors.csv")
+        self.document_vectors_csv_filepath = os.path.join(self.results_dirpath, "document_vectors.csv")
+
+        # TOKEN ANALYSIS (SIDE qUEST)
+        all_words = list(chain.from_iterable(self.corpus_tokens)) # h/t chat gpt for this one
+        word_counter = Counter(all_words)
+        self.word_counts = Series(word_counter.values(), index=word_counter.keys(), name="word_count")
+        print("UNIQUE TOKENS:", len(self.word_counts))
+        print(self.word_counts.sort_values(ascending=False).head())
 
 
+    def perform(self):
+        self.load_or_train_model()
+        print("WORDS:", len(self.words))
 
-    def load_or_train_model(self,corpus, results_dirpath=WORD2VEC_RESULTS_DIRPATH,
-                            vector_size=100, window=10, min_count=2, workers=4,
-                            destructive=WORD2VEC_DESTRUCTIVE
-                            ):
-        """
-        Params corpus (pandas.Series) : a column of tokenized text, can be variable length
-        """
+        print("WORD VECTORS:", self.word_vectors_df.shape) # 100 columns, default vector_size=100
+        self.save_word_vectors()
 
-        if destructive:
+        print("DOCUMENT VECTORS:", self.document_vectors.shape)
+        self.save_document_vectors()
+
+
+    def load_or_train_model(self, vector_size=100, window=10, min_count=2, workers=4):
+        if self.destructive:
+            print("----------------")
             print("DESTRUCTIVE MODE...")
-            shutil.rmtree(results_dirpath)
+            shutil.rmtree(self.results_dirpath)
+        os.makedirs(self.results_dirpath, exist_ok=True)
 
-        os.makedirs(results_dirpath, exist_ok=True)
-
-        model_filepath = os.path.join(results_dirpath, f"my-model.model")
-        vectors_filepath = os.path.join(results_dirpath, f"my-model.kv")
-
-        if os.path.exists(model_filepath):
+        if os.path.exists(self.model_filepath):
+            print("----------------")
             print("LOADING MODEL FROM FILE...")
-            print(model_filepath)
-            self.model = Word2Vec.load(model_filepath)
+            print(self.model_filepath)
+            self.model = Word2Vec.load(self.model_filepath)
+            print(self.model)
+            print(type(self.model))
         else:
+            print("----------------")
             print("INITIALIZING NEW MODEL...")
             self.model = Word2Vec(window=window, min_count=min_count, workers=workers, vector_size=vector_size)
+            print(self.model)
 
+            print("----------------")
             print("VOCAB...")
-            self.model.build_vocab(corpus) # progress_per=1000
+            self.model.build_vocab(self.corpus_tokens) # progress_per=1000
             #print("N SAMPLES:", model.corpus_count)
             #print("EPOCHS:", model.epochs)
 
+            print("----------------")
             print("TRAINING...")
-            self.model.train(corpus, total_examples=self.model.corpus_count, epochs=self.model.epochs)
+            self.model.train(self.corpus_tokens, total_examples=self.model.corpus_count, epochs=self.model.epochs)
             print(round(self.model.total_train_time, 0), "seconds")
 
+            print("----------------")
             print("SAVING...")
-            self.model.save(model_filepath)
-            self.model.wv.save(vectors_filepath)
+            self.model.save(self.model_filepath)
+            #self.model.wv.save(self.vectors_filepath)
 
         return self.model
 
+    # AVAILABLE AFTER TRAINING:
 
+    # WORD ANaLYSIS
 
+    @property
+    def words(self):
+        return self.model.wv.index_to_key
 
-    def infer_vector(self, tokens):
+    @property
+    def word_vectors(self):
+        return self.model.wv.vectors
 
+    @property
+    def word_vectors_df(self):
+        return DataFrame(self.word_vectors, index=self.words)
+
+    def save_word_vectors(self, index_name="token"):
+        words_df = self.word_vectors_df.merge(wp.word_counts, how="inner", left_index=True, right_index=True)
+        words_df.index.name = index_name
+        words_df.to_csv(self.word_vectors_csv_filepath, index=True)
+
+    # DOCUMENT ANALYSIS
+
+    def infer_document_vector(self, tokens):
+        """"Gets average vector for each set of tokens."""
         # Filter tokens that are in the model's vocabulary
         tokens = [token for token in tokens if token in self.model.wv.key_to_index]
-
-        if tokens:
+        if any(tokens):
             # Calculate the average vector for the tokens in the document
-            doc_vector = np.mean([model.wv[token] for token in tokens], axis=0)
+            doc_vector = np.mean([self.model.wv[token] for token in tokens], axis=0)
         else:
             # If none of the tokens are in the model's vocabulary, return a zero vector
-            doc_vector = np.zeros(model.vector_size)
-
+            doc_vector = np.zeros(self.model.vector_size)
         return doc_vector
 
+    @cached_property
+    def document_vectors(self):
+        return self.corpus_tokens.apply(self.infer_document_vector)
 
+    @cached_property
+    def document_vectors_df(self, index_name="user_id"):
+        # UNpacK EMBEdDINGS tO THEIR OWN COLUMNS
+        docs_df = DataFrame(self.document_vectors.values.tolist())
+        docs_df.columns = [str(i) for i in range(0, len(docs_df.columns))]
+        docs_df.index = self.corpus_tokens.index
+        docs_df.index.name = index_name
+        return docs_df
 
-
-
-
-
-
-
-
-class AnotherReductionPipeline(ReductionPipeline):
-
-    def __init__(self, x, labels_df=None, #x_scale=X_SCALE,
-                        reducer_type=REDUCER_TYPE, n_components=N_COMPONENTS,
-                        results_dirpath=WORD2VEC_RESULTS_DIRPATH):
-
-        self.x = x
-        self.labels_df = labels_df
-
-        self.reducer_type = reducer_type
-        self.n_components = n_components
-        self.results_dirpath = results_dirpath
-
-
-        self.reducer_name = {"PCA": "pca", "T-SNE": "tsne", "UMAP": "umap"}[self.reducer_type]
-
-        self.reducer = None
-        self.embeddings = None
-        self.embeddings_df = None
-        self.loadings = None
-        self.loadings_df = None
-
-
-    def save_embeddings(self):
-        """
-        Save a slim copy of the embeddings to CSV (just user_id and component values).
-        With the goal of merging all the results into a single file later.
-        """
-        csv_filepath = os.path.join(self.results_dirpath, f"{self.reducer_name}_{self.n_components}_embeddings.csv")
-
-        results_df = self.embeddings_df.copy()
-        #results_df.index = self.x.index
-        #results_df.index.name = "token"
-        results_df["token"] = self.x.index
-
-        for colname in self.component_names:
-            # rename column to include info about which method produced it:
-            results_df.rename(columns={colname: f"{self.reducer_name}_{self.n_components}_{colname}"}, inplace=True)
-        results_df.to_csv(csv_filepath, index=False)
-
-
-
-
-
-
-
+    def save_document_vectors(self):
+        self.document_vectors_df.to_csv(self.document_vectors_csv_filepath, index=True)
 
 
 if __name__ == "__main__":
@@ -152,94 +151,24 @@ if __name__ == "__main__":
     ds = Dataset()
     df = ds.df
 
-    # TEXT PROCESSING / TOKENIZATION
-
     df["tokens"] = df["tweet_texts"].apply(tokenizer)
     print(df["tokens"].head())
 
+    wp = WordPipe(corpus_tokens=df["tokens"])
+    wp.perform()
 
-    # TOKEN ANALYSIS (SIDE qUEST)
-
-    all_words = list(chain.from_iterable(df["tokens"])) # h/t chat gpt for this one
-    unique_words = list(set(all_words))
-    print("NUMBER OF UNIQUE TOKENS:", len(unique_words))
-
-    word_counter = Counter(all_words)
-    # len(word_counter.keys()) #> unique words
-    word_counts = Series(word_counter.values(), index=word_counter.keys(), name="word_count")
-    print(word_counts.sort_values(ascending=False).head())
-    #word_counts.to_json(os.path.join(WORD2VEC_RESULTS_DIRPATH, 'word_counts.json'))
-
-
-
-    # MODEL TRAINING
-    wp = WordPipe()
-
-    model = wp.load_or_train_model(corpus=df["tokens"])
-    print(type(model))
-
+    # INVEstIGatION
     # https://radimrehurek.com/gensim/models/keyedvectors.html
-    wv = model.wv
-    print(type(wv))
-    #len(wv) #> 34,729
-    # wv.index_to_key[0] #> "rt"
+    wv = wp.model.wv #> gensim.models.keyedvectors.KeyedVectors
+    print(len(wv))  #> 34,729 ORIGINAL ( ______ STOPwORD-REMOVED)
 
-    vocab = wv.index_to_key
-    print("WORDS:", len(vocab))
-
-    vectors = wv.vectors
-    print("WORD VECTORS:", vectors.shape) # 100 columns, default vector_size=100
-
-    vectors_df = DataFrame(wv.vectors, index=vocab)
-    #print(vectors_df.shape)
-    print(vectors_df.head())
-    vectors_df.to_csv(os.path.join(WORD2VEC_RESULTS_DIRPATH, "word_vectors.csv"))
-
-    #wv.most_similar("realdonaldtrump", topn=10)
+    #breakpoint()
+    trumplike = wv.most_similar("realdonaldtrump", topn=10)
+    pprint(trumplike)
 
     #wv.similarity(w1="impeachment", w2="sham")
-    #wv.similarity(w1="impeachment", w2="just")
-    #wv.similarity(w1="impeachment", w2="fair")
-    #wv.similarity(w1="impeachment", w2="unfair")
-    #wv.similarity(w1="impeachment", w2="witchhunt")
-    #wv.similarity(w1="trump", w2="guilty")
-    #wv.similarity(w1="trump", w2="innocent")
-
-    # DOCUMENT / USER EMBEDDINGS
-
-    df["doc_embeds"] = df["tokens"].apply(wp.infer_vector)
-
-
-    # UNpacK EMBEdDINGS tO THEIR OWN COLUMNS
-    embeds_df = DataFrame(df["doc_embeds"].values.tolist())
-    embedding_cols = [f"wv_{i}" for i in range(0, len(embeds_df.columns))]
-    embeds_df.columns = embedding_cols
-    embeds_df = df.drop(columns=["doc_embeds"]).merge(embeds_df, left_index=True, right_index=True)
-    print(embeds_df)
-
-    embeds_df = embeds_df[["user_id", "tweet_texts", "tokens"] + embedding_cols]
-    embeds_df.to_csv(os.path.join(WORD2VEC_RESULTS_DIRPATH, "user_embeddings.csv"))
-
-
-    exit()
-
-
-
-
-    #pca_pipeline(x=vectors_df, chart_title="Word Embeddings")
-
-    for reducer_type in ["PCA", "T-SNE", "UMAP"]:
-
-        drp = AnotherReductionPipeline(x=vectors_df, reducer_type=reducer_type, n_components=2, results_dirpath=WORD2VEC_RESULTS_DIRPATH)
-        drp.perform()
-
-        drp.embeddings_df = drp.embeddings_df.merge(word_counts, how="inner", left_index=True, right_index=True)
-        drp.embeddings_df["token"] = drp.embeddings_df.index
-        drp.save_embeddings()
-
-        #TOP_N = 250
-        #drp.embeddings_df.sort_values(by=["word_count"], ascending=False, inplace=True) # it is already sorted, but just to be sure
-        #drp.embeddings_df = drp.embeddings_df.head(TOP_N)
-        # oh this is not that interesting unless we perform stopword removal
-        #drp.plot_embeddings(size="word_count", hover_data=["token", "word_count"]) # subtitle=f"Top {TOP_N} Words"
-        drp.plot_embeddings(hover_data=["token", "word_count"])
+    #wv.similarity(w1="impeachment", w2="just"))
+    #wv.similarity(w1="impeachment", w2="fair"))
+    #wv.similarity(w1="impeachment", w2="unfair"))
+    #wv.similarity(w1="realdonaldtrump", w2="guilty"))
+    #wv.similarity(w1="realdonaldtrump", w2="innocent"))
