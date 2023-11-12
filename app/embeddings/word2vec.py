@@ -165,16 +165,18 @@ if __name__ == "__main__":
 
     #pca_pipeline(x=vectors_df, chart_title="Word Embeddings")
 
-    drp = AnotherReductionPipeline(x=vectors_df, n_components=2, results_dirpath=WORD2VEC_RESULTS_DIRPATH)
-    drp.perform()
+    for reducer_type in ["PCA", "T-SNE", "UMAP"]:
 
-    drp.embeddings_df = drp.embeddings_df.merge(word_counts, how="inner", left_index=True, right_index=True)
-    drp.embeddings_df["token"] = drp.embeddings_df.index
-    drp.save_embeddings()
+        drp = AnotherReductionPipeline(x=vectors_df, reducer_type=reducer_type, n_components=2, results_dirpath=WORD2VEC_RESULTS_DIRPATH)
+        drp.perform()
 
-    #TOP_N = 250
-    #drp.embeddings_df.sort_values(by=["word_count"], ascending=False, inplace=True) # it is already sorted, but just to be sure
-    #drp.embeddings_df = drp.embeddings_df.head(TOP_N)
-    # oh this is not that interesting unless we perform stopword removal
-    #drp.plot_embeddings(size="word_count", hover_data=["token", "word_count"]) # subtitle=f"Top {TOP_N} Words"
-    drp.plot_embeddings(hover_data=["token", "word_count"])
+        drp.embeddings_df = drp.embeddings_df.merge(word_counts, how="inner", left_index=True, right_index=True)
+        drp.embeddings_df["token"] = drp.embeddings_df.index
+        drp.save_embeddings()
+
+        #TOP_N = 250
+        #drp.embeddings_df.sort_values(by=["word_count"], ascending=False, inplace=True) # it is already sorted, but just to be sure
+        #drp.embeddings_df = drp.embeddings_df.head(TOP_N)
+        # oh this is not that interesting unless we perform stopword removal
+        #drp.plot_embeddings(size="word_count", hover_data=["token", "word_count"]) # subtitle=f"Top {TOP_N} Words"
+        drp.plot_embeddings(hover_data=["token", "word_count"])
