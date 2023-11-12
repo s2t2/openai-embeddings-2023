@@ -17,19 +17,19 @@ from app import RESULTS_DIRPATH
 from app.classification import Y_COLS
 
 WORD2VEC_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "embeddings", "word2vec")
-WORD2VEC_DESTRUCTIVE = bool(os.getenv("WORD2VEC_DESTRUCTIVE", default="false") == 'true')
+#WORD2VEC_DESTRUCTIVE = bool(os.getenv("WORD2VEC_DESTRUCTIVE", default="false") == 'true')
 
 #VECTOR_LENGTH = 100
 
 
 class WordPipe:
-    def __init__(self, corpus, tokenizer=tokenizer, results_dirpath=WORD2VEC_RESULTS_DIRPATH, destructive=WORD2VEC_DESTRUCTIVE):
+    def __init__(self, corpus, tokenizer=tokenizer, results_dirpath=WORD2VEC_RESULTS_DIRPATH): # destructive=WORD2VEC_DESTRUCTIVE
         """Param corpus a pandas series of arrays (tokens for each document)"""
 
         self.corpus = corpus
         self.tokenizer = tokenizer
 
-        self.destructive = bool(destructive)
+        #self.destructive = bool(destructive)
         self.results_dirpath = results_dirpath
         self.model_filepath = os.path.join(self.results_dirpath, f"w2v.model")
         #self.kv_filepath = os.path.join(self.results_dirpath, f"w2v.kv")
@@ -63,10 +63,12 @@ class WordPipe:
 
 
     def load_or_train_model(self, vector_size=100, window=10, min_count=2, workers=4):
-        if self.destructive:
-            print("----------------")
-            print("DESTRUCTIVE MODE...")
-            shutil.rmtree(self.results_dirpath)
+        #if self.destructive:
+        #    print("----------------")
+        #    print("DESTRUCTIVE MODE...")
+        #    #shutil.rmtree(self.results_dirpath)
+        #    os.removedirs()
+
         os.makedirs(self.results_dirpath, exist_ok=True)
 
         if os.path.exists(self.model_filepath):

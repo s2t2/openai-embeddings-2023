@@ -21,100 +21,102 @@
 </head>
 <body>
     <div class="container">
-        <h1><a href="../../index.html">OpenAI Embeddings 2023</a></h1>
+        <h1><a href="../../../index.html">Word2Vec Embeddings 2023</a></h1>
 
-        <h3>Text Embedding Results</h3>
-
-        <label for="select-n-components">Embedding Model:</label>
-        <select name="embedding_model" id="select-embedding-model" class="form-select form-select-lg" style="width:400px;">
-            <option value="word2vec" data-embedding-model="word2vec" selected>Word2Vec</option>
-        </select>
-
+        <h3>Dimensionality Reduction Results</h3>
 
         <label for="select-n-components">Number of Components:</label>
         <select name="n_components" id="select-n-components" class="form-select form-select-lg" style="width:400px;">
             <option value="2" data-n-components="2" selected>2 Components</option>
         </select>
 
+        <p style="margin-top: 10px; margin-bottom: 0px;">Page Navigation:</p>
+        <ul>
+            <li><a href="#word-embeddings-container">Word Embeddings (below)</a></li>
+            <li><a href="#user-embeddings-container">User Embeddings (further below)</a></li>
+        </ul>
+
         <hr>
         <div id="word-embeddings-container">
         </div>
 
         <hr>
-        <h4>Word2Vec User Embeddings</h4>
-        <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-top: 30px; margin-bottom: 15px;">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="is-bot-tab" data-bs-toggle="tab" data-bs-target="#is-bot" type="button" role="tab" aria-controls="is-bot" aria-selected="true">
-                    Bot Status
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="opinion-tab" data-bs-toggle="tab" data-bs-target="#opinion-community" type="button" role="tab" aria-controls="opinion-community" aria-selected="false">
-                    Opinion Community
-                </button>
-            </li>
+        <div id="user-embeddings-container">
+            <h4>Word2Vec User Embeddings</h4>
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-top: 30px; margin-bottom: 15px;">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="is-bot-tab" data-bs-toggle="tab" data-bs-target="#is-bot" type="button" role="tab" aria-controls="is-bot" aria-selected="true">
+                        Bot Status
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="opinion-tab" data-bs-toggle="tab" data-bs-target="#opinion-community" type="button" role="tab" aria-controls="opinion-community" aria-selected="false">
+                        Opinion Community
+                    </button>
+                </li>
 
-             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="bom-overall-tab" data-bs-toggle="tab" data-bs-target="#bom-overall" type="button" role="tab" aria-controls="bom-overall" aria-selected="false">
-                    Botometer Overall
-                </button>
-            </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="bom-overall-tab" data-bs-toggle="tab" data-bs-target="#bom-overall" type="button" role="tab" aria-controls="bom-overall" aria-selected="false">
+                        Botometer Overall
+                    </button>
+                </li>
 
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="bom-astroturf-tab" data-bs-toggle="tab" data-bs-target="#bom-astroturf" type="button" role="tab" aria-controls="bom-astroturf" aria-selected="false">
-                    Botometer Astroturf
-                </button>
-            </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="bom-astroturf-tab" data-bs-toggle="tab" data-bs-target="#bom-astroturf" type="button" role="tab" aria-controls="bom-astroturf" aria-selected="false">
+                        Botometer Astroturf
+                    </button>
+                </li>
 
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="is-toxic-tab" data-bs-toggle="tab" data-bs-target="#is-toxic" type="button" role="tab" aria-controls="is-toxic" aria-selected="false">
-                    Language Toxicity
-                </button>
-            </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="is-toxic-tab" data-bs-toggle="tab" data-bs-target="#is-toxic" type="button" role="tab" aria-controls="is-toxic" aria-selected="false">
+                        Language Toxicity
+                    </button>
+                </li>
 
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="is-factual-tab" data-bs-toggle="tab" data-bs-target="#is-factual" type="button" role="tab" aria-controls="is-factual" aria-selected="false">
-                    News Quality
-                </button>
-            </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="is-factual-tab" data-bs-toggle="tab" data-bs-target="#is-factual" type="button" role="tab" aria-controls="is-factual" aria-selected="false">
+                        News Quality
+                    </button>
+                </li>
 
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="fourway-label-tab" data-bs-toggle="tab" data-bs-target="#fourway-label" type="button" role="tab" aria-controls="fourway-label" aria-selected="false">
-                    Fourway (Bot x Opinion)
-                </button>
-            </li>
-        </ul>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="fourway-label-tab" data-bs-toggle="tab" data-bs-target="#fourway-label" type="button" role="tab" aria-controls="fourway-label" aria-selected="false">
+                        Fourway (Bot x Opinion)
+                    </button>
+                </li>
+            </ul>
 
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="is-bot" role="tabpanel" aria-labelledby="is-bot-tab">
-                <h4>Bot Status</h4>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="is-bot" role="tabpanel" aria-labelledby="is-bot-tab">
+                    <h4>Bot Status</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="opinion-community" role="tabpanel" aria-labelledby="opinion-tab">
+                    <h4>Opinion Community</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="bom-overall" role="tabpanel" aria-labelledby="bom-overall-tab">
+                    <h4>Botometer Overall</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="bom-astroturf" role="tabpanel" aria-labelledby="bom-astroturf-tab">
+                    <h4>Botometer Astroturf</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="is-toxic" role="tabpanel" aria-labelledby="is-toxic-tab">
+                    <h4>Language Toxicity</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="is-factual" role="tabpanel" aria-labelledby="is-factual-tab">
+                    <h4>News Quality</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="fourway-label" role="tabpanel" aria-labelledby="fourway-label-tab">
+                    <h4>Fourway (Bot x Opinion)</h4>
+                </div>
             </div>
 
-            <div class="tab-pane fade show" id="opinion-community" role="tabpanel" aria-labelledby="opinion-tab">
-                <h4>Opinion Community</h4>
-            </div>
-
-            <div class="tab-pane fade show" id="bom-overall" role="tabpanel" aria-labelledby="bom-overall-tab">
-                <h4>Botometer Overall</h4>
-            </div>
-
-            <div class="tab-pane fade show" id="bom-astroturf" role="tabpanel" aria-labelledby="bom-astroturf-tab">
-                <h4>Botometer Astroturf</h4>
-            </div>
-
-            <div class="tab-pane fade show" id="is-toxic" role="tabpanel" aria-labelledby="is-toxic-tab">
-                <h4>Language Toxicity</h4>
-            </div>
-
-            <div class="tab-pane fade show" id="is-factual" role="tabpanel" aria-labelledby="is-factual-tab">
-                <h4>News Quality</h4>
-            </div>
-
-            <div class="tab-pane fade show" id="fourway-label" role="tabpanel" aria-labelledby="fourway-label-tab">
-                <h4>Fourway (Bot x Opinion)</h4>
-            </div>
         </div>
-
 
         <hr>
         <div id="root"></div>
@@ -175,7 +177,7 @@
                 //this.roc_curve_filepath = `./${this.results_dirpath}/roc_curve.png`
                 //this.results_filepath = `./${this.results_dirpath}/results.json`
                 this.y_label = LABELS_MAP[this.y_col]
-                this.filestem = `./word2vec/doc_reduction/${this.y_label}/${this.reducer_name}_${this.n_components}`
+                this.filestem = `./doc_reduction/${this.y_label}/${this.reducer_name}_${this.n_components}`
                 this.embeddings_html_filepath = `${this.filestem}.html`
                 this.embeddings_png_filepath = `${this.filestem}.png`
                 this.centroids_html_filepath = `${this.filestem}_centroids.html`
@@ -235,7 +237,7 @@
                 this.reducer_type = REDUCERS_MAP[this.reducer_name]
                 this.n_components = this.props.n_components || "2"
 
-                this.filestem = `./word2vec/word_reduction/${this.reducer_name}_${this.n_components}`
+                this.filestem = `./word_reduction/${this.reducer_name}_${this.n_components}`
                 this.embeddings_html_filepath = `${this.filestem}.html`
                 this.embeddings_png_filepath = `${this.filestem}.png`
                 this.centroids_html_filepath = `${this.filestem}_centroids.html`
