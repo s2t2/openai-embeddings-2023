@@ -16,16 +16,19 @@ openai==0.28 # ok so there is now a 1.0 interface but we originally obtained usi
 
 
 # machine learning:
-scikit-learn
+scikit-learn #==1.3.0
 #category_encoders
 #tensorflow
-# classification:
 xgboost==1.7.6 #==1.2.1 #==1.5.0 # 1.7.6
 #lightgbm
-# clustering:
 umap-learn
 kmodes
 hdbscan
+
+# NLP:
+gensim
+#python-Levenshtein
+
 
 # model storage:
 google-cloud-storage

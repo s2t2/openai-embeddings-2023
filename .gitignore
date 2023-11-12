@@ -15,6 +15,11 @@ results/*/*.csv.gz
 results/*/*.json
 results/*/*.json
 
+results/embeddings/*/*.model
+results/embeddings/*/*.kv
+results/embeddings/*/*.csv
+
+
 #results/*/*/*.png
 #results/*/*/*.html
 results/*/*/*.json
