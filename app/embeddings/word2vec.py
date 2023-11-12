@@ -18,47 +18,81 @@ WORD2VEC_DESTRUCTIVE = bool(os.getenv("WORD2VEC_DESTRUCTIVE", default="false") =
 
 #VECTOR_LENGTH = 100
 
+import numpy as np
 
-def load_or_train_model(corpus, results_dirpath=WORD2VEC_RESULTS_DIRPATH,
-                        vector_size=100, window=10, min_count=2, workers=4,
-                        destructive=WORD2VEC_DESTRUCTIVE
-                        ):
-    """
-    Params corpus (pandas.Series) : a column of tokenized text, can be variable length
-    """
 
-    if destructive:
-        print("DESTRUCTIVE MODE...")
-        shutil.rmtree(results_dirpath)
 
-    os.makedirs(results_dirpath, exist_ok=True)
 
-    model_filepath = os.path.join(results_dirpath, f"my-model.model")
-    vectors_filepath = os.path.join(results_dirpath, f"my-model.kv")
 
-    if os.path.exists(model_filepath):
-        print("LOADING MODEL FROM FILE...")
-        print(model_filepath)
-        model = Word2Vec.load(model_filepath)
-    else:
+class WordPipe:
+    def __init__(self):
+        pass
 
-        print("INITIALIZING NEW MODEL...")
-        model = Word2Vec(window=window, min_count=min_count, workers=workers, vector_size=vector_size)
 
-        print("VOCAB...")
-        model.build_vocab(corpus) # progress_per=1000
-        #print("N SAMPLES:", model.corpus_count)
-        #print("EPOCHS:", model.epochs)
 
-        print("TRAINING...")
-        model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
-        print(round(model.total_train_time, 0), "seconds")
+    def load_or_train_model(self,corpus, results_dirpath=WORD2VEC_RESULTS_DIRPATH,
+                            vector_size=100, window=10, min_count=2, workers=4,
+                            destructive=WORD2VEC_DESTRUCTIVE
+                            ):
+        """
+        Params corpus (pandas.Series) : a column of tokenized text, can be variable length
+        """
 
-        print("SAVING...")
-        model.save(model_filepath)
-        model.wv.save(vectors_filepath)
+        if destructive:
+            print("DESTRUCTIVE MODE...")
+            shutil.rmtree(results_dirpath)
 
-    return model
+        os.makedirs(results_dirpath, exist_ok=True)
+
+        model_filepath = os.path.join(results_dirpath, f"my-model.model")
+        vectors_filepath = os.path.join(results_dirpath, f"my-model.kv")
+
+        if os.path.exists(model_filepath):
+            print("LOADING MODEL FROM FILE...")
+            print(model_filepath)
+            self.model = Word2Vec.load(model_filepath)
+        else:
+            print("INITIALIZING NEW MODEL...")
+            self.model = Word2Vec(window=window, min_count=min_count, workers=workers, vector_size=vector_size)
+
+            print("VOCAB...")
+            self.model.build_vocab(corpus) # progress_per=1000
+            #print("N SAMPLES:", model.corpus_count)
+            #print("EPOCHS:", model.epochs)
+
+            print("TRAINING...")
+            self.model.train(corpus, total_examples=self.model.corpus_count, epochs=self.model.epochs)
+            print(round(self.model.total_train_time, 0), "seconds")
+
+            print("SAVING...")
+            self.model.save(model_filepath)
+            self.model.wv.save(vectors_filepath)
+
+        return self.model
+
+
+
+
+    def infer_vector(self, tokens):
+
+        # Filter tokens that are in the model's vocabulary
+        tokens = [token for token in tokens if token in self.model.wv.key_to_index]
+
+        if tokens:
+            # Calculate the average vector for the tokens in the document
+            doc_vector = np.mean([model.wv[token] for token in tokens], axis=0)
+        else:
+            # If none of the tokens are in the model's vocabulary, return a zero vector
+            doc_vector = np.zeros(model.vector_size)
+
+        return doc_vector
+
+
+
+
+
+
+
 
 
 
@@ -104,6 +138,12 @@ class AnotherReductionPipeline(ReductionPipeline):
 
 
 
+
+
+
+
+
+
 if __name__ == "__main__":
 
 
@@ -117,6 +157,7 @@ if __name__ == "__main__":
     df["tokens"] = df["tweet_texts"].apply(tokenizer)
     print(df["tokens"].head())
 
+
     # TOKEN ANALYSIS (SIDE qUEST)
 
     all_words = list(chain.from_iterable(df["tokens"])) # h/t chat gpt for this one
@@ -129,9 +170,12 @@ if __name__ == "__main__":
     print(word_counts.sort_values(ascending=False).head())
     #word_counts.to_json(os.path.join(WORD2VEC_RESULTS_DIRPATH, 'word_counts.json'))
 
-    # MODEL TRAINING
 
-    model = load_or_train_model(corpus=df["tokens"])
+
+    # MODEL TRAINING
+    wp = WordPipe()
+
+    model = wp.load_or_train_model(corpus=df["tokens"])
     print(type(model))
 
     # https://radimrehurek.com/gensim/models/keyedvectors.html
@@ -149,9 +193,7 @@ if __name__ == "__main__":
     vectors_df = DataFrame(wv.vectors, index=vocab)
     #print(vectors_df.shape)
     print(vectors_df.head())
-
-    vectors_csv_filepath = os.path.join(WORD2VEC_RESULTS_DIRPATH, "word_vectors.csv")
-    vectors_df.to_csv(vectors_csv_filepath)
+    vectors_df.to_csv(os.path.join(WORD2VEC_RESULTS_DIRPATH, "word_vectors.csv"))
 
     #wv.most_similar("realdonaldtrump", topn=10)
 
@@ -162,6 +204,27 @@ if __name__ == "__main__":
     #wv.similarity(w1="impeachment", w2="witchhunt")
     #wv.similarity(w1="trump", w2="guilty")
     #wv.similarity(w1="trump", w2="innocent")
+
+    # DOCUMENT / USER EMBEDDINGS
+
+    df["doc_embeds"] = df["tokens"].apply(wp.infer_vector)
+
+
+    # UNpacK EMBEdDINGS tO THEIR OWN COLUMNS
+    embeds_df = DataFrame(df["doc_embeds"].values.tolist())
+    embedding_cols = [f"wv_{i}" for i in range(0, len(embeds_df.columns))]
+    embeds_df.columns = embedding_cols
+    embeds_df = df.drop(columns=["doc_embeds"]).merge(embeds_df, left_index=True, right_index=True)
+    print(embeds_df)
+
+    embeds_df = embeds_df[["user_id", "tweet_texts", "tokens"] + embedding_cols]
+    embeds_df.to_csv(os.path.join(WORD2VEC_RESULTS_DIRPATH, "user_embeddings.csv"))
+
+
+    exit()
+
+
+
 
     #pca_pipeline(x=vectors_df, chart_title="Word Embeddings")
 
