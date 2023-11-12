@@ -23,9 +23,11 @@ WORD2VEC_DESTRUCTIVE = bool(os.getenv("WORD2VEC_DESTRUCTIVE", default="false") =
 
 
 class WordPipe:
-    def __init__(self, corpus_tokens, results_dirpath=WORD2VEC_RESULTS_DIRPATH, destructive=WORD2VEC_DESTRUCTIVE):
+    def __init__(self, corpus, tokenizer=tokenizer, results_dirpath=WORD2VEC_RESULTS_DIRPATH, destructive=WORD2VEC_DESTRUCTIVE):
         """Param corpus a pandas series of arrays (tokens for each document)"""
-        self.corpus_tokens = corpus_tokens
+
+        self.corpus = corpus
+        self.tokenizer = tokenizer
 
         self.destructive = bool(destructive)
         self.results_dirpath = results_dirpath
@@ -34,15 +36,22 @@ class WordPipe:
         self.word_vectors_csv_filepath = os.path.join(self.results_dirpath, "word_vectors.csv")
         self.document_vectors_csv_filepath = os.path.join(self.results_dirpath, "document_vectors.csv")
 
-        # TOKEN ANALYSIS (SIDE qUEST)
+
+    @cached_property
+    def corpus_tokens(self):
+        return self.corpus.apply(tokenizer)
+
+    @cached_property
+    def word_counts(self):
         all_words = list(chain.from_iterable(self.corpus_tokens)) # h/t chat gpt for this one
         word_counter = Counter(all_words)
-        self.word_counts = Series(word_counter.values(), index=word_counter.keys(), name="word_count")
-        print("UNIQUE TOKENS:", len(self.word_counts))
-        print(self.word_counts.sort_values(ascending=False).head())
+        return Series(word_counter.values(), index=word_counter.keys(), name="word_count")
 
 
     def perform(self):
+        # TOKEN ANALYSIS (SIDE qUEST)
+        print(self.word_counts.sort_values(ascending=False).head())
+
         self.load_or_train_model()
         print("WORDS:", len(self.words))
 
@@ -66,7 +75,7 @@ class WordPipe:
             print(self.model_filepath)
             self.model = Word2Vec.load(self.model_filepath)
             print(self.model)
-            print(type(self.model))
+            #print(type(self.model))
         else:
             print("----------------")
             print("INITIALIZING NEW MODEL...")
@@ -107,10 +116,14 @@ class WordPipe:
     def word_vectors_df(self):
         return DataFrame(self.word_vectors, index=self.words)
 
-    def save_word_vectors(self, index_name="token"):
-        words_df = self.word_vectors_df.merge(wp.word_counts, how="inner", left_index=True, right_index=True)
-        words_df.index.name = index_name
-        words_df.to_csv(self.word_vectors_csv_filepath, index=True)
+    @cached_property
+    def words_df(self):
+        words_df = self.word_vectors_df.merge(self.word_counts, how="inner", left_index=True, right_index=True)
+        words_df.index.name = "token"
+        return words_df
+
+    def save_word_vectors(self):
+        self.words_df.to_csv(self.word_vectors_csv_filepath, index=True)
 
     # DOCUMENT ANALYSIS
 
@@ -151,10 +164,10 @@ if __name__ == "__main__":
     ds = Dataset()
     df = ds.df
 
-    df["tokens"] = df["tweet_texts"].apply(tokenizer)
-    print(df["tokens"].head())
+    #df["tokens"] = df["tweet_texts"].apply(tokenizer)
+    #print(df["tokens"].head())
 
-    wp = WordPipe(corpus_tokens=df["tokens"])
+    wp = WordPipe(corpus=df["tweet_texts"])
     wp.perform()
 
     # INVEstIGatION
