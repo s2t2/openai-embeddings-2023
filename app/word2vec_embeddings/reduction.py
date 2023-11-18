@@ -4,7 +4,7 @@ import numpy as np
 
 
 from app.reduction.pipeline import ReductionPipeline, REDUCER_TYPE, N_COMPONENTS
-from app.embeddings.word2vec import WORD2VEC_RESULTS_DIRPATH, WordPipe
+from app.word2vec_embeddings.pipeline import WORD2VEC_RESULTS_DIRPATH, WordPipe
 
 
 class WordVectorReductionPipeline(ReductionPipeline):
