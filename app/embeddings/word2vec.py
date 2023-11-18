@@ -12,6 +12,7 @@ from gensim.models import Word2Vec
 from gensim.utils import simple_preprocess as tokenizer
 from pandas import DataFrame, Series
 import numpy as np
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as SKLEARN_STOPWORDS
 
 from app import RESULTS_DIRPATH
 from app.classification import Y_COLS
@@ -23,11 +24,12 @@ WORD2VEC_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "embeddings", "word2vec
 
 
 class WordPipe:
-    def __init__(self, corpus, tokenizer=tokenizer, results_dirpath=WORD2VEC_RESULTS_DIRPATH): # destructive=WORD2VEC_DESTRUCTIVE
+    def __init__(self, corpus, tokenizer=tokenizer, results_dirpath=WORD2VEC_RESULTS_DIRPATH, stopwords=SKLEARN_STOPWORDS): # destructive=WORD2VEC_DESTRUCTIVE
         """Param corpus a pandas series of arrays (tokens for each document)"""
 
         self.corpus = corpus
         self.tokenizer = tokenizer
+        self.stopwords = stopwords
 
         #self.destructive = bool(destructive)
         self.results_dirpath = results_dirpath
@@ -121,6 +123,7 @@ class WordPipe:
     @cached_property
     def words_df(self):
         words_df = self.word_vectors_df.merge(self.word_counts, how="inner", left_index=True, right_index=True)
+        words_df["is_stopword"] = words_df.index.map(lambda token: token in self.stopwords)
         words_df.index.name = "token"
         return words_df
 

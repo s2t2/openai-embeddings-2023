@@ -1,5 +1,7 @@
 import os
 from pandas import DataFrame
+import numpy as np
+
 
 from app.reduction.pipeline import ReductionPipeline, REDUCER_TYPE, N_COMPONENTS
 from app.embeddings.word2vec import WORD2VEC_RESULTS_DIRPATH, WordPipe
@@ -71,13 +73,29 @@ if __name__ == "__main__":
         drp.perform()
         drp.save_embeddings()
 
+        drp.embeddings_df = drp.embeddings_df.merge(wp.words_df["is_stopword"], how="inner", left_index=True, right_index=True)
         drp.embeddings_df["token"] = drp.embeddings_df.index
-        drp.plot_embeddings(hover_data=["token", "word_count"], subtitle="Word2Vec Word Embeddings")
-        # oh this is not that interesting unless we perform stopword removal
-        #TOP_N = 250
+        drp.plot_embeddings(hover_data=["token", "word_count"], subtitle="Word2Vec Word Embeddings", color="is_stopword")
+
+        # special chart
+        #drp.embeddings_df = drp.embeddings_df[drp.embeddings_df["is_stopword"] == False]
+        ##drp.plot_embeddings(hover_data=["token", "word_count"], subtitle="Word2Vec Word Embeddings (excluding stopwords)", size="word_count")
+        ## oh this is not that interesting unless we perform stopword removal
+        #TOP_N = 50
+        #drp.embeddings_df['scaled_count'] = np.log10(drp.embeddings_df['word_count']) # special special
+        #
         #drp.embeddings_df.sort_values(by=["word_count"], ascending=False, inplace=True) # it is already sorted, but just to be sure
         #drp.embeddings_df = drp.embeddings_df.head(TOP_N)
-        #drp.plot_embeddings(size="word_count", hover_data=["token", "word_count"]) # subtitle=f"Top {TOP_N} Words"
+        #drp.plot_embeddings(size="scaled_count",
+        #                    color='scaled_count', color_scale="oranges",
+        #                    hover_data=["token", "word_count"],
+        #                    subtitle=f"Top {TOP_N} Words",
+        #                    text="token",
+        #                    )
+
+        #exit()
+
+    exit()
 
     print("------------")
     print("DOCUMENT EMBEDDINGS...")

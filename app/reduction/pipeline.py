@@ -128,7 +128,9 @@ class ReductionPipeline:
         results_df.to_csv(csv_filepath, index=False)
 
 
-    def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, color=None, color_map=None, category_orders=None, hover_data=None, results_dirpath=None, size=None):
+    def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, results_dirpath=None,
+                        subtitle=None, text=None, size=None, hover_data=None,
+                        color=None, color_map=None, color_scale=None, category_orders=None):
         title = f"Dimensionality Reduction Results ({self.reducer_type} n_components={self.n_components})"
         if subtitle:
             title += f"<br><sup>{subtitle}</sup>"
@@ -142,12 +144,16 @@ class ReductionPipeline:
             chart_params["color"] = color
         if color_map:
             chart_params["color_discrete_map"] = color_map
+        if color_scale:
+            chart_params["color_continuous_scale"] = color_scale
         if category_orders:
             chart_params["category_orders"] = category_orders
         if hover_data:
             chart_params["hover_data"] = hover_data
         if size:
             chart_params["size"] = size
+        if text:
+            chart_params["text"] = text
 
         if self.n_components == 2:
             fig = px.scatter(self.embeddings_df, **chart_params)
