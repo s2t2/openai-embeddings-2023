@@ -15,6 +15,11 @@ results/*/*.csv.gz
 results/*/*.json
 results/*/*.json
 
+results/word2vec_embeddings/*.model
+results/word2vec_embeddings/*.kv
+results/word2vec_embeddings/*.csv
+
+
 #results/*/*/*.png
 #results/*/*/*.html
 results/*/*/*.json

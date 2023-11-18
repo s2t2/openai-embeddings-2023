@@ -90,8 +90,9 @@ class ReductionPipeline:
 
         self.embeddings = self.reducer.fit_transform(self.x)
         print("EMBEDDINGS:", self.embeddings.shape)
-        self.embeddings_df = DataFrame(self.embeddings, columns=self.component_names)
-        self.embeddings_df = self.embeddings_df.merge(self.labels_df, left_index=True, right_index=True)
+        self.embeddings_df = DataFrame(self.embeddings, columns=self.component_names, index=self.x.index)
+        if isinstance(self.labels_df, DataFrame):
+            self.embeddings_df = self.embeddings_df.merge(self.labels_df, left_index=True, right_index=True)
 
         # EXPLAINABILITY:
         if self.reducer_type == "PCA":
@@ -101,7 +102,7 @@ class ReductionPipeline:
             self.loadings = self.reducer.components_.T * np.sqrt(self.reducer.explained_variance_)
             print("LOADINGS...", self.loadings.shape)
             self.loadings_df = DataFrame(self.loadings, columns=self.component_names)
-            self.loadings_df.index = self.reducer.feature_names_in_
+            self.loadings_df.index = self.x.columns.tolist() # self.reducer.feature_names_in_
 
             # these represent the absolute magnitude of importances, not direction up or down
             self.feature_importances = {}
@@ -127,7 +128,9 @@ class ReductionPipeline:
         results_df.to_csv(csv_filepath, index=False)
 
 
-    def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, subtitle=None, color=None, color_map=None, category_orders=None, hover_data=None, results_dirpath=None):
+    def plot_embeddings(self, height=500, fig_show=FIG_SHOW, fig_save=FIG_SAVE, results_dirpath=None,
+                        subtitle=None, text=None, size=None, hover_data=None,
+                        color=None, color_map=None, color_scale=None, category_orders=None):
         title = f"Dimensionality Reduction Results ({self.reducer_type} n_components={self.n_components})"
         if subtitle:
             title += f"<br><sup>{subtitle}</sup>"
@@ -135,16 +138,22 @@ class ReductionPipeline:
         chart_params = dict(x="component_1", y="component_2",
             title=title, height=height,
             #color=color, #"artist_name",
-            #hover_data=hover_data #["audio_filename", "track_number"]
+            hover_data= hover_data #{"index": (self.embeddings_df.index)} #hover_data #["audio_filename", "track_number"]
         )
         if color:
             chart_params["color"] = color
         if color_map:
             chart_params["color_discrete_map"] = color_map
+        if color_scale:
+            chart_params["color_continuous_scale"] = color_scale
         if category_orders:
             chart_params["category_orders"] = category_orders
         if hover_data:
             chart_params["hover_data"] = hover_data
+        if size:
+            chart_params["size"] = size
+        if text:
+            chart_params["text"] = text
 
         if self.n_components == 2:
             fig = px.scatter(self.embeddings_df, **chart_params)
