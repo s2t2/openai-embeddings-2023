@@ -1,0 +1,98 @@
+{
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Anti-Trump",
+        "Pro-Trump"
+    ],
+    "classification_report": {
+        "Anti-Trump": {
+            "precision": 0.9082926829268293,
+            "recall": 0.9263681592039801,
+            "f1-score": 0.9172413793103448,
+            "support": 1005.0
+        },
+        "Pro-Trump": {
+            "precision": 0.8486707566462167,
+            "recall": 0.8153241650294696,
+            "f1-score": 0.8316633266533067,
+            "support": 509.0
+        },
+        "accuracy": 0.8890356671070013,
+        "macro avg": {
+            "precision": 0.878481719786523,
+            "recall": 0.8708461621167248,
+            "f1-score": 0.8744523529818258,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8882480590980104,
+            "recall": 0.8890356671070013,
+            "f1-score": 0.8884704223734673,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            931,
+            74
+        ],
+        [
+            94,
+            415
+        ]
+    ],
+    "roc_auc_score": 0.9440928950532211,
+    "y_col": "opinion_community",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__C": [
+                1,
+                2,
+                5,
+                10,
+                25,
+                50,
+                100
+            ],
+            "classifier__max_iter": [
+                10,
+                25,
+                50,
+                100,
+                250,
+                500,
+                1000,
+                5000,
+                10000
+            ]
+        },
+        "best_params": {
+            "classifier__C": 1,
+            "classifier__max_iter": 25
+        },
+        "best_score": 0.9367002577612823
+    },
+    "model_params": {
+        "C": 1,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 25,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
+    }
+}
