@@ -7,8 +7,8 @@ from app.classification.pipeline import ClassificationPipeline
 
 class RandomForestPipeline(ClassificationPipeline):
 
-    def __init__(self, ds=None, y_col="is_bot", param_grid=None, results_dirpath=None):
-        super().__init__(ds=ds, y_col=y_col, param_grid=param_grid, results_dirpath=results_dirpath)
+    def __init__(self, ds=None, y_col="is_bot", param_grid=None, results_dirpath=None, will_upload=False):
+        super().__init__(ds=ds, y_col=y_col, param_grid=param_grid, results_dirpath=results_dirpath, will_upload=will_upload)
 
         self.model = RandomForestClassifier(random_state=99)
         self.model_dirname = "random_forest"
