@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Text Embedding Results</title>
+
+    <!-- BOOTSTRAP CSS: https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- BOOTSTRAP ICONS: https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- REACT.JS
+        https://dev.to/luispa/lets-try-react-without-nodejs-3a7
+        todo: upgrade to react@17
+    -->
+    <script type="application/javascript" src="https://unpkg.com/react@16.0.0/umd/react.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1><a href="../../../index.html">Word2Vec Embeddings 2023</a></h1>
+
+        <h3>Dimensionality Reduction Results</h3>
+
+        <label for="select-n-components">Number of Components:</label>
+        <select name="n_components" id="select-n-components" class="form-select form-select-lg" style="width:400px;">
+            <option value="2" data-n-components="2" selected>2 Components</option>
+        </select>
+
+        <p style="margin-top: 10px; margin-bottom: 0px;">Page Navigation:</p>
+        <ul>
+            <li><a href="#word-embeddings-container">Word Embeddings (below)</a></li>
+            <li><a href="#user-embeddings-container">User Embeddings (further below)</a></li>
+        </ul>
+
+        <hr>
+        <div id="word-embeddings-container">
+        </div>
+
+        <hr>
+        <div id="user-embeddings-container">
+            <h4>Word2Vec User Embeddings</h4>
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-top: 30px; margin-bottom: 15px;">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="is-bot-tab" data-bs-toggle="tab" data-bs-target="#is-bot" type="button" role="tab" aria-controls="is-bot" aria-selected="true">
+                        Bot Status
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="opinion-tab" data-bs-toggle="tab" data-bs-target="#opinion-community" type="button" role="tab" aria-controls="opinion-community" aria-selected="false">
+                        Opinion Community
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="bom-overall-tab" data-bs-toggle="tab" data-bs-target="#bom-overall" type="button" role="tab" aria-controls="bom-overall" aria-selected="false">
+                        Botometer Overall
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="bom-astroturf-tab" data-bs-toggle="tab" data-bs-target="#bom-astroturf" type="button" role="tab" aria-controls="bom-astroturf" aria-selected="false">
+                        Botometer Astroturf
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="is-toxic-tab" data-bs-toggle="tab" data-bs-target="#is-toxic" type="button" role="tab" aria-controls="is-toxic" aria-selected="false">
+                        Language Toxicity
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="is-factual-tab" data-bs-toggle="tab" data-bs-target="#is-factual" type="button" role="tab" aria-controls="is-factual" aria-selected="false">
+                        News Quality
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="fourway-label-tab" data-bs-toggle="tab" data-bs-target="#fourway-label" type="button" role="tab" aria-controls="fourway-label" aria-selected="false">
+                        Fourway (Bot x Opinion)
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="is-bot" role="tabpanel" aria-labelledby="is-bot-tab">
+                    <h4>Bot Status</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="opinion-community" role="tabpanel" aria-labelledby="opinion-tab">
+                    <h4>Opinion Community</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="bom-overall" role="tabpanel" aria-labelledby="bom-overall-tab">
+                    <h4>Botometer Overall</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="bom-astroturf" role="tabpanel" aria-labelledby="bom-astroturf-tab">
+                    <h4>Botometer Astroturf</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="is-toxic" role="tabpanel" aria-labelledby="is-toxic-tab">
+                    <h4>Language Toxicity</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="is-factual" role="tabpanel" aria-labelledby="is-factual-tab">
+                    <h4>News Quality</h4>
+                </div>
+
+                <div class="tab-pane fade show" id="fourway-label" role="tabpanel" aria-labelledby="fourway-label-tab">
+                    <h4>Fourway (Bot x Opinion)</h4>
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+        <div id="root"></div>
+
+        <footer>
+            <a href="https://github.com/s2t2/openai-embeddings-2023">source code</a>
+        </footer>
+    </div>
+
+    <!-- BOOTSTRAP JS https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script type="text/babel">
+
+        const rootElement = document.getElementById('root')
+        const isBotTab = document.getElementById("is-bot")
+        const opinionTab = document.getElementById("opinion-community")
+        const bomOverallTab = document.getElementById("bom-overall")
+        const bomAstroTab = document.getElementById("bom-astroturf")
+        const toxicTab = document.getElementById("is-toxic")
+        const factualTab = document.getElementById("is-factual")
+        const fourwayTab = document.getElementById("fourway-label")
+        const wordEmbeddingsContainer = document.getElementById("word-embeddings-container")
+
+        const Y_LABELS = {
+            "is_bot": "Bot Status",
+            "opinion_community": "Opinion Community",
+            "is_bom_overall": "Botometer Overall Score",
+            "is_bom_astroturf": "Botometer Astroturf Score",
+            "is_toxic": "Language Toxicity",
+            "is_factual": "News Quality",
+            "fourway_label": "Fourway (Bot x Opinion)"
+        }
+        const LABELS_MAP = {
+            "is_bot": "bot_label",
+            "opinion_community": "opinion_label",
+            "is_bom_overall": "bom_overall_label",
+            "is_bom_astroturf": "bom_astroturf_label",
+            "is_toxic": "toxic_label",
+            "is_factual": "factual_label",
+            "fourway_label": "fourway_label"
+        }
+
+        const REDUCERS_MAP = {"pca": "PCA","tsne": "T-SNE","umap": "UMAP"}
+
+        class ReductionResults extends React.Component {
+
+            render() {
+                this.reducer_name = this.props.reducer_name || "pca"
+                this.reducer_type = REDUCERS_MAP[this.reducer_name]
+                this.n_components = this.props.n_components || "2"
+                this.y_col = this.props.y_col || "is_bot"
+                //this.model_name = this.props.model_name
+                //this.model_dirname = MODELS_MAP[this.props.model_name]
+
+                //this.results_dirpath = `./${this.y_col}/${this.reducer_name}_${this.n_components}/${this.model_dirname}`
+                //this.confusion_matrix_filepath = `./${this.results_dirpath}/confusion.png`
+                //this.roc_curve_filepath = `./${this.results_dirpath}/roc_curve.png`
+                //this.results_filepath = `./${this.results_dirpath}/results.json`
+                this.y_label = LABELS_MAP[this.y_col]
+                this.filestem = `./doc_reduction/${this.y_label}/${this.reducer_name}_${this.n_components}`
+                this.embeddings_html_filepath = `${this.filestem}.html`
+                this.embeddings_png_filepath = `${this.filestem}.png`
+                this.centroids_html_filepath = `${this.filestem}_centroids.html`
+                this.centroids_png_filepath = `${this.filestem}_centroids.png`
+
+                //this.words_filestem = `.word2vec/word_reduction/${this.reducer_name}_${this.n_components}`
+
+                return (
+                    <div class="reduction-results">
+                        <h5>{this.reducer_type} ({this.n_components} Components)</h5>
+
+                        <p>
+                            <a href={this.embeddings_html_filepath}>Embeddings Chart</a> | &nbsp;
+                            <a href={this.centroids_html_filepath}>Centroids Chart</a>
+                        </p>
+
+                        <div class="row row-cols-2">
+                            <a class="card col" style={{width:"26rem", margin:"0px 20px 40px 20px"}} href={this.embeddings_html_filepath}>
+                                <img src={this.embeddings_png_filepath} alt="Embeddings Chart"/>
+                            </a>
+
+                            <a class="card col" style={{width:"26rem", margin:"0px 20px 20px 40px"}} href={this.centroids_html_filepath}>
+                                <img src={this.centroids_png_filepath} alt="Centroids Chart"/>
+                            </a>
+                        </div>
+
+                    </div>
+                )
+            }
+
+        }
+
+        class Page extends React.Component {
+            render() {
+                this.y_col = this.props.y_col || "is_bot"
+                this.y_label = Y_LABELS[this.y_col]
+
+                this.n_components = this.props.n_components || "2"
+
+                return (
+                    <div>
+                        <h4 style={{marginTop:"15px", marginBottom:"15px"}}>{this.y_label}</h4>
+                        <ReductionResults reducer_name="pca"   n_components={this.n_components} y_col={this.y_col}/>
+                        <ReductionResults reducer_name="tsne" n_components={this.n_components} y_col={this.y_col}/>
+                        <ReductionResults reducer_name="umap"  n_components={this.n_components} y_col={this.y_col}/>
+                    </div>
+                )
+            }
+        }
+
+
+
+        class WordReductionResults extends React.Component {
+
+            render() {
+                this.reducer_name = this.props.reducer_name || "pca"
+                this.reducer_type = REDUCERS_MAP[this.reducer_name]
+                this.n_components = this.props.n_components || "2"
+
+                this.filestem = `./word_reduction/${this.reducer_name}_${this.n_components}`
+                this.embeddings_html_filepath = `${this.filestem}.html`
+                this.embeddings_png_filepath = `${this.filestem}.png`
+                //this.centroids_html_filepath = `${this.filestem}_centroids.html`
+                //this.centroids_png_filepath = `${this.filestem}_centroids.png`
+
+                //this.words_filestem = `.word2vec/word_reduction/${this.reducer_name}_${this.n_components}`
+
+                return (
+                    <div class="reduction-results">
+                        <h5>{this.reducer_type} ({this.n_components} Components)</h5>
+
+                        <p>
+                            <a href={this.embeddings_html_filepath}>Word Embeddings Chart</a>
+                        </p>
+
+                        <div class="row row-cols-2">
+                            <a class="card col" style={{width:"26rem", margin:"0px 20px 40px 20px"}} href={this.embeddings_html_filepath}>
+                                <img src={this.embeddings_png_filepath} alt="Word Embeddings Chart"/>
+                            </a>
+                        </div>
+
+                    </div>
+                )
+            }
+
+        }
+
+
+        class WordSection extends React.Component {
+            render() {
+                this.n_components = this.props.n_components || "2"
+                this.model_type = this.props.embedding_model_type || "Word2Vec"
+
+                return (
+                    <div>
+                        <h4 style={{marginTop:"15px", marginBottom:"15px"}}>{this.model_type} Word Embeddings</h4>
+                        <WordReductionResults reducer_name="pca"   n_components={this.n_components} />
+                        <WordReductionResults reducer_name="tsne" n_components={this.n_components} />
+                        <WordReductionResults reducer_name="umap"  n_components={this.n_components} />
+                    </div>
+                )
+            }
+        }
+
+        var dropdown = document.getElementById("select-n-components")
+
+        function selectNComponents(event){
+            //var select = event.target
+            //var value = select.value
+            //console.log("YOU SELECTED", value)
+
+            //var selectedOption = event.target.options[event.target.selectedIndex]
+            var selectedOption = dropdown.options[dropdown.selectedIndex]
+            var n_components = selectedOption.value
+            console.log("YOU SELECTED", n_components)
+
+            ReactDOM.render(<WordSection n_components={n_components}/>, wordEmbeddingsContainer)
+
+            ReactDOM.render(<Page n_components={n_components} y_col="is_bot"/>, isBotTab)
+            ReactDOM.render(<Page n_components={n_components} y_col="is_bot"/>, isBotTab)
+            ReactDOM.render(<Page n_components={n_components} y_col="opinion_community"/>, opinionTab)
+            ReactDOM.render(<Page n_components={n_components} y_col="is_bom_overall"/>, bomOverallTab)
+            ReactDOM.render(<Page n_components={n_components} y_col="is_bom_astroturf"/>, bomAstroTab)
+            ReactDOM.render(<Page n_components={n_components} y_col="is_toxic"/>, toxicTab)
+            ReactDOM.render(<Page n_components={n_components} y_col="is_factual"/>, factualTab)
+            ReactDOM.render(<Page n_components={n_components} y_col="fourway_label"/>, fourwayTab)
+        }
+
+        dropdown.addEventListener("change", selectNComponents, false)
+
+
+        selectNComponents()
+
+    </script>
+</body>
+</html>

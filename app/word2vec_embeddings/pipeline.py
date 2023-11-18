@@ -17,7 +17,7 @@ from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as SKLEARN_STOPWO
 from app import RESULTS_DIRPATH
 from app.classification import Y_COLS
 
-WORD2VEC_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "embeddings", "word2vec")
+WORD2VEC_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "word2vec_embeddings")
 #WORD2VEC_DESTRUCTIVE = bool(os.getenv("WORD2VEC_DESTRUCTIVE", default="false") == 'true')
 
 #VECTOR_LENGTH = 100

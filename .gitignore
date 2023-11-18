@@ -15,9 +15,9 @@ results/*/*.csv.gz
 results/*/*.json
 results/*/*.json
 
-results/embeddings/*/*.model
-results/embeddings/*/*.kv
-results/embeddings/*/*.csv
+results/word2vec_embeddings/*.model
+results/word2vec_embeddings/*.kv
+results/word2vec_embeddings/*.csv
 
 
 #results/*/*/*.png
