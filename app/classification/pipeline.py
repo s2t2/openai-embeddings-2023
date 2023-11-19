@@ -33,7 +33,7 @@ FIG_SAVE = bool(os.getenv("FIG_SAVE", default="true").lower() == "true")
 class ClassificationPipeline(ABC):
     """Supports binary and multiclass classification."""
 
-    def __init__(self, ds=None, x_scale=False, y_col="is_bot", param_grid=None, k_folds=K_FOLDS, results_dirpath=None):
+    def __init__(self, ds=None, x_scale=False, y_col="is_bot", param_grid=None, k_folds=K_FOLDS, results_dirpath=None, will_upload=True):
 
         self.ds = ds or Dataset()
         self.x_scale = x_scale
@@ -69,6 +69,8 @@ class ClassificationPipeline(ABC):
         self.k_folds = k_folds
         self._results_dirpath = results_dirpath
 
+        self.will_upload = bool(will_upload)
+
         # values set after training:
         self.gs = None
         self.results = None
@@ -79,6 +81,7 @@ class ClassificationPipeline(ABC):
         self.model = None
         self.model_dirname = None
         self.param_grid = param_grid or {}
+
 
     @property
     def model_type(self):
@@ -97,12 +100,12 @@ class ClassificationPipeline(ABC):
             self.plot_roc_curve()
 
         # upload to cloud storage :-D
-        self.storage = ModelStorage(local_dirpath=self.results_dirpath)
-        self.storage.save_and_upload_model(self.model)
+        if self.will_upload:
+            self.storage = ModelStorage(local_dirpath=self.results_dirpath)
+            self.storage.save_and_upload_model(self.model)
 
 
     def train_eval(self):
-
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.x, self.y, shuffle=True, test_size=0.2, random_state=99)
         print("X TRAIN:", self.x_train.shape)
         print("Y TRAIN:", self.y_train.shape)

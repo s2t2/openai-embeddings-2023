@@ -21,8 +21,8 @@ from app.classification.pipeline import ClassificationPipeline
 
 class XGBoostPipeline(ClassificationPipeline):
 
-    def __init__(self, ds=None, y_col="is_bot", param_grid=None, results_dirpath=None):
-        super().__init__(ds=ds, y_col=y_col, param_grid=param_grid, results_dirpath=results_dirpath)
+    def __init__(self, ds=None, y_col="is_bot", param_grid=None, results_dirpath=None, will_upload=False):
+        super().__init__(ds=ds, y_col=y_col, param_grid=param_grid, results_dirpath=results_dirpath, will_upload=will_upload)
 
         # UserWarning: The use of label encoder in XGBClassifier is deprecated and will be removed in a future release.
         # To remove this warning, do the following: 1) Pass option use_label_encoder=False when constructing XGBClassifier object; and 2) Encode your labels (y) as integers starting with 0, i.e. 0, 1, 2, ..., [num_class - 1].

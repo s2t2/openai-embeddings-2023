@@ -1,0 +1,108 @@
+{
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Anti-Trump",
+        "Pro-Trump"
+    ],
+    "classification_report": {
+        "Anti-Trump": {
+            "precision": 0.9173151750972762,
+            "recall": 0.9383084577114428,
+            "f1-score": 0.9276930644367929,
+            "support": 1005.0
+        },
+        "Pro-Trump": {
+            "precision": 0.8724279835390947,
+            "recall": 0.8330058939096268,
+            "f1-score": 0.8522613065326634,
+            "support": 509.0
+        },
+        "accuracy": 0.9029062087186261,
+        "macro avg": {
+            "precision": 0.8948715793181854,
+            "recall": 0.8856571758105347,
+            "f1-score": 0.8899771854847282,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.9022243029023526,
+            "recall": 0.9029062087186261,
+            "f1-score": 0.9023332462246384,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            943,
+            62
+        ],
+        [
+            85,
+            424
+        ]
+    ],
+    "roc_auc_score": 0.9726436579382068,
+    "y_col": "opinion_community",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "XGBClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                100,
+                150,
+                250,
+                500
+            ]
+        },
+        "best_params": {
+            "classifier__n_estimators": 500
+        },
+        "best_score": 0.9649610961558717
+    },
+    "model_params": {
+        "objective": "binary:logistic",
+        "use_label_encoder": null,
+        "base_score": null,
+        "booster": null,
+        "callbacks": null,
+        "colsample_bylevel": null,
+        "colsample_bynode": null,
+        "colsample_bytree": null,
+        "early_stopping_rounds": null,
+        "enable_categorical": false,
+        "eval_metric": null,
+        "feature_types": null,
+        "gamma": null,
+        "gpu_id": null,
+        "grow_policy": null,
+        "importance_type": null,
+        "interaction_constraints": null,
+        "learning_rate": null,
+        "max_bin": null,
+        "max_cat_threshold": null,
+        "max_cat_to_onehot": null,
+        "max_delta_step": null,
+        "max_depth": null,
+        "max_leaves": null,
+        "min_child_weight": null,
+        "missing": NaN,
+        "monotone_constraints": null,
+        "n_estimators": 500,
+        "n_jobs": null,
+        "num_parallel_tree": null,
+        "predictor": null,
+        "random_state": 99,
+        "reg_alpha": null,
+        "reg_lambda": null,
+        "sampling_method": null,
+        "scale_pos_weight": null,
+        "subsample": null,
+        "tree_method": null,
+        "validate_parameters": null,
+        "verbosity": null
+    }
+}

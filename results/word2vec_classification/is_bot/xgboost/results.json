@@ -1,0 +1,108 @@
+{
+    "class_names": [
+        "False",
+        "True"
+    ],
+    "class_labels": [
+        "Human",
+        "Bot"
+    ],
+    "classification_report": {
+        "Human": {
+            "precision": 0.9882629107981221,
+            "recall": 0.9334811529933481,
+            "f1-score": 0.9600912200684151,
+            "support": 902.0
+        },
+        "Bot": {
+            "precision": 0.9093655589123867,
+            "recall": 0.9836601307189542,
+            "f1-score": 0.945054945054945,
+            "support": 612.0
+        },
+        "accuracy": 0.9537648612945839,
+        "macro avg": {
+            "precision": 0.9488142348552544,
+            "recall": 0.9585706418561512,
+            "f1-score": 0.95257308256168,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.9563704541573889,
+            "recall": 0.9537648612945839,
+            "f1-score": 0.9540131485306056,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            842,
+            60
+        ],
+        [
+            10,
+            602
+        ]
+    ],
+    "roc_auc_score": 0.9832244612553077,
+    "y_col": "is_bot",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "XGBClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                100,
+                150,
+                250,
+                500
+            ]
+        },
+        "best_params": {
+            "classifier__n_estimators": 500
+        },
+        "best_score": 0.9830814267586538
+    },
+    "model_params": {
+        "objective": "binary:logistic",
+        "use_label_encoder": null,
+        "base_score": null,
+        "booster": null,
+        "callbacks": null,
+        "colsample_bylevel": null,
+        "colsample_bynode": null,
+        "colsample_bytree": null,
+        "early_stopping_rounds": null,
+        "enable_categorical": false,
+        "eval_metric": null,
+        "feature_types": null,
+        "gamma": null,
+        "gpu_id": null,
+        "grow_policy": null,
+        "importance_type": null,
+        "interaction_constraints": null,
+        "learning_rate": null,
+        "max_bin": null,
+        "max_cat_threshold": null,
+        "max_cat_to_onehot": null,
+        "max_delta_step": null,
+        "max_depth": null,
+        "max_leaves": null,
+        "min_child_weight": null,
+        "missing": NaN,
+        "monotone_constraints": null,
+        "n_estimators": 500,
+        "n_jobs": null,
+        "num_parallel_tree": null,
+        "predictor": null,
+        "random_state": 99,
+        "reg_alpha": null,
+        "reg_lambda": null,
+        "sampling_method": null,
+        "scale_pos_weight": null,
+        "subsample": null,
+        "tree_method": null,
+        "validate_parameters": null,
+        "verbosity": null
+    }
+}

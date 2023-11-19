@@ -11,6 +11,8 @@ python -m app.word2vec_embeddings.pipeline
 # FIG_SAVE=true FIG_SHOW=true python -m app.word2vec_embeddings.pipeline
 ```
 
+### Dimensionality Reduction
+
 Perform dimensionality reduction on the resulting word and document embeddings, respectively:
 
 ```sh

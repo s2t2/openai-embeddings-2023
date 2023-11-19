@@ -1,0 +1,140 @@
+{
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot",
+        "Anti-Trump Human",
+        "Pro-Trump Bot",
+        "Pro-Trump Human"
+    ],
+    "classification_report": {
+        "Anti-Trump Bot": {
+            "precision": 0.8997555012224939,
+            "recall": 0.9813333333333333,
+            "f1-score": 0.9387755102040816,
+            "support": 375.0
+        },
+        "Anti-Trump Human": {
+            "precision": 0.8607594936708861,
+            "recall": 0.8634920634920635,
+            "f1-score": 0.8621236133122029,
+            "support": 630.0
+        },
+        "Pro-Trump Bot": {
+            "precision": 0.9126984126984127,
+            "recall": 0.9704641350210971,
+            "f1-score": 0.9406952965235174,
+            "support": 237.0
+        },
+        "Pro-Trump Human": {
+            "precision": 0.7647058823529411,
+            "recall": 0.6213235294117647,
+            "f1-score": 0.6855983772819473,
+            "support": 272.0
+        },
+        "accuracy": 0.8659180977542933,
+        "macro avg": {
+            "precision": 0.8594798224861835,
+            "recall": 0.8591532653145646,
+            "f1-score": 0.8567981993304373,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8612921517705531,
+            "recall": 0.8659180977542933,
+            "f1-score": 0.8616950043659061,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            368,
+            6,
+            1,
+            0
+        ],
+        [
+            39,
+            544,
+            0,
+            47
+        ],
+        [
+            2,
+            0,
+            230,
+            5
+        ],
+        [
+            0,
+            82,
+            21,
+            169
+        ]
+    ],
+    "roc_auc_score": 0.9691052335130362,
+    "y_col": "fourway_label",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "XGBClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                100,
+                150,
+                250,
+                500
+            ]
+        },
+        "best_params": {
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.9629052818002976
+    },
+    "model_params": {
+        "objective": "multi:softprob",
+        "use_label_encoder": null,
+        "base_score": null,
+        "booster": null,
+        "callbacks": null,
+        "colsample_bylevel": null,
+        "colsample_bynode": null,
+        "colsample_bytree": null,
+        "early_stopping_rounds": null,
+        "enable_categorical": false,
+        "eval_metric": null,
+        "feature_types": null,
+        "gamma": null,
+        "gpu_id": null,
+        "grow_policy": null,
+        "importance_type": null,
+        "interaction_constraints": null,
+        "learning_rate": null,
+        "max_bin": null,
+        "max_cat_threshold": null,
+        "max_cat_to_onehot": null,
+        "max_delta_step": null,
+        "max_depth": null,
+        "max_leaves": null,
+        "min_child_weight": null,
+        "missing": NaN,
+        "monotone_constraints": null,
+        "n_estimators": 250,
+        "n_jobs": null,
+        "num_parallel_tree": null,
+        "predictor": null,
+        "random_state": 99,
+        "reg_alpha": null,
+        "reg_lambda": null,
+        "sampling_method": null,
+        "scale_pos_weight": null,
+        "subsample": null,
+        "tree_method": null,
+        "validate_parameters": null,
+        "verbosity": null
+    }
+}

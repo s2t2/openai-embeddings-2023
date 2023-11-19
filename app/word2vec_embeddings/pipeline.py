@@ -168,6 +168,7 @@ if __name__ == "__main__":
 
     ds = Dataset()
     df = ds.df
+    df.index = df["user_id"]
 
     #df["tokens"] = df["tweet_texts"].apply(tokenizer)
     #print(df["tokens"].head())

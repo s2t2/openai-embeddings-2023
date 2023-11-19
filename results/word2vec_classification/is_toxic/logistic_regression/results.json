@@ -1,0 +1,98 @@
+{
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Normal",
+        "Toxic"
+    ],
+    "classification_report": {
+        "Normal": {
+            "precision": 0.8794272795779955,
+            "recall": 0.9518760195758564,
+            "f1-score": 0.9142185663924794,
+            "support": 1226.0
+        },
+        "Toxic": {
+            "precision": 0.6844919786096256,
+            "recall": 0.4444444444444444,
+            "f1-score": 0.5389473684210526,
+            "support": 288.0
+        },
+        "accuracy": 0.8553500660501981,
+        "macro avg": {
+            "precision": 0.7819596290938106,
+            "recall": 0.6981602320101504,
+            "f1-score": 0.7265829674067661,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8423457956421364,
+            "recall": 0.8553500660501981,
+            "f1-score": 0.8428327638721551,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            1167,
+            59
+        ],
+        [
+            160,
+            128
+        ]
+    ],
+    "roc_auc_score": 0.8670388118542687,
+    "y_col": "is_toxic",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__C": [
+                1,
+                2,
+                5,
+                10,
+                25,
+                50,
+                100
+            ],
+            "classifier__max_iter": [
+                10,
+                25,
+                50,
+                100,
+                250,
+                500,
+                1000,
+                5000,
+                10000
+            ]
+        },
+        "best_params": {
+            "classifier__C": 1,
+            "classifier__max_iter": 50
+        },
+        "best_score": 0.853445856451479
+    },
+    "model_params": {
+        "C": 1,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 50,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
+    }
+}

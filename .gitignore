@@ -19,6 +19,8 @@ results/word2vec_embeddings/*.model
 results/word2vec_embeddings/*.kv
 results/word2vec_embeddings/*.csv
 
+results/word2vec_classification/*/*/model.joblib
+results/word2vec_classification/*/*/*.csv
 
 #results/*/*/*.png
 #results/*/*/*.html
