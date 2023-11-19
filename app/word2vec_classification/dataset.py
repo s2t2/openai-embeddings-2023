@@ -48,7 +48,7 @@ class Word2VecDataset():
 
     @cached_property
     def x(self):
-        """Override parent method, use feature cols for the given reduction method and n components."""
+        """Override parent method, use feature cols specified below."""
         return self.df[self.feature_cols].copy()
 
     @property
