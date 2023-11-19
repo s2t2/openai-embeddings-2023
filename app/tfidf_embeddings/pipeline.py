@@ -41,7 +41,7 @@ class TextEmbeddingPipeline:
         self.model_filepath = os.path.join(self.results_dirpath, f"tfidf.model")
         self.results_json_filepath = os.path.join(self.results_dirpath, "results.json")
         self.terms_csv_filepath = os.path.join(self.results_dirpath, "terms.csv")
-        self.document_embeddings_csv_filepath = os.path.join(self.results_dirpath, "document_embeddings.csv")
+        self.document_embeddings_csv_filepath = os.path.join(self.results_dirpath, "documents.csv.gz")
 
         # after training;
         self.model = None
@@ -130,6 +130,7 @@ class TextEmbeddingPipeline:
         self.top_words_df.to_csv(self.terms_csv_filepath, index=True)
         #print("...DOCUMENT EMBeDDINGS...")
         #self.embeddings_df.to_csv(self.document_embeddings_csv_filepath, index=True) # TAKeS TOO LONG? tOO SPArSE? tOO MANY COlS?
+
         #print("... MODEL...")
         #joblib.dump(self.model, self.model_filepath)
 

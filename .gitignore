@@ -19,11 +19,11 @@ results/*/*.json
 results/*_embeddings/*.model
 results/*_embeddings/*.kv
 results/*_embeddings/*.csv
+results/*_embeddings/*.csv.gz
 !results/*_embeddings/*.json
 
 results/word2vec_classification/*/*/model.joblib
 results/word2vec_classification/*/*/*.csv
-
 #results/*/*/*.png
 #results/*/*/*.html
 results/*/*/*.json
@@ -32,6 +32,7 @@ results/classification/*/*/model.joblib
 
 # ignore these files b/c they contains user ids:
 results/classification/*/*/predictions.csv
+results/*classification/*/*/predictions.csv
 
 # keep this:
 !results/reduced_classification/all_results.csv

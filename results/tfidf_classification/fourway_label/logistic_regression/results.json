@@ -1,0 +1,119 @@
+{
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot",
+        "Anti-Trump Human",
+        "Pro-Trump Bot",
+        "Pro-Trump Human"
+    ],
+    "classification_report": {
+        "Anti-Trump Bot": {
+            "precision": 0.9044117647058824,
+            "recall": 0.984,
+            "f1-score": 0.942528735632184,
+            "support": 375.0
+        },
+        "Anti-Trump Human": {
+            "precision": 0.8313782991202346,
+            "recall": 0.9,
+            "f1-score": 0.864329268292683,
+            "support": 630.0
+        },
+        "Pro-Trump Bot": {
+            "precision": 0.936,
+            "recall": 0.9873417721518988,
+            "f1-score": 0.9609856262833677,
+            "support": 237.0
+        },
+        "Pro-Trump Human": {
+            "precision": 0.8390804597701149,
+            "recall": 0.5367647058823529,
+            "f1-score": 0.6547085201793722,
+            "support": 272.0
+        },
+        "accuracy": 0.869220607661823,
+        "macro avg": {
+            "precision": 0.877717630899058,
+            "recall": 0.8520266195085628,
+            "f1-score": 0.8556380375969017,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8672289466763045,
+            "recall": 0.869220607661823,
+            "f1-score": 0.8611691055511272,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            369,
+            6,
+            0,
+            0
+        ],
+        [
+            36,
+            567,
+            0,
+            27
+        ],
+        [
+            2,
+            0,
+            234,
+            1
+        ],
+        [
+            1,
+            109,
+            16,
+            146
+        ]
+    ],
+    "roc_auc_score": 0.9718254943499608,
+    "y_col": "fourway_label",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__C": [
+                1,
+                10
+            ],
+            "classifier__max_iter": [
+                50,
+                100,
+                500
+            ]
+        },
+        "best_params": {
+            "classifier__C": 10,
+            "classifier__max_iter": 50
+        },
+        "best_score": 0.9712099973926765
+    },
+    "model_params": {
+        "C": 10,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 50,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
+    }
+}

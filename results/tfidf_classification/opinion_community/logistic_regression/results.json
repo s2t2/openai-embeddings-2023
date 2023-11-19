@@ -1,0 +1,87 @@
+{
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Anti-Trump",
+        "Pro-Trump"
+    ],
+    "classification_report": {
+        "Anti-Trump": {
+            "precision": 0.8997240110395585,
+            "recall": 0.9731343283582089,
+            "f1-score": 0.9349904397705545,
+            "support": 1005.0
+        },
+        "Pro-Trump": {
+            "precision": 0.936768149882904,
+            "recall": 0.7858546168958742,
+            "f1-score": 0.8547008547008547,
+            "support": 509.0
+        },
+        "accuracy": 0.9101717305151915,
+        "macro avg": {
+            "precision": 0.9182460804612312,
+            "recall": 0.8794944726270415,
+            "f1-score": 0.8948456472357046,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.9121780841381468,
+            "recall": 0.9101717305151915,
+            "f1-score": 0.9079974418838457,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            978,
+            27
+        ],
+        [
+            109,
+            400
+        ]
+    ],
+    "roc_auc_score": 0.9749934023399701,
+    "y_col": "opinion_community",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__C": [
+                1,
+                10
+            ],
+            "classifier__max_iter": [
+                50,
+                100,
+                500
+            ]
+        },
+        "best_params": {
+            "classifier__C": 10,
+            "classifier__max_iter": 500
+        },
+        "best_score": 0.9731799672939039
+    },
+    "model_params": {
+        "C": 10,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 500,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
+    }
+}
