@@ -53,7 +53,7 @@ BUCKET_NAME="my-bucket"
 
 ## Usage
 
-### OpenAI Embeddings
+### OpenAI Service
 
 Fetch some example embeddings from OpenAI API:
 
@@ -74,10 +74,17 @@ python -m app.dataset
 
 Perform machine learning and other analyses on the data:
 
+OpenAI Embeddings:
+
   + [Dimensionality Reduction](app/reduction/README.md)
   + [Clustering](app/clustering/README.md)
   + [Classification](app/classification/README.md)
   + [Reduced Classification](app/reduced_classification/README.md)
+
+Word2Vec Embeddings:
+
+  + [Dimensionality Reduction](app/word2vec_embeddings/README.md)
+  + [Classification](app/word2vec_classification/README.md)
 
 
 ## Testing
