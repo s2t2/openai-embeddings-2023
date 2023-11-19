@@ -11,7 +11,7 @@ import re
 
 import numpy as np
 from pandas import DataFrame, Series
-from gensim.utils import simple_preprocess as tokenizer
+from gensim.utils import simple_preprocess as tokenizer # lowercases, tokenizes
 from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS as SKLEARN_STOPWORDS
 
 
@@ -115,17 +115,23 @@ class TextEmbeddingPipeline:
         params = self.model.get_params()
         params["dtype"] = str(params["dtype"]) # serializable class name
         params["ngram_range"] = list(params["ngram_range"]) # serializable tuple
-        params["tokenizer"] = str(params["tokenizer"]) # serializable class name
+        params["tokenizer"] = str(params["tokenizer"].__name__) # serializable function name
+        params["stop_words"] = sorted(params["stop_words"])
         self.results = {
             "model": str(self.model.__class__.__name__),
-            "params": params
+            "params": params,
+            "vocab": len(self.feature_names),
+            "embeddings": self.embeddings_df.shape
         }
+        #print("...RESUltS...")
         save_results_json(self.results, self.results_json_filepath)
 
+        #print("...wORD FREQUENCIES...")
         self.top_words_df.to_csv(self.terms_csv_filepath, index=True)
-        self.embeddings_df.to_csv(self.document_embeddings_csv_filepath, index=True)
-
-        joblib.dump(self.model, self.model_filepath)
+        #print("...DOCUMENT EMBeDDINGS...")
+        #self.embeddings_df.to_csv(self.document_embeddings_csv_filepath, index=True) # TAKeS TOO LONG? tOO SPArSE? tOO MANY COlS?
+        #print("... MODEL...")
+        #joblib.dump(self.model, self.model_filepath)
 
 
 
