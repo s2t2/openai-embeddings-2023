@@ -15,9 +15,10 @@ results/*/*.csv.gz
 results/*/*.json
 results/*/*.json
 
-results/word2vec_embeddings/*.model
-results/word2vec_embeddings/*.kv
-results/word2vec_embeddings/*.csv
+# embedding models:
+results/*_embeddings/*.model
+results/*_embeddings/*.kv
+results/*_embeddings/*.csv
 
 results/word2vec_classification/*/*/model.joblib
 results/word2vec_classification/*/*/*.csv

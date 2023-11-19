@@ -14,10 +14,11 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import roc_curve, auc
 
+from app import save_results_json
 from app.colors import ORANGES
 from app.dataset import Dataset
 from app.model_storage import ModelStorage
-from app.classification import CLASSIFICATION_RESULTS_DIRPATH, save_results_json, class_labels
+from app.classification import CLASSIFICATION_RESULTS_DIRPATH, class_labels
 from app.classification.results import ClassificationResults
 
 
