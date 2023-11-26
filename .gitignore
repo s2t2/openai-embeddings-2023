@@ -19,6 +19,7 @@ results/*/*.json
 results/*_embeddings/*.model
 results/*_embeddings/*.kv
 results/*_embeddings/*.csv
+results/*_embeddings/*.hd5
 results/*_embeddings/*.csv.gz
 !results/*_embeddings/*.json
 

@@ -27,21 +27,23 @@ TFIDF_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "tfidf_embeddings")
 
 
 class TextEmbeddingPipeline:
-    def __init__(self, corpus, tokenizer=tokenizer, stopwords=list(SKLEARN_STOPWORDS), results_dirpath=TFIDF_RESULTS_DIRPATH): # destructive=WORD2VEC_DESTRUCTIVE
+    def __init__(self, corpus, tokenizer=tokenizer, stopwords=list(SKLEARN_STOPWORDS), results_dirpath=TFIDF_RESULTS_DIRPATH): # save_results=True, # destructive=WORD2VEC_DESTRUCTIVE
         """Param corpus a pandas series of texts (text for each document)"""
 
         self.corpus = corpus
         self.tokenizer = tokenizer
         self.stopwords = stopwords
+        #self.save_results = bool(save_results)
+        #self.destructive = bool(destructive)
 
         self.corpus = self.corpus.apply(convert_non_ascii) # 72_854
 
-        #self.destructive = bool(destructive)
         self.results_dirpath = results_dirpath
         self.model_filepath = os.path.join(self.results_dirpath, f"tfidf.model")
         self.results_json_filepath = os.path.join(self.results_dirpath, "results.json")
         self.terms_csv_filepath = os.path.join(self.results_dirpath, "terms.csv")
         self.document_embeddings_csv_filepath = os.path.join(self.results_dirpath, "documents.csv.gz")
+        self.document_embeddings_hd5_filepath = os.path.join(self.results_dirpath, "documents.hd5")
 
         # after training;
         self.model = None
@@ -97,7 +99,7 @@ class TextEmbeddingPipeline:
         print("TRAINinG...")
 
         self.embeddings = self.model.fit_transform(self.corpus)
-        print("DOCUMENT EMBEDdINGS:", self.embeddings.shape)
+        print("DOCUMENT EMBEDdINGS:", self.embeddings.shape) #> (7_566, 72_854)
 
         # mapping of terms to feature indices:
         self.vocab = self.model.vocabulary_ #> {"rt": 53304, "foxnewpolls": 21286, "poll": 46945, "donald": 15855}
@@ -123,6 +125,7 @@ class TextEmbeddingPipeline:
             "vocab": len(self.feature_names),
             "embeddings": self.embeddings_df.shape
         }
+
         #print("...RESUltS...")
         save_results_json(self.results, self.results_json_filepath)
 
@@ -130,6 +133,7 @@ class TextEmbeddingPipeline:
         self.top_words_df.to_csv(self.terms_csv_filepath, index=True)
         #print("...DOCUMENT EMBeDDINGS...")
         #self.embeddings_df.to_csv(self.document_embeddings_csv_filepath, index=True) # TAKeS TOO LONG? tOO SPArSE? tOO MANY COlS?
+        self.embeddings_df.to_hdf(self.document_embeddings_hd5_filepath, index=True, key="document_embeddings")
 
         #print("... MODEL...")
         #joblib.dump(self.model, self.model_filepath)
