@@ -22,6 +22,7 @@ results/*_embeddings/*.csv
 results/*_embeddings/*.hd5
 results/*_embeddings/*.csv.gz
 !results/*_embeddings/*.json
+results/*_embeddings/*/*.csv
 
 results/word2vec_classification/*/*/model.joblib
 results/word2vec_classification/*/*/*.csv
