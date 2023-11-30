@@ -20,3 +20,11 @@ Perform dimensionality reduction on the resulting word and document embeddings, 
 ```sh
 FIG_SAVE=true FIG_SHOW=false python -m app.tfidf_embeddings.reduction
 ```
+
+### Classification Job
+
+```sh
+FIG_SAVE=true FIG_SHOW=false python -m app.tfidf_embeddings.classification
+```
+
+This is taking a while. There are so many columns. We should consider using less features. Perhaps 1500 max to be in line with OpenAI text embeddings.

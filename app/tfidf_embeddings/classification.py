@@ -50,28 +50,28 @@ if __name__ == "__main__":
     will_upload = False
     for y_col in Y_COLS:
         results_dirpath = os.path.join(CLASSIFICATION_RESULTS_DIRPATH, y_col, "logistic_regression")
-        pipeline = LogisticRegressionPipeline(ds=text_ds, y_col=y_col, results_dirpath=results_dirpath, will_upload=will_upload, param_grid={
+        #pipeline = LogisticRegressionPipeline(ds=text_ds, y_col=y_col, results_dirpath=results_dirpath, will_upload=will_upload, param_grid={
+        #
+        #    # C (float), default=1.0
+        #    # Inverse of regularization strength; must be a positive float. Like in support vector machines, smaller values specify stronger regularization.
+        #    "classifier__C": [
+        #        1, #2, 5,
+        #        10, #25, 50,
+        #        #100
+        #    ],
+        #
+        #    # default max_iter is 100
+        #    "classifier__max_iter": [#10, 25,
+        #                             50,
+        #                             100,
+        #                             #250,
+        #                             500,
+        #                             #1_000, #5_000, 10_000
+        #                             ],
+        #})
+        #pipeline.perform()
 
-            # C (float), default=1.0
-            # Inverse of regularization strength; must be a positive float. Like in support vector machines, smaller values specify stronger regularization.
-            "classifier__C": [
-                1, #2, 5,
-                10, #25, 50,
-                #100
-            ],
-
-            # default max_iter is 100
-            "classifier__max_iter": [#10, 25,
-                                     50,
-                                     100,
-                                     #250,
-                                     500,
-                                     #1_000, #5_000, 10_000
-                                     ],
-        })
-        pipeline.perform()
-
-        continue
+        #continue
 
         results_dirpath = os.path.join(CLASSIFICATION_RESULTS_DIRPATH, y_col, "xgboost")
         pipeline = XGBoostPipeline(ds=text_ds, y_col=y_col, results_dirpath=results_dirpath, will_upload=will_upload, param_grid={
