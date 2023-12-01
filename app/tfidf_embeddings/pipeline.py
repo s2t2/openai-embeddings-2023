@@ -19,7 +19,9 @@ from app import RESULTS_DIRPATH, save_results_json
 from app.nlp import convert_non_ascii
 from app.classification import Y_COLS
 
-TFIDF_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "tfidf_embeddings")
+TFIDF_MAX_FEATURES = os.getenv("TFIDF_MAX_FEATURES") # default of None
+TFIDF_RESULTS_DIRPATH_SUFFIX = f"_{TFIDF_MAX_FEATURES}" if TFIDF_MAX_FEATURES else ""
+TFIDF_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, f"tfidf_embeddings{TFIDF_RESULTS_DIRPATH_SUFFIX}")
 
 
 #def remove_non_ascii(my_text):
@@ -27,18 +29,23 @@ TFIDF_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "tfidf_embeddings")
 
 
 class TextEmbeddingPipeline:
-    def __init__(self, corpus, tokenizer=tokenizer, stopwords=list(SKLEARN_STOPWORDS), results_dirpath=TFIDF_RESULTS_DIRPATH): # save_results=True, # destructive=WORD2VEC_DESTRUCTIVE
+    def __init__(self, corpus, tokenizer=tokenizer, stopwords=list(SKLEARN_STOPWORDS), results_dirpath=TFIDF_RESULTS_DIRPATH, max_features=TFIDF_MAX_FEATURES): # save_results=True, # destructive=WORD2VEC_DESTRUCTIVE
         """Param corpus a pandas series of texts (text for each document)"""
 
         self.corpus = corpus
         self.tokenizer = tokenizer
         self.stopwords = stopwords
+        self.max_features = max_features
+        if self.max_features:
+            self.max_features = int(self.max_features)
+
         #self.save_results = bool(save_results)
         #self.destructive = bool(destructive)
 
         self.corpus = self.corpus.apply(convert_non_ascii) # 72_854
 
         self.results_dirpath = results_dirpath
+        os.makedirs(self.results_dirpath, exist_ok=True)
         self.model_filepath = os.path.join(self.results_dirpath, f"tfidf.model")
         self.results_json_filepath = os.path.join(self.results_dirpath, "results.json")
         self.terms_csv_filepath = os.path.join(self.results_dirpath, "terms.csv")
@@ -92,7 +99,7 @@ class TextEmbeddingPipeline:
         print("----------------")
         print("INITIALIZING NEW MODEL...")
 
-        self.model = TfidfVectorizer(tokenizer=self.tokenizer, stop_words=self.stopwords)
+        self.model = TfidfVectorizer(tokenizer=self.tokenizer, stop_words=self.stopwords, max_features=self.max_features)
         print(self.model)
 
         print("----------------")
@@ -133,7 +140,14 @@ class TextEmbeddingPipeline:
         self.top_words_df.to_csv(self.terms_csv_filepath, index=True)
         #print("...DOCUMENT EMBeDDINGS...")
         #self.embeddings_df.to_csv(self.document_embeddings_csv_filepath, index=True) # TAKeS TOO LONG? tOO SPArSE? tOO MANY COlS?
-        self.embeddings_df.to_hdf(self.document_embeddings_hd5_filepath, index=True, key="document_embeddings")
+        #self.embeddings_df.to_hdf(self.document_embeddings_hd5_filepath, index=True, key="document_embeddings")
+        if self.max_features < 5_000:
+            # let's save a smaller version of the file
+            self.embeddings_df.to_csv(self.document_embeddings_csv_filepath, index=True)
+        else:
+            # let's save the large file? but actually its like 5GB so nevermind
+            #self.embeddings_df.to_hdf(self.document_embeddings_hd5_filepath, index=True, key="document_embeddings")
+            pass
 
         #print("... MODEL...")
         #joblib.dump(self.model, self.model_filepath)
