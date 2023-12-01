@@ -1,0 +1,86 @@
+{
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Anti-Trump",
+        "Pro-Trump"
+    ],
+    "classification_report": {
+        "Anti-Trump": {
+            "precision": 0.8891941391941391,
+            "recall": 0.9661691542288557,
+            "f1-score": 0.9260848831664282,
+            "support": 1005.0
+        },
+        "Pro-Trump": {
+            "precision": 0.919431279620853,
+            "recall": 0.762278978388998,
+            "f1-score": 0.8335123523093447,
+            "support": 509.0
+        },
+        "accuracy": 0.8976221928665786,
+        "macro avg": {
+            "precision": 0.9043127094074961,
+            "recall": 0.8642240663089269,
+            "f1-score": 0.8797986177378865,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8993597299981003,
+            "recall": 0.8976221928665786,
+            "f1-score": 0.8949624140737892,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            971,
+            34
+        ],
+        [
+            121,
+            388
+        ]
+    ],
+    "roc_auc_score": 0.9634440762787243,
+    "y_col": "opinion_community",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ]
+        },
+        "best_params": {
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.9593833132711935
+    },
+    "model_params": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_depth": null,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "n_estimators": 250,
+        "n_jobs": null,
+        "oob_score": false,
+        "random_state": 99,
+        "verbose": 0,
+        "warm_start": false
+    }
+}

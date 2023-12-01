@@ -41,5 +41,9 @@ TFIDF_MAX_FEATURES=1500 python -m app.tfidf_embeddings.pipeline
 ```
 
 ```sh
+TFIDF_MAX_FEATURES=1500 FIG_SAVE=true FIG_SHOW=false python -m app.tfidf_embeddings.reduction
+```
+
+```sh
 TFIDF_MAX_FEATURES=1500 FIG_SAVE=true FIG_SHOW=false python -m app.tfidf_embeddings.classification
 ```

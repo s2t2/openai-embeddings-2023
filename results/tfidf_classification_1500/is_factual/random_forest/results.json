@@ -1,0 +1,86 @@
+{
+    "class_names": [
+        "0.0",
+        "1.0"
+    ],
+    "class_labels": [
+        "Low Quality",
+        "High Quality"
+    ],
+    "classification_report": {
+        "Low Quality": {
+            "precision": 0.9625468164794008,
+            "recall": 0.7198879551820728,
+            "f1-score": 0.8237179487179487,
+            "support": 357.0
+        },
+        "High Quality": {
+            "precision": 0.7448979591836735,
+            "recall": 0.9668874172185431,
+            "f1-score": 0.8414985590778098,
+            "support": 302.0
+        },
+        "accuracy": 0.8330804248861912,
+        "macro avg": {
+            "precision": 0.8537223878315372,
+            "recall": 0.843387686200308,
+            "f1-score": 0.8326082538978792,
+            "support": 659.0
+        },
+        "weighted avg": {
+            "precision": 0.8628048515274893,
+            "recall": 0.8330804248861912,
+            "f1-score": 0.8318662709162462,
+            "support": 659.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            257,
+            100
+        ],
+        [
+            10,
+            292
+        ]
+    ],
+    "roc_auc_score": 0.8833732168364035,
+    "y_col": "is_factual",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "RandomForestClassifier",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__n_estimators": [
+                50,
+                100,
+                150,
+                250
+            ]
+        },
+        "best_params": {
+            "classifier__n_estimators": 250
+        },
+        "best_score": 0.8831525866465162
+    },
+    "model_params": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_depth": null,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "n_estimators": 250,
+        "n_jobs": null,
+        "oob_score": false,
+        "random_state": 99,
+        "verbose": 0,
+        "warm_start": false
+    }
+}
