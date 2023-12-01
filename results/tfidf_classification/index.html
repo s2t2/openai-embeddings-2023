@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+
+    <!-- BOOTSTRAP CSS: https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- BOOTSTRAP ICONS: https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- REACT.JS
+        https://dev.to/luispa/lets-try-react-without-nodejs-3a7
+        todo: upgrade to react@17
+    -->
+    <script type="application/javascript" src="https://unpkg.com/react@16.0.0/umd/react.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1><a href="../../index.html">TF-IDF Embeddings 2023</a></h1>
+
+        <h3>Classification Results</h3>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-top: 30px; margin-bottom: 15px;">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="is-bot-tab" data-bs-toggle="tab" data-bs-target="#is-bot" type="button" role="tab" aria-controls="is-bot" aria-selected="true">
+                    Bot Status
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="opinion-tab" data-bs-toggle="tab" data-bs-target="#opinion-community" type="button" role="tab" aria-controls="opinion-community" aria-selected="false">
+                    Opinion Community
+                </button>
+            </li>
+
+             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="bom-overall-tab" data-bs-toggle="tab" data-bs-target="#bom-overall" type="button" role="tab" aria-controls="bom-overall" aria-selected="false">
+                    Botometer Overall
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="bom-astroturf-tab" data-bs-toggle="tab" data-bs-target="#bom-astroturf" type="button" role="tab" aria-controls="bom-astroturf" aria-selected="false">
+                    Botometer Astroturf
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="is-toxic-tab" data-bs-toggle="tab" data-bs-target="#is-toxic" type="button" role="tab" aria-controls="is-toxic" aria-selected="false">
+                    Language Toxicity
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="is-factual-tab" data-bs-toggle="tab" data-bs-target="#is-factual" type="button" role="tab" aria-controls="is-factual" aria-selected="false">
+                    News Quality
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="fourway-label-tab" data-bs-toggle="tab" data-bs-target="#fourway-label" type="button" role="tab" aria-controls="fourway-label" aria-selected="false">
+                    Fourway (Bot x Opinion)
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="is-bot" role="tabpanel" aria-labelledby="is-bot-tab">
+                <h4>Bot Status</h4>
+            </div>
+
+            <div class="tab-pane fade show" id="opinion-community" role="tabpanel" aria-labelledby="opinion-tab">
+                <h4>Opinion Community</h4>
+            </div>
+
+            <div class="tab-pane fade show" id="bom-overall" role="tabpanel" aria-labelledby="bom-overall-tab">
+                <h4>Botometer Overall</h4>
+            </div>
+
+            <div class="tab-pane fade show" id="bom-astroturf" role="tabpanel" aria-labelledby="bom-astroturf-tab">
+                <h4>Botometer Astroturf</h4>
+            </div>
+
+            <div class="tab-pane fade show" id="is-toxic" role="tabpanel" aria-labelledby="is-toxic-tab">
+                <h4>Language Toxicity</h4>
+            </div>
+
+            <div class="tab-pane fade show" id="is-factual" role="tabpanel" aria-labelledby="is-factual-tab">
+                <h4>News Quality</h4>
+            </div>
+
+            <div class="tab-pane fade show" id="fourway-label" role="tabpanel" aria-labelledby="fourway-label-tab">
+                <h4>Fourway (Bot x Opinion)</h4>
+            </div>
+        </div>
+
+
+        <hr>
+        <div id="root"></div>
+        <hr>
+
+        <footer>
+            <a href="https://github.com/s2t2/openai-embeddings-2023">source code</a>
+        </footer>
+    </div>
+
+    <!-- BOOTSTRAP JS https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script type="text/babel">
+
+        const rootElement = document.getElementById('root')
+        const isBotTab = document.getElementById("is-bot")
+        const opinionTab = document.getElementById("opinion-community")
+        const bomOverallTab = document.getElementById("bom-overall")
+        const bomAstroTab = document.getElementById("bom-astroturf")
+        const toxicTab = document.getElementById("is-toxic")
+        const factualTab = document.getElementById("is-factual")
+        const fourwayTab = document.getElementById("fourway-label")
+
+        const Y_LABELS = {
+            // binary:
+            "is_bot": "Bot Status",
+            "opinion_community": "Opinion Community",
+            "is_bom_overall": "Botometer Overall Score",
+            "is_bom_astroturf": "Botometer Astroturf Score",
+            "is_toxic": "Language Toxicity",
+            "is_factual": "News Quality",
+            // multiclass:
+            "fourway_label": "Fourway (Bot x Opinion)"
+        }
+
+        const MODELS_MAP = {
+            "Logistic Regression": "logistic_regression",
+            "Random Forest": "random_forest",
+            "XGBoost": "xgboost",
+        }
+
+        class ClassificationResults extends React.Component {
+
+            // CORS ISSUE WITH LOCAL FILES
+            //loadJSONData(jsonFilepath) {
+            //    fetch(jsonFilepath)
+            //        .then(data => {
+            //            //this.setState({ results: data.default }); // Update state with loaded JSON data
+            //            console.log(data)
+            //            return data.default
+            //        })
+            //        .catch(error => {
+            //            console.error('Error loading JSON data:', error);
+            //            return null
+            //        });
+            //}
+
+            render() {
+                this.y_col = this.props.y_col || "is_bot"
+                this.model_dirname = MODELS_MAP[this.props.model_name]
+                this.confusion_matrix_filepath = `./${this.y_col}/${this.model_dirname}/confusion.png`
+                this.confusion_matrix_html_filepath = `./${this.y_col}/${this.model_dirname}/confusion.html`
+                this.roc_curve_filepath = `./${this.y_col}/${this.model_dirname}/roc_curve.png`
+                this.roc_curve_html_filepath = `./${this.y_col}/${this.model_dirname}/roc_curve.html`
+
+                this.results_filepath = `./${this.y_col}/${this.model_dirname}/results.json`
+                //this.results = this.loadJSONData(this.results_filepath)
+                //this.results = this.state.results
+                this.coefs_filepath = `./${this.y_col}/${this.model_dirname}/explainability.json`
+
+                return (
+                    <div class="classification-results">
+                        <h5>{this.props.model_name}</h5>
+
+                        <a href={this.results_filepath}>Results JSON</a>&nbsp;|&nbsp;
+                        <a href={this.coefs_filepath}>Explainability JSON</a>
+
+                        <div class="row row-cols-2">
+                            <a class="card col" style={{width:"26rem", margin:"20px"}} href={this.roc_curve_html_filepath}>
+                                <img src={this.roc_curve_filepath} alt="ROC Curve"/>
+                            </a>
+
+                            <a class="card col" style={{width:"26rem", margin:"20px",
+                                    overflow:"hidden", height: "26rem",
+                                }} href={this.confusion_matrix_html_filepath}>
+                                <img src={this.confusion_matrix_filepath} style={{
+                                    //maxHeight:"480px", height: "150%", width: "auto", overflow:"hidden"
+                                    //height: "100%", width: "100%",
+                                    height: "24rem", width: "36rem",
+                                    position: "relative",  top: "5%", right: "20%"  //transform: "translateY(-20%)"
+
+                                }} alt="Confusion Matrix"/>
+                            </a>
+                        </div>
+                    </div>
+                )
+            }
+
+
+
+
+
+
+
+
+
+        }
+
+        class Page extends React.Component {
+            render() {
+                this.y_col = this.props.y_col || "is_bot"
+                this.y_label = Y_LABELS[this.y_col]
+
+                return (
+                    <div>
+                        <h4 style={{marginTop:"15px", marginBottom:"15px"}}>{this.y_label}</h4>
+                        <ClassificationResults y_col={this.y_col} model_name="Logistic Regression"/>
+                        {/*  TRAINING IS TAKING A WHILE
+                        <ClassificationResults y_col={this.y_col} model_name="Random Forest"/>
+                        <ClassificationResults y_col={this.y_col} model_name="XGBoost"/>
+                        */}
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<Page y_col="is_bot"/>, isBotTab)
+        ReactDOM.render(<Page y_col="opinion_community"/>, opinionTab)
+        ReactDOM.render(<Page y_col="is_bom_overall"/>, bomOverallTab)
+        ReactDOM.render(<Page y_col="is_bom_astroturf"/>, bomAstroTab)
+        ReactDOM.render(<Page y_col="is_toxic"/>, toxicTab)
+        ReactDOM.render(<Page y_col="is_factual"/>, factualTab)
+        ReactDOM.render(<Page y_col="fourway_label"/>, fourwayTab)
+    </script>
+</body>
+</html>

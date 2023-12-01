@@ -1,0 +1,87 @@
+{
+    "class_names": [
+        "0.0",
+        "1.0"
+    ],
+    "class_labels": [
+        "Human",
+        "Bot"
+    ],
+    "classification_report": {
+        "Human": {
+            "precision": 0.7751060820367751,
+            "recall": 0.9622475856014048,
+            "f1-score": 0.8585977281629454,
+            "support": 1139.0
+        },
+        "Bot": {
+            "precision": 0.57,
+            "recall": 0.152,
+            "f1-score": 0.24,
+            "support": 375.0
+        },
+        "accuracy": 0.7615587846763541,
+        "macro avg": {
+            "precision": 0.6725530410183875,
+            "recall": 0.5571237928007023,
+            "f1-score": 0.5492988640814727,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.724303716935196,
+            "recall": 0.7615587846763541,
+            "f1-score": 0.7053783437104324,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            1096,
+            43
+        ],
+        [
+            318,
+            57
+        ]
+    ],
+    "roc_auc_score": 0.7584793678665497,
+    "y_col": "is_bom_overall",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__C": [
+                1,
+                10
+            ],
+            "classifier__max_iter": [
+                50,
+                100,
+                500
+            ]
+        },
+        "best_params": {
+            "classifier__C": 1,
+            "classifier__max_iter": 100
+        },
+        "best_score": 0.7362692124540009
+    },
+    "model_params": {
+        "C": 1,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 100,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
+    }
+}

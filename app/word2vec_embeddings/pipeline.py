@@ -25,7 +25,7 @@ WORD2VEC_RESULTS_DIRPATH = os.path.join(RESULTS_DIRPATH, "word2vec_embeddings")
 
 class WordPipe:
     def __init__(self, corpus, tokenizer=tokenizer, results_dirpath=WORD2VEC_RESULTS_DIRPATH, stopwords=SKLEARN_STOPWORDS): # destructive=WORD2VEC_DESTRUCTIVE
-        """Param corpus a pandas series of arrays (tokens for each document)"""
+        """Param corpus a pandas series of texts (text for each document)"""
 
         self.corpus = corpus
         self.tokenizer = tokenizer

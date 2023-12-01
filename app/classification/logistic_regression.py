@@ -4,7 +4,6 @@ import os
 from sklearn.linear_model import LogisticRegression
 from pandas import Series
 
-from app.classification import save_results_json
 from app.classification.pipeline import ClassificationPipeline
 
 

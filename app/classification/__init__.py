@@ -1,6 +1,5 @@
 
 import os
-import json
 
 from app import RESULTS_DIRPATH
 
@@ -41,8 +40,3 @@ def class_labels(y_col, class_names):
         classes_map = CLASSES_MAP[y_col]
         class_names = [classes_map[val] for val in class_names]
     return class_names
-
-
-def save_results_json(results, json_filepath):
-    with open(json_filepath, "w") as json_file:
-        json.dump(results, json_file, indent=4)

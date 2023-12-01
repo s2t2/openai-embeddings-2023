@@ -3,6 +3,7 @@ python-dotenv
 
 # data processing:
 pandas
+tables # pytables package required when saving data to hd5 format
 numpy
 
 # dataviz:
