@@ -39,3 +39,7 @@ Let's try setting max features limit to help models train faster and data to sav
 ```sh
 TFIDF_MAX_FEATURES=1500 python -m app.tfidf_embeddings.pipeline
 ```
+
+```sh
+TFIDF_MAX_FEATURES=1500 FIG_SAVE=true FIG_SHOW=false python -m app.tfidf_embeddings.classification
+```
