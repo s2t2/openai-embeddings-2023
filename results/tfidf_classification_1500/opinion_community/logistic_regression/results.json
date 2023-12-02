@@ -1,0 +1,91 @@
+{
+    "class_names": [
+        "0",
+        "1"
+    ],
+    "class_labels": [
+        "Anti-Trump",
+        "Pro-Trump"
+    ],
+    "classification_report": {
+        "Anti-Trump": {
+            "precision": 0.8911627906976745,
+            "recall": 0.9532338308457712,
+            "f1-score": 0.9211538461538461,
+            "support": 1005.0
+        },
+        "Pro-Trump": {
+            "precision": 0.8929384965831435,
+            "recall": 0.7701375245579568,
+            "f1-score": 0.8270042194092828,
+            "support": 509.0
+        },
+        "accuracy": 0.8916776750330251,
+        "macro avg": {
+            "precision": 0.892050643640409,
+            "recall": 0.861685677701864,
+            "f1-score": 0.8740790327815644,
+            "support": 1514.0
+        },
+        "weighted avg": {
+            "precision": 0.8917597750409398,
+            "recall": 0.8916776750330251,
+            "f1-score": 0.8895011645072262,
+            "support": 1514.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            958,
+            47
+        ],
+        [
+            117,
+            392
+        ]
+    ],
+    "roc_auc_score": 0.9622809332512291,
+    "y_col": "opinion_community",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__C": [
+                1,
+                2,
+                5,
+                10,
+                100
+            ],
+            "classifier__max_iter": [
+                50,
+                100,
+                500,
+                1000
+            ]
+        },
+        "best_params": {
+            "classifier__C": 2,
+            "classifier__max_iter": 100
+        },
+        "best_score": 0.962779193576603
+    },
+    "model_params": {
+        "C": 2,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": null,
+        "max_iter": 100,
+        "multi_class": "auto",
+        "n_jobs": null,
+        "penalty": "l2",
+        "random_state": 99,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
+    }
+}
