@@ -17,9 +17,14 @@ pip install -r requirements.txt
 
 
 ### Application
+BigQuery Service:
+```sh
+python -m app.BigQuery_service
+```
+
 fetch embeddings with OpenAI API
 ```sh
-python -m election_2020.get_embeddings
+python -m election_2020.embeddings
 ```
 
 make and save prediction with models from Cloud, for now use Logistic regression

@@ -1,3 +1,4 @@
+
 import os
 import pandas as pd
 import json
@@ -9,8 +10,8 @@ from election_2020 import DATA_DIRPATH, ELECT_FIRPATH
 
 
 print("-----------------")
-filename = 'user_sample_testing200.csv' ##for testing code
-#filename = 'openai_user_sample_max_50_size_10000.csv'
+#filename = 'user_sample_testing200.csv' ##for testing code
+filename = 'openai_user_sample_max_50_size_10000.csv'
 filepath = os.path.join(ELECT_FIRPATH, filename)
 #print(filepath)
 if os.path.exists(filepath):
