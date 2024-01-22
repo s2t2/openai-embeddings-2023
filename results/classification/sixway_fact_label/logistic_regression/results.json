@@ -1,0 +1,185 @@
+{
+    "class_names": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+    ],
+    "class_labels": [
+        "Anti-Trump Bot High-Quality",
+        "Anti-Trump Bot Low-Quality",
+        "Anti-Trump Human High-Quality",
+        "Anti-Trump Human Low-Quality",
+        "Pro-Trump Bot High-Quality",
+        "Pro-Trump Bot Low-Quality",
+        "Pro-Trump Human High-Quality",
+        "Pro-Trump Human Low-Quality"
+    ],
+    "classification_report": {
+        "Anti-Trump Bot High-Quality": {
+            "precision": 0.6683804627249358,
+            "recall": 0.9961685823754789,
+            "f1-score": 0.8,
+            "support": 261.0
+        },
+        "Anti-Trump Bot Low-Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 96.0
+        },
+        "Anti-Trump Human High-Quality": {
+            "precision": 0.8333333333333334,
+            "recall": 0.1724137931034483,
+            "f1-score": 0.28571428571428575,
+            "support": 29.0
+        },
+        "Anti-Trump Human Low-Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 9.0
+        },
+        "Pro-Trump Bot High-Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 10.0
+        },
+        "Pro-Trump Bot Low-Quality": {
+            "precision": 0.8939393939393939,
+            "recall": 0.9915966386554622,
+            "f1-score": 0.9402390438247011,
+            "support": 238.0
+        },
+        "Pro-Trump Human High-Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 2.0
+        },
+        "Pro-Trump Human Low-Quality": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 14.0
+        },
+        "accuracy": 0.7602427921092565,
+        "macro avg": {
+            "precision": 0.2994566487497079,
+            "recall": 0.2700223767667987,
+            "f1-score": 0.2532441661923734,
+            "support": 659.0
+        },
+        "weighted avg": {
+            "precision": 0.6242360291281497,
+            "recall": 0.7602427921092565,
+            "f1-score": 0.6689872636054525,
+            "support": 659.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            260,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+        ],
+        [
+            94,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+        ],
+        [
+            24,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            8,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            0,
+            0,
+            0,
+            0,
+            9,
+            0,
+            0
+        ],
+        [
+            2,
+            0,
+            0,
+            0,
+            0,
+            236,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            14,
+            0,
+            0
+        ]
+    ],
+    "roc_auc_score": 0.8332511940989005,
+    "y_col": "sixway_fact_label",
+    "x_scaled": false,
+    "grid_search": {
+        "model_type": "LogisticRegression",
+        "k_folds": 5,
+        "param_grid": {
+            "classifier__max_iter": [
+                25,
+                1000,
+                10000
+            ]
+        },
+        "best_params": {
+            "classifier__max_iter": 1000
+        },
+        "best_score": 0.8309722151668659
+    }
+}

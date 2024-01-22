@@ -20,7 +20,7 @@ OPINION_COLORS_MAP = {"Anti-Trump": BLUES[5], "Pro-Trump": REDS[5]}
 BOT_COLORS_MAP = {"Human": GREYS[3], "Bot": PURPLES[6]}
 Q_COLORS_MAP = {"Normal": GREYS[3], "Q-anon": REDS[6]}
 TOXIC_COLORS_MAP = {"Toxic": BROWNS[1], "Normal": GREYS[3]}
-FACT_COLORS_MAP = {"High Quality": GREYS[3], "Low Quality": RD_PU[4]}
+FACT_COLORS_MAP = {"High-Quality": GREYS[3], "Low-Quality": RD_PU[4]}
 
 FOURWAY_COLORS_MAP = {
     "Anti-Trump Human": BLUES[3],
@@ -29,17 +29,6 @@ FOURWAY_COLORS_MAP = {
     "Pro-Trump Human": REDS[3],
     "Pro-Trump Bot": REDS[6],
 }
-SIXWAY_COLORS_MAP = {
-    "Anti-Trump Human": BLUES[3],
-    "Anti-Trump Bot": BLUES[6],
-
-    "Pro-Trump Human": REDS[3],
-    "Pro-Trump Bot": REDS[6],
-
-    "Q-anon Human": REDS[4], # "Pro-Trump Q-anon Human"
-    "Q-anon Bot": REDS[7], # "Pro-Trump Q-anon Bot"
-}
-
 
 COLORS_MAP = {
     "bot_label": BOT_COLORS_MAP,
@@ -49,7 +38,7 @@ COLORS_MAP = {
     "factual_label": FACT_COLORS_MAP,
 
     "fourway_label": FOURWAY_COLORS_MAP,
-    "sixway_label": SIXWAY_COLORS_MAP,
+
     "bom_overall_label": BOT_COLORS_MAP,
     "bom_astroturf_label": BOT_COLORS_MAP,
 }
@@ -64,8 +53,7 @@ CATEGORY_ORDERS = {
     "q_label": ["Normal", "Q-anon"],
 
     "toxic_label": ["Normal", "Toxic"],
-    "factual_label": ["High Quality", "Low Quality"],
+    "factual_label": ["High-quality", "Low-Quality"],
 
     "fourway_label": list(FOURWAY_COLORS_MAP.keys()),
-    "sixway_label": list(SIXWAY_COLORS_MAP.keys()),
 }
