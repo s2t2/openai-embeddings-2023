@@ -37,10 +37,10 @@ if __name__ == "__main__":
         sql += f"    LIMIT {texts_limit} "
 
     df = bq.query_to_df(sql)
-
-    #if TEXTS_LIMIT:
-    #    texts_limit = int(TEXTS_LIMIT)
-    #    df = df.iloc[0:texts_limit]
+    print(len(df))
+    if df.empty:
+        print("NO MORE TEXTS TO PROCESS... GOODBYE!")
+        exit()
 
     print("---------------")
     print("EMBEDDINGS...")
