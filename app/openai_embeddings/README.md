@@ -1,9 +1,10 @@
-# OpenAI Embeddings per Tweet
+# OpenAI Embeddings
 
 Get embeddings, not only per user, but also per tweet, so we can compare the two approaches. Pull a new sample of tweets for the users we have been analyzing, but this time make sure to keep track of which tweets are being used, which will aid comparisons.
 
 ## Setup
 
+Migrations, as necessary. Here we create a table of all tweets from each user in the sample:
 
 ```sql
 --CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_10` as (
@@ -31,7 +32,8 @@ CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample` as (
 );
 ```
 
-How to sample from this table (choose a MAX_TWEETS_PER_USER):
+
+How to sample from this table (choose a `MAX_TWEETS_PER_USER`, which we set as 50 by default):
 
 ```sql
 SELECT
@@ -40,6 +42,8 @@ SELECT
 FROM `tweet-collector-py.impeachment_production.botometer_sample`
 WHERE row_num <= 50 -- MAX_TWEETS_PER_USER
 ```
+
+The 7,566 users in this sample have 183,727 tweets.
 
 Unique table of texts with identifiers:
 
@@ -67,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_
 
 Of the 183,727 tweets in this sample, there are 80,205 unique texts.
 
-Migrate table to receive embeddings:
+Migrate table to receive text embeddings:
 
 ```sql
 CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_text_embeddings` (
@@ -76,8 +80,16 @@ CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_
 )
 ```
 
+Migrate table to receive user embeddings:
 
-## Fetch Embeddings
+```sql
+CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_user_embeddings` (
+    user_id	    INT64,
+    embeddings ARRAY<FLOAT64>
+)
+```
+
+## Fetch Embeddings (Per Tweet)
 
 Fetch embeddings on a per-tweet basis, and store in BQ, in a table:
 
@@ -95,4 +107,23 @@ Monitoring the results:
 ```sql
 SELECT count(distinct status_text_id) as text_count
 FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_text_embeddings`  emb
+```
+
+## Fetch Embeddings (Per User)
+
+Fetch embeddings on a per-user basis, and store in BQ, in a table:
+
+```sh
+python -m app.openai_embeddings.per_user
+
+USERS_LIMIT=10 python -m app.openai_embeddings.per_user
+USERS_LIMIT=100 python -m app.openai_embeddings.per_user
+USERS_LIMIT=1000 python -m app.openai_embeddings.per_user
+```
+
+Monitoring the results:
+
+```sql
+SELECT count(distinct user_id) as user_count
+FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_user_embeddings`  emb
 ```

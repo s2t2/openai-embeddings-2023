@@ -197,6 +197,11 @@ class OpenAIService():
                     print(f"... Rate limit reached. Sleeping for {sleep_seconds} seconds.")
                     sleep(sleep_seconds)
                     # retry the same batch
+                except openai.error.ServiceUnavailableError as err:
+                    print(f"... Service Unavailz. Sleeping for {sleep_seconds} seconds.")
+                    print(err)
+                    sleep(sleep_seconds)
+                    # retry the same batch
             counter += 1
         return embeddings
 
