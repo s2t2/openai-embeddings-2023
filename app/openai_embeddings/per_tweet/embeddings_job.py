@@ -16,12 +16,11 @@ if __name__ == "__main__":
 
     bq = BigQueryService()
     print(bq)
+    print("DATASET ADDRESS:", bq.dataset_address)
 
-    #sql = f"""
-    #    SELECT DISTINCT status_text_id, status_text
-    #    FROM `{bq.dataset_address}.botometer_sample_max_50_texts_map`
-    #    ORDER BY status_text_id
-    #"""
+    print("---------------")
+    print("TEXTS...")
+    #print("LIMIT: ", TEXTS_LIMIT)
 
     sql = f"""
         -- FETCH STATUSES WE HAVEN'T ALREADY RETRIEVED EMBEDDINGS FOR
@@ -43,26 +42,25 @@ if __name__ == "__main__":
     #    texts_limit = int(TEXTS_LIMIT)
     #    df = df.iloc[0:texts_limit]
 
-    print("EMBEDDINGS:")
+    print("---------------")
+    print("EMBEDDINGS...")
     texts = df["status_text"].tolist()
 
     ai = OpenAIService()
     embeddings = ai.get_embeddings_in_dynamic_batches(texts, batch_char_limit=15_000)
-    #sample_embeddings = sample.assign(openai_embeddings=embeddings)
     #print(len(embeddings))
-
-    #records = []
-    #text_ids = df["status_text_id"].tolist()
-    #for text_id, emb in zip(text_ids, embeddings):
-    #    records.append({
-    #        "status_text_id": text_id,
-    #    })
 
     df["embeddings"] = embeddings
     records = df[["status_text_id", "embeddings"]].to_dict("records")
+
+    print("---------------")
+    print("SAVING...")
 
     embeddings_table = bq.client.get_table(f"{bq.dataset_address}.botometer_sample_max_50_openai_text_embeddings") # API call!
     errors = bq.insert_records_in_batches(embeddings_table, records, batch_size=50) # running into google api issues with larger batches - there are so many embeddings for each row, so we lower the batch count substantially
     if any(errors):
         print("ERRORS:")
         print(errors)
+
+    print("---------------")
+    print("JOB COMPLETE!")
