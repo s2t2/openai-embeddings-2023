@@ -84,11 +84,10 @@ Fetch embeddings on a per-tweet basis, and store in BQ, in a table:
 ```sh
 python -m app.openai_embeddings.per_tweet.embeddings_job
 
-TEXTS_LIMIT=10 python -m app.openai_embeddings.per_tweet.embeddings_job
-TEXTS_LIMIT=1500 python -m app.openai_embeddings.per_tweet.embeddings_job
-TEXTS_LIMIT=10000 python -m app.openai_embeddings.per_tweet.embeddings_job
-
-
+TEXTS_LIMIT=10 python -m app.openai_embeddings.per_tweet
+TEXTS_LIMIT=1500 python -m app.openai_embeddings.per_tweet
+TEXTS_LIMIT=10000 python -m app.openai_embeddings.per_tweet
+TEXTS_LIMIT=250000 python -m app.openai_embeddings.per_tweet
 ```
 
 Monitoring the results:
