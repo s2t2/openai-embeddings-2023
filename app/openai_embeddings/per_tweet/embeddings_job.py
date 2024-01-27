@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     if TEXTS_LIMIT:
         texts_limit = int(TEXTS_LIMIT)
-        sql += f" LIMIT {texts_limit} "
+        sql += f"    LIMIT {texts_limit} "
 
     df = bq.query_to_df(sql)
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     records = df[["status_text_id", "embeddings"]].to_dict("records")
 
     embeddings_table = bq.client.get_table(f"{bq.dataset_address}.botometer_sample_max_50_openai_text_embeddings") # API call!
-    errors = bq.insert_records_in_batches(embeddings_table, records)
+    errors = bq.insert_records_in_batches(embeddings_table, records, batch_size=50) # running into google api issues with larger batches - there are so many embeddings for each row, so we lower the batch count substantially
     if any(errors):
         print("ERRORS:")
         print(errors)

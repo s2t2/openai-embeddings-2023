@@ -50,7 +50,7 @@ class BigQueryService():
         dt = dt or datetime.now()
         return dt.strftime("%Y-%m-%d %H:%M:%S")
 
-    def insert_records_in_batches(self, table, records):
+    def insert_records_in_batches(self, table, records, batch_size=5_000):
         """
         Inserts records in batches because attempting to insert too many rows at once
             may result in google.api_core.exceptions.BadRequest: 400
@@ -62,7 +62,7 @@ class BigQueryService():
         rows_to_insert = [list(d.values()) for d in records]
         #errors = self.client.insert_rows(table, rows_to_insert)
         errors = []
-        batches = list(BigQueryService.split_into_batches(rows_to_insert, batch_size=5_000))
+        batches = list(BigQueryService.split_into_batches(rows_to_insert, batch_size=batch_size))
         for batch in batches:
             errors += self.client.insert_rows(table, batch)
         return errors
