@@ -20,8 +20,9 @@ DATASET_ADDRESS = os.getenv("DATASET_ADDRESS", default="tweet-collector-py.impea
 
 class BigQueryService():
 
-    def __init__(self, client=None):
+    def __init__(self, client=None, dataset_address=DATASET_ADDRESS):
         self.client = client or bigquery.Client()
+        self.dataset_address = dataset_address
 
     def execute_query(self, sql, verbose=True):
         if verbose == True:

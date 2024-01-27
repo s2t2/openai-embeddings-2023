@@ -83,4 +83,13 @@ Fetch embeddings on a per-tweet basis, and store in BQ, in a table:
 
 ```sh
 python -m app.openai_embeddings.per_tweet.embeddings_job
+
+TEXTS_LIMIT=10 python -m app.openai_embeddings.per_tweet.embeddings_job
+```
+
+Monitoring the results:
+
+```sql
+SELECT count(distinct status_text_id) as text_count
+FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_text_embeddings`  emb
 ```

@@ -186,7 +186,7 @@ class OpenAIService():
         embeddings = []
         counter = 1
         for texts_batch in dynamic_batches(texts, batch_char_limit=batch_char_limit):
-            print(counter, len(texts_batch))
+            print("BATCH:", counter, "SIZE:", len(texts_batch))
             # retry loop
             while True:
                 try:
