@@ -26,14 +26,25 @@ if __name__ == "__main__":
 
     sql = f"""
         -- FETCH USERS WE HAVEN'T ALREADY RETRIEVED EMBEDDINGS FOR
-        SELECT
-            s.user_id --,min(s.row_num) as row_min, max(s.row_num) as row_max
-            ,count(distinct s.status_id) as status_count_max_50
-            ,string_agg(distinct status_text, " ") as status_texts
-        FROM `{bq.dataset_address}.botometer_sample` s
-        WHERE s.row_num <= {int(MAX_TWEETS_PER_USER)}
-        GROUP BY 1
-        ORDER BY user_id
+
+        WITH users_sample as (
+            SELECT
+                s.user_id --,min(s.row_num) as row_min, max(s.row_num) as row_max
+                ,count(distinct s.status_id) as status_count_max_50
+                ,array_agg(distinct s.status_id) as status_ids
+                ,string_agg(distinct s.status_text, " ") as status_texts
+            FROM `{bq.dataset_address}.botometer_sample` s
+            WHERE s.row_num <= {int(MAX_TWEETS_PER_USER)}
+            GROUP BY 1
+            -- ORDER BY user_id
+        )
+
+        SELECT u.user_id, u.status_count_max_50, u.status_ids, u.status_texts
+        FROM users_sample u
+        LEFT JOIN  `{bq.dataset_address}.botometer_sample_max_50_openai_user_embeddings` emb
+            ON u.user_id = emb.user_id
+        WHERE emb.user_id IS NULL
+        ORDER BY u.user_id
     """
 
     if USERS_LIMIT:

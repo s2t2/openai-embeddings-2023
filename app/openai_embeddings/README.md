@@ -83,15 +83,17 @@ CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_
 Migrate table to receive user embeddings:
 
 ```sql
+DROP TABLE IF EXISTS `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_user_embeddings`;
 CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_user_embeddings` (
     user_id	    INT64,
     embeddings ARRAY<FLOAT64>
 )
 ```
 
+
 ## Fetch Embeddings (Per Tweet)
 
-Fetch embeddings on a per-tweet basis, and store in BQ, in a table:
+Fetch tweet-level embeddings, and store in BQ:
 
 ```sh
 python -m app.openai_embeddings.per_tweet.embeddings_job
@@ -111,7 +113,7 @@ FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_t
 
 ## Fetch Embeddings (Per User)
 
-Fetch embeddings on a per-user basis, and store in BQ, in a table:
+Fetch user-level embeddings, and store in BQ:
 
 ```sh
 python -m app.openai_embeddings.per_user
@@ -124,6 +126,12 @@ USERS_LIMIT=1000 python -m app.openai_embeddings.per_user
 Monitoring the results:
 
 ```sql
-SELECT count(distinct user_id) as user_count
-FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_user_embeddings`  emb
+SELECT
+    count(distinct s.user_id) as user_count
+    ,count(distinct case when emb.user_id is not null then s.user_id end) as users_collected
+    ,count(distinct case when emb.user_id is not null then s.user_id end) / count(distinct s.user_id) as pct_collected
+FROM `tweet-collector-py.impeachment_production.botometer_sample` s
+LEFT JOIN `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_user_embeddings`  emb
+  ON s.user_id = emb.user_id
+
 ```
