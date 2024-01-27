@@ -34,6 +34,8 @@ gensim
 # model storage:
 google-cloud-storage
 
+# data storage:
+google-cloud-bigquery #==3.2.0
 
 # automated tests:
 pytest

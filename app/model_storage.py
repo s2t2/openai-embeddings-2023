@@ -5,9 +5,11 @@ from functools import cached_property
 from google.cloud import storage as gcs
 from dotenv import load_dotenv
 
+from app.google_apis import GOOGLE_APPLICATION_CREDENTIALS # implicit check by google.cloud
+
 load_dotenv()
 
-GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS") # implicit check by google.cloud for env var
+#GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS") # implicit check by google.cloud for env var
 
 #PROJECT_ID = os.getenv("GOOGLE_PROJECT_NAME") # "my-project"
 BUCKET_NAME = os.getenv("BUCKET_NAME") # "my-bucket" needs to be globally unique!
