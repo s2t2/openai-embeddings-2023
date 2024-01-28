@@ -1,17 +1,18 @@
+import pandas as pd
+import os
 from google.cloud import bigquery
 from google.oauth2 import service_account
-import pandas as pd
+from dotenv import load_dotenv
 
-credentials = service_account.Credentials.from_service_account_file(
-'/Users/Joyce/Desktop/Project/openai-embeddings-2023/google-credentials.json')
+load_dotenv()
 
-
+GOOGLE_CREDENTIALS_FILEPATH = os.getenv("GOOGLE_CREDENTIALS_FILEPATH")
+PROJECT_ID = os.getenv("PROJECT_ID")
+DATASET_ID = os.getenv("DATASET_ID")
 
 class BigQueryService():
     def __init__(self):
-        self.client = bigquery.Client.from_service_account_json('/Users/Joyce/Desktop/Project/openai-embeddings-2023/google-credentials.json')
-
-        #self.client = bigquery.Client(project="tweet-research-shared")
+        self.client = bigquery.Client.from_service_account_json(GOOGLE_CREDENTIALS_FILEPATH)
 
     def execute_query(self, sql, verbose=True):
         if verbose == True:
@@ -31,11 +32,11 @@ if __name__ == "__main__":
     bq = BigQueryService()
     print(bq)
 
-    sql = '''
-    SELECT user_id
-    FROM `tweet-research-shared.election_2020_transition_2021_combined.users_sample_max50_10000` 
-    LIMIT 10
+    #simple test to pull topics from topics dataset
+    sql = f'''
+    SELECT topic
+    FROM `{PROJECT_ID}.{DATASET_ID}.topics` 
     '''
 
-    users = bq.query_to_df(sql, verbose=False)
-    print(users['user_id'].tolist())
+    topics = bq.query_to_df(sql, verbose=False)
+    print(topics['topic'].tolist())

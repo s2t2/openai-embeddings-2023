@@ -25,14 +25,14 @@ google-cloud-bigquery
 scikit-learn #==1.3.0
 #category_encoders
 #tensorflow
-#xgboost==1.7.6 #==1.2.1 #==1.5.0 # 1.7.6
+xgboost==1.7.6 #==1.2.1 #==1.5.0 # 1.7.6
 #lightgbm
-#umap-learn
-#kmodes
-#hdbscan
+umap-learn
+kmodes
+hdbscan
 
 # NLP:
-#gensim
+gensim
 #python-Levenshtein
 
 
