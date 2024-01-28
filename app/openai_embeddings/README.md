@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_
 ```
 
 
-## Fetch Embeddings (Per Tweet)
+## Tweet level Embeddings
 
 Fetch tweet-level embeddings, and store in BQ:
 
@@ -111,7 +111,29 @@ SELECT count(distinct status_text_id) as text_count
 FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_text_embeddings`  emb
 ```
 
-## Fetch Embeddings (Per User)
+
+Reconstruct table of embedding per status (as they were originally fetched for each distinct text):
+
+
+```sql
+CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_status_embeddings` as (
+    WITH lookup_table as (
+        SELECT txt.status_text_id ,status_id
+        FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_texts_map` txt,
+        UNNEST(txt.status_ids) as status_id
+    )
+
+    SELECT txt.status_id, txt.status_text_id, emb.embeddings
+    FROM lookup_table txt
+    JOIN `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_text_embeddings`  emb
+      ON txt.status_text_id = emb.status_text_id
+    ORDER BY 2
+    --LIMIT 10
+
+)
+```
+
+## User level Embeddings
 
 Fetch user-level embeddings, and store in BQ:
 
