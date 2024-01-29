@@ -133,6 +133,35 @@ CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_50_
 )
 ```
 
+Looks like we may have some duplicates, so update the table to remove dups:
+
+```sql
+-- SELECT status_id, count(*) as row_count
+-- FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_status_embeddings`
+-- GROUP BY 1
+-- HAVING row_count > 1
+-- ORDER BY 2 DESC
+-- -- 14652 example status ids: 1212493877673779200, 1212848708171321344, 1217970948529364992
+
+-- SELECT status_id, status_text_id, count(*) as row_count
+-- FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_status_embeddings`
+-- GROUP BY 1,2
+-- HAVING row_count > 1
+-- ORDER BY 2 DESC
+-- -- 14652 dups, example status ids: 1212493877673779200, 1212848708171321344, 1217970948529364992
+
+CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_status_embeddings_v2` as (
+    -- DE-DUPLICATED :-)
+    SELECT status_id, status_text_id, any_value(embeddings) as embeddings
+    FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_status_embeddings`
+    GROUP BY 1,2
+)
+
+--SELECT count(distinct status_id) as status_count
+--FROM `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_status_embeddings_v2`
+---- 183727
+```
+
 ## User level Embeddings
 
 Fetch user-level embeddings, and store in BQ:
