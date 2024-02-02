@@ -1,4 +1,4 @@
-# OpenAI Embeddings
+# OpenAI Embeddings (v2)
 
 Get embeddings, not only per user, but also per tweet, so we can compare the two approaches. Pull a new sample of tweets for the users we have been analyzing, but this time make sure to keep track of which tweets are being used, which will aid comparisons.
 
@@ -219,8 +219,8 @@ The contents of the embeddings alone are greater than the BQ export limit of 1GB
 
 ## Exporting CSV files to Drive
 
-See notebooks.
+See [notebooks](/notebooks/openai_embeddings_v2/README.md).
 
 ## Analysis
 
-See notebooks.
+See [notebooks](/notebooks/openai_embeddings_v2/README.md).
