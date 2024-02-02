@@ -43,6 +43,15 @@ FROM `tweet-collector-py.impeachment_production.botometer_sample`
 WHERE row_num <= 50 -- MAX_TWEETS_PER_USER
 ```
 
+```sql
+CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_50` as (
+    SELECT *
+    FROM `tweet-collector-py.impeachment_production.botometer_sample`
+    WHERE row_num <= 50
+    ORDER BY user_id, row_num
+)
+```
+
 The 7,566 users in this sample have 183,727 tweets.
 
 Unique table of texts with identifiers:
@@ -90,8 +99,35 @@ CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_
 )
 ```
 
+## Embeddings
 
-## Tweet level Embeddings
+### User level Embeddings
+
+Fetch user-level embeddings, and store in BQ:
+
+```sh
+python -m app.openai_embeddings.per_user
+
+USERS_LIMIT=10 python -m app.openai_embeddings.per_user
+USERS_LIMIT=100 python -m app.openai_embeddings.per_user
+USERS_LIMIT=1000 python -m app.openai_embeddings.per_user
+```
+
+Monitoring the results:
+
+```sql
+SELECT
+    count(distinct s.user_id) as user_count
+    ,count(distinct case when emb.user_id is not null then s.user_id end) as users_collected
+    ,count(distinct case when emb.user_id is not null then s.user_id end) / count(distinct s.user_id) as pct_collected
+FROM `tweet-collector-py.impeachment_production.botometer_sample` s
+LEFT JOIN `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_user_embeddings`  emb
+  ON s.user_id = emb.user_id
+
+```
+
+
+### Tweet level Embeddings
 
 Fetch tweet-level embeddings, and store in BQ:
 
@@ -162,27 +198,29 @@ CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_50_
 ---- 183727
 ```
 
-## User level Embeddings
-
-Fetch user-level embeddings, and store in BQ:
-
-```sh
-python -m app.openai_embeddings.per_user
-
-USERS_LIMIT=10 python -m app.openai_embeddings.per_user
-USERS_LIMIT=100 python -m app.openai_embeddings.per_user
-USERS_LIMIT=1000 python -m app.openai_embeddings.per_user
-```
-
-Monitoring the results:
+Add the user-level info back to the table for convenience of future queries. Can always not select it later.
 
 ```sql
-SELECT
-    count(distinct s.user_id) as user_count
-    ,count(distinct case when emb.user_id is not null then s.user_id end) as users_collected
-    ,count(distinct case when emb.user_id is not null then s.user_id end) / count(distinct s.user_id) as pct_collected
-FROM `tweet-collector-py.impeachment_production.botometer_sample` s
-LEFT JOIN `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_user_embeddings`  emb
-  ON s.user_id = emb.user_id
+CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_status_embeddings_v3` as (
+  SELECT s.user_id, s.status_id, s.status_text, s.created_at
+    , array_length(emb.embeddings) as embeds_length
+    ,emb.embeddings
+  FROM `tweet-collector-py.impeachment_production.botometer_sample` s
+  JOIN `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_status_embeddings_v2` emb
+      ON s.status_id = emb.status_id
+  -- LIMIT 10000
+)
 
 ```
+
+The contents of the embeddings alone are greater than the BQ export limit of 1GB, so we have to [export to GCS](https://cloud.google.com/bigquery/docs/exporting-data), or stream via notebook. For some reason the embeddings are malformatted when streaming from BQ to drive via notebook, so... Export this table to cloud storage in CSV.GZ format. Choose a file name that has a wildcard operator "*" to instruct BQ to shard the data into multiple files. We can reconstruct them later.
+
+
+
+## Exporting CSV files to Drive
+
+See notebooks.
+
+## Analysis
+
+See notebooks.
