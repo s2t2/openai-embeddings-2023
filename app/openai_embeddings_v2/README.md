@@ -213,7 +213,7 @@ CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_50_
 
 ```
 
-The contents of the embeddings alone are greater than the BQ export limit of 1GB, so we have to [export to GCS](https://cloud.google.com/bigquery/docs/exporting-data), or stream via notebook. For some reason the embeddings are malformatted when streaming from BQ to drive via notebook, so... Export this table to cloud storage in CSV.GZ format. Choose a file name that has a wildcard operator "*" to instruct BQ to shard the data into multiple files. We can reconstruct them later.
+The contents of the embeddings alone are greater than the BQ export limit of 1GB, so we have to [export to GCS](https://cloud.google.com/bigquery/docs/exporting-data), or stream via notebook.
 
 
 
