@@ -49,6 +49,8 @@ OPENAI_API_KEY="sk__________"
 
 GOOGLE_APPLICATION_CREDENTIALS="/path/to/openai-embeddings-2023/google-credentials.json"
 BUCKET_NAME="my-bucket"
+
+DATASET_ADDRESS="my_project.my_dataset"
 ```
 
 ## Usage
@@ -62,15 +64,13 @@ python -m app.openai_service
 ```
 
 
-### Dataset Loading
+### Embeddings per User (v1)
 
 Demonstrate ability to load the dataset:
 
 ```sh
 python -m app.dataset
 ```
-
-### Data Analysis
 
 Perform machine learning and other analyses on the data:
 
@@ -85,6 +85,13 @@ Word2Vec Embeddings:
 
   + [Dimensionality Reduction](app/word2vec_embeddings/README.md)
   + [Classification](app/word2vec_classification/README.md)
+
+
+### Embeddings per Tweet (v1)
+
+OpenAI Embeddings:
+
+  + [Fetching Embeddings](app/openai_embeddings/per_tweet/README.md)
 
 
 ## Testing

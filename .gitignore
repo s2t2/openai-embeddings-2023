@@ -5,6 +5,7 @@
 google-credentials.json
 google-credentials-shared.json
 
+data/*.csv
 
 data/*/*.csv
 data/*/*.csv.gz
