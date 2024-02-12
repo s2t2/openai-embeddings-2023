@@ -1,7 +1,7 @@
 
 Use election_transaction_2020 dataset, get embeddings on both user level and tweet level, and apply the pre-trained classification models on the dataset.
 
-##Google BigQuery Setup
+## Google BigQuery Setup
 Create several tables in Google BigQuery for further execution
 
 Create table for user and tweets sample:
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_
 );
 ```
 
-##Embeddings
+## Embeddings
 
 Embeddings per user:
 ```sh
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_
 ```
 
 
-##Prediction:
+## Prediction:
 
 Apply pre-trained Logistic Regression models on the user/tweet embeddings
 ```sh
