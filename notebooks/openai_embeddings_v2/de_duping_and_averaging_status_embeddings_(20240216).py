@@ -49,7 +49,11 @@ statuses_df["status_id"].nunique()
 
 statuses_df["status_id"].value_counts()
 
-"""## De-Duping
+statuses_df[statuses_df["status_id"].duplicated(keep=False)].sort_values("status_id")
+
+"""The embeddings values appear to be the same for each status, so we can take the first row for each status.
+
+## De-Duping
 
 183,727 statuses
 """
@@ -62,7 +66,7 @@ print(statuses_df.shape)
 
 pq_filepath = os.path.join(DATA_DIRPATH, "botometer_sample_max_50_openai_status_embeddings_v3_unpacked_deduped.parquet.gzip")
 
-statuses_df.to_csv(pq_filepath, compression="gzip")
+statuses_df.to_parquet(pq_filepath, compression="gzip")
 
 """## Averaging Embeddings per User"""
 
