@@ -15,3 +15,5 @@ This supercedes earlier approach to fetch embeddings. In this second attempt we 
 
 
   3. The "Analysis Template" notebook provides an example of how to load the files from drive for further analysis.
+
+  4. The "User vs Tweet Level Embeddings" notebook performs dimensionality reduction on user embeddings vs tweet embeddings averaged for each user. The results are saved to drive, and then copied to the "results/openai_embeddings_v2" folder in this repo.
