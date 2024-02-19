@@ -49,7 +49,8 @@ CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_50`
     FROM `tweet-collector-py.impeachment_production.botometer_sample`
     WHERE row_num <= 50
     ORDER BY user_id, row_num
-)
+) -- NOTE: this table has duplicates in it, with current row count at 183,738
+-- ... so we have been de-dup in pandas like df.drop_duplicates(subset="status_id", inplace=True)
 ```
 
 The 7,566 users in this sample have 183,727 tweets.
@@ -80,16 +81,12 @@ CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_
 
 Of the 183,727 tweets in this sample, there are 80,205 unique texts.
 
-Migrate table to receive text embeddings:
 
-```sql
-CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_text_embeddings` (
-    status_text_id	INT64,
-    embeddings ARRAY<FLOAT64>
-)
-```
+## Embeddings
 
-Migrate table to receive user embeddings:
+### User level Embeddings
+
+Migrate table to receive user embeddings, as necessary:
 
 ```sql
 DROP TABLE IF EXISTS `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_user_embeddings`;
@@ -98,10 +95,6 @@ CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_
     embeddings ARRAY<FLOAT64>
 )
 ```
-
-## Embeddings
-
-### User level Embeddings
 
 Fetch user-level embeddings, and store in BQ:
 
@@ -128,6 +121,15 @@ LEFT JOIN `tweet-collector-py.impeachment_production.botometer_sample_max_50_ope
 
 
 ### Tweet level Embeddings
+
+Migrate table to receive text embeddings:
+
+```sql
+CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_text_embeddings` (
+    status_text_id	INT64,
+    embeddings ARRAY<FLOAT64>
+)
+```
 
 Fetch tweet-level embeddings, and store in BQ:
 
@@ -214,6 +216,33 @@ CREATE TABLE `tweet-collector-py.impeachment_production.botometer_sample_max_50_
 ```
 
 The contents of the embeddings alone are greater than the BQ export limit of 1GB, so we have to [export to GCS](https://cloud.google.com/bigquery/docs/exporting-data), or stream via notebook.
+
+
+
+### Tweet Level Embeddings (Cumulative Time Series)
+
+
+Migrate table to receive cumulative time-series status-level embeddings:
+
+```sql
+DROP TABLE IF EXISTS `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_cumulative_embeddings`;
+CREATE TABLE IF NOT EXISTS `tweet-collector-py.impeachment_production.botometer_sample_max_50_openai_cumulative_embeddings` (
+    user_id	          INT64,
+    user_status_count INT64,
+    user_ts           INT64,
+    status_id	        INT64,
+    --status_length	    INT64,
+    --status_text STRING,
+    created_at        TIMESTAMP,
+    cumulative_length INT64,
+    cumulative_text   STRING,
+    embeddings ARRAY<FLOAT64>
+)
+```
+
+
+Fetch cumulative time series embeddings, and store in CSV and BQ (see Notebooks!)
+
 
 
 
