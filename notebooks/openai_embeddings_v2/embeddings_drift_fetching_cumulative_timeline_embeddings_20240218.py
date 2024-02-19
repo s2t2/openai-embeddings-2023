@@ -543,3 +543,61 @@ sql = f"""
 """
 
 bq.query_to_df(sql)
+
+"""### Unpacked"""
+
+
+
+import os
+from pandas import read_parquet
+
+pq_filepath = os.path.join(DATA_DIRPATH, f"botometer_sample_max_50_openai_cumulative_embeddings.parquet.gz")
+df_packed = read_parquet(pq_filepath)
+print(df_packed)
+df_packed.head()
+
+import json
+from pandas import DataFrame
+
+
+def unpack(embeddings_str):
+    """Takes a string value containing an array of OpenAI embeddings,
+        and returns a list of floats.
+    """
+    if isinstance(embeddings_str, str):
+        return json.loads(embeddings_str)
+    else:
+        return embeddings_str
+
+
+def unpacked(df, col_prefix="openai"):
+    """Takes a dataframe witha single column of OpenAI embeddings,
+        and unpacks them into their own separate columns,
+        and returns a modified version of the original dataframe,
+        with the original embeddings column replaced by the new unpacked columns
+    """
+
+    print("UNPACKING...")
+    embeds = df["embeddings"].apply(unpack)
+    print(type(embeds))
+
+    print("RECONSTRUCTING...")
+    embeds = DataFrame(embeds.values.tolist())
+    embeds.columns = [f"{col_prefix}_{col}" for col in embeds.columns]
+    embeds.index = df.index
+    print(embeds.shape)
+    #embeds.head()
+
+    print("MERGING...")
+    df_unpacked = df.merge(embeds, left_index=True, right_index=True)
+    df_unpacked.drop(columns=["embeddings"], inplace=True)
+    print(df_unpacked.shape)
+    return df_unpacked
+
+df_unpacked = unpacked(df_packed)
+print(df_unpacked.shape)
+print(df_unpacked.columns.tolist())
+df_unpacked.head()
+
+pq_filepath_unpacked = os.path.join(DATA_DIRPATH, "botometer_sample_max_50_openai_cumulative_embeddings_unpacked.parquet.gz")
+df_unpacked.to_parquet(pq_filepath_unpacked, index=False, compression="gzip")
