@@ -186,7 +186,7 @@ class OpenAIService():
         embeddings = []
         counter = 1
         for texts_batch in dynamic_batches(texts, batch_char_limit=batch_char_limit):
-            print(counter, len(texts_batch))
+            print("BATCH:", counter, "SIZE:", len(texts_batch))
             # retry loop
             while True:
                 try:
@@ -195,6 +195,11 @@ class OpenAIService():
                     break  # exit the retry loop and go to the next batch
                 except openai.error.RateLimitError as err:
                     print(f"... Rate limit reached. Sleeping for {sleep_seconds} seconds.")
+                    sleep(sleep_seconds)
+                    # retry the same batch
+                except openai.error.ServiceUnavailableError as err:
+                    print(f"... Service Unavailz. Sleeping for {sleep_seconds} seconds.")
+                    print(err)
                     sleep(sleep_seconds)
                     # retry the same batch
             counter += 1

@@ -5,7 +5,7 @@ from functools import cached_property
 from google.cloud import storage as gcs
 from dotenv import load_dotenv
 
-from app.google_apis import GOOGLE_APPLICATION_CREDENTIALS
+from app.google_apis import GOOGLE_APPLICATION_CREDENTIALS # implicit check by google.cloud
 
 load_dotenv()
 

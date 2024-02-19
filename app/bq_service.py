@@ -1,3 +1,5 @@
+# https://raw.githubusercontent.com/s2t2/tweet-analysis-2023/main/app/bq_service.py
+
 import os
 from datetime import datetime
 
@@ -13,8 +15,7 @@ load_dotenv()
 #GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS") # implicit check by google.cloud
 
 # used by child classes only, defined here for convenience
-DATASET_ADDRESS = os.getenv("DATASET_ADDRESS", default="tweet-collector-py.impeachment_development") 
-
+DATASET_ADDRESS = os.getenv("DATASET_ADDRESS", default="tweet-collector-py.impeachment_development") # "MY_PROJECT.MY_DATASET"
 
 
 class BigQueryService():
