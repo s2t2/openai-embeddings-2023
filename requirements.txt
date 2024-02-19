@@ -3,7 +3,7 @@ python-dotenv
 
 # data processing:
 pandas
-#tables # pytables package required when saving data to hd5 format
+tables # pytables package required when saving data to hd5 format
 numpy
 
 # dataviz:
@@ -15,10 +15,6 @@ kaleido # for exporting plotly images to png / html
 # embeddings:
 openai==0.28 # ok so there is now a 1.0 interface but we originally obtained using earlier API, so pinning that here
 
-#google cloud:
-google.cloud
-pandas-gbq
-google-cloud-bigquery
 
 
 # machine learning:
@@ -35,6 +31,8 @@ hdbscan
 gensim
 #python-Levenshtein
 
+
+#google-cloud 
 
 # model storage:
 google-cloud-storage
