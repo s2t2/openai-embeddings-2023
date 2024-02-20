@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from dotenv import load_dotenv
 
 from app.bq_service import BigQueryService
 from app.model_storage import ModelStorage
@@ -7,7 +8,8 @@ from app.model_storage import ModelStorage
 import warnings
 warnings.filterwarnings('ignore')
 
-
+load_dotenv()
+TEXTS_LIMIT = os.getenv('TEXTS_LIMIT')
 
 if __name__ == "__main__":
     bq = BigQueryService()
@@ -20,12 +22,15 @@ if __name__ == "__main__":
     sql =  f'''
     SELECT emb.status_text_id,
         emb.embeddings
-    FROM `tweet-research-shared.election_2020_transition_2021_combined.openai_tweet_embeddings` emb 
-    LEFT JOIN `tweet-research-shared.election_2020_transition_2021_combined.LR_tweet_pred` tp
+    FROM `{bq.dataset_address}.openai_tweet_embeddings` emb 
+    LEFT JOIN `{bq.dataset_address}.openai_tweet_embeddings_lr_preds` tp
     ON emb.status_text_id = tp.status_text_id
     WHERE tp.status_text_id IS NULL
     '''
-    #add a limit or not?
+
+    if TEXTS_LIMIT:
+        text_limit = int(TEXTS_LIMIT)
+        sql += f"  LIMIT {text_limit}"
 
     df = bq.query_to_df(sql, verbose=False)
     print(len(df))
@@ -73,7 +78,7 @@ if __name__ == "__main__":
     print("---------------")
     print("SAVING:")
 
-    pred_table_name = f"tweet-research-shared.election_2020_transition_2021_combined.LR_tweet_pred"
+    pred_table_name = f"{bq.dataset_address}.openai_tweet_embeddings_lr_preds"
     pred_table = bq.client.get_table(pred_table_name) 
     errors = bq.insert_records_in_batches(pred_table, records, batch_size=50) 
     if any(errors):

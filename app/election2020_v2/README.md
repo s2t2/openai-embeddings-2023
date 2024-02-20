@@ -4,11 +4,12 @@ Use election_transaction_2020 dataset, get embeddings on both user level and twe
 ## Google BigQuery Setup
 Create several tables in Google BigQuery for further execution
 
-Create table for user and tweets sample:
+### User-Tweet Sample
+Create table for users and their timeline tweets sample:
 ```sql
 CREATE TABLE `tweet-research-shared.election_2020_transition_2021_combined.openai_user_tweets_sample_v2` AS (
   SELECT user_id,
-    ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY RAND()) AS row_num,
+    ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY RAND()) AS row_num, --row_num for further max/min limits
     status_id,
     status_text,
     created_at
@@ -17,7 +18,14 @@ CREATE TABLE `tweet-research-shared.election_2020_transition_2021_combined.opena
 );
 ```
 
-Sample with max limit 50:
+Users and tweets summary from this table:
+```sql
+SELECT COUNT(DISTINCT user_id), --3364945
+  COUNT(DISTINCT status_id) --22311139
+FROM `tweet-research-shared.election_2020_transition_2021_combined.openai_user_tweets_sample_v2`
+```
+
+User-tweets sample with max 50 tweets limit:
 ```sql
 CREATE TABLE `tweet-research-shared.election_2020_transition_2021_combined.openai_user_tweets_sample_max50_v2` AS (
   SELECT *
@@ -27,14 +35,15 @@ CREATE TABLE `tweet-research-shared.election_2020_transition_2021_combined.opena
 );
 ```
 
-Users and tweets under max50 limit
+Users and tweets summary under max50 limit
 ```sql
 SELECT COUNT(DISTINCT user_id), --3364945
   COUNT(DISTINCT status_id) --15622828
 FROM `tweet-research-shared.election_2020_transition_2021_combined.openai_user_tweets_sample_max50_v2`
 ```
 
-Status text sample for embeddings per tweet
+### Status Text Sample
+Status text sample with max 50 limit for embeddings per tweet
 ```sql
 DROP TABLE IF EXISTS `tweet-research-shared.election_2020_transition_2021_combined.openai_text_sample_max50`;
 CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_combined.openai_text_sample_max50` AS(
@@ -45,14 +54,16 @@ CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_
     ARRAY_AGG(DISTINCT status_id) AS status_ids,
     COUNT(DISTINCT user_id) AS user_count,
     ARRAY_AGG(DISTINCT user_id) AS user_ids
-  FROM `tweet-research-shared.election_2020_transition_2021_combined.openai_user_tweets_sample_v2`
-  WHERE row_num <= 50
+  FROM `tweet-research-shared.election_2020_transition_2021_combined.openai_user_tweets_sample_max50_v2`
+  --WHERE row_num <= 50
   GROUP BY 2
   ORDER BY 1
 );
+--5,203,140 text
 ```
 
-table for embeddings storage:
+### Table for Embeddings:
+Embeddings per user
 ```sql
 --table for user embeddings
 DROP TABLE IF EXISTS `tweet-research-shared.election_2020_transition_2021_combined.openai_user_embeddings`;
@@ -60,7 +71,10 @@ CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_
   user_id INT64,
   embeddings ARRAY<FLOAT64>
 );
+```
 
+Embeddings per tweet
+```sql
 --table for tweet embeddings
 DROP TABLE IF EXISTS `tweet-research-shared.election_2020_transition_2021_combined.openai_tweet_embeddings`;
 CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_combined.openai_tweet_embeddings` (
@@ -69,10 +83,10 @@ CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_
 );
 ```
 
-Tables for classification results:
+### Tables for classification results:
 ```sql
-DROP TABLE IF EXISTS `tweet-research-shared.election_2020_transition_2021_combined.LR_user_pred`;
-CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_combined.LR_user_pred` (
+DROP TABLE IF EXISTS `tweet-research-shared.election_2020_transition_2021_combined.openai_user_embeddings_lr_preds`;
+CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_combined.openai_user_embeddings_lr_preds` (
     user_id	INT64,
 
     is_bot_pred BOOL,
@@ -93,8 +107,8 @@ CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_
 );
 
 
-DROP TABLE IF EXISTS `tweet-research-shared.election_2020_transition_2021_combined.LR_tweet_pred`;
-CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_combined.LR_tweet_pred` (
+DROP TABLE IF EXISTS `tweet-research-shared.election_2020_transition_2021_combined.openai_tweet_embeddings_lr_preds`;
+CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_combined.openai_tweet_embeddings_lr_preds` (
     status_text_id	INT64,
 
     is_bot_pred BOOL,
@@ -121,14 +135,14 @@ Embeddings per user:
 ```sh
 python -m app.election2020_v2.openai_per_user
 
-USERS_LIMIT=10 python -m app.election2020_v2.openai_per_user
+USERS_LIMIT=200 python -m app.election2020_v2.openai_per_user
 ```
 
 Embeddings per tweet:
 ```sh
 python -m app.election2020_v2.openai_per_tweet
 
-TWEETS_LIMIT=10 python -m app.election2020_v2.openai_per_tweet
+TEXTS_LIMIT=200 python -m app.election2020_v2.openai_per_tweet
 ```
 
 Mapping embeddings per tweet with status_id:
@@ -155,8 +169,12 @@ CREATE TABLE IF NOT EXISTS `tweet-research-shared.election_2020_transition_2021_
 Apply pre-trained Logistic Regression models on the user/tweet embeddings
 ```sh
 python -m app.election2020_v2.predict_user
+
+USERS_LIMIT=200 python -m app.election2020_v2.predict_user
 ```
 
 ```sh
 python -m app.election2020_v2.predict_tweet
+
+TEXTS_LIMIT=200 python -m app.election2020_v2.predict_tweet
 ```

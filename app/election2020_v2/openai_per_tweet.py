@@ -20,13 +20,13 @@ if __name__ == "__main__":
     print("FETCHING TWEETS:")
 
     sql = f'''
-    SELECT t.status_text_id,
-      t.status_text
-    FROM `tweet-research-shared.election_2020_transition_2021_combined.openai_text_sample_max50` t
-    LEFT JOIN `tweet-research-shared.election_2020_transition_2021_combined.openai_tweet_embeddings` emb 
-    ON t.status_text_id = emb.status_text_id
-    WHERE emb.status_text_id IS NULL
-    ORDER BY 1
+        SELECT t.status_text_id,
+          t.status_text
+        FROM `{bq.dataset_address}.openai_text_sample_max50` t
+        LEFT JOIN `{bq.dataset_address}.openai_tweet_embeddings` emb 
+        ON t.status_text_id = emb.status_text_id
+        WHERE emb.status_text_id IS NULL
+        ORDER BY 1
     '''
 
     if TEXTS_LIMIT:
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     print("---------------")
     print("SAVING:")
 
-    embeddings_table_name = f"tweet-research-shared.election_2020_transition_2021_combined.openai_tweet_embeddings"
+    embeddings_table_name = f"{bq.dataset_address}.openai_tweet_embeddings"
     embeddings_table = bq.client.get_table(embeddings_table_name) 
     errors = bq.insert_records_in_batches(embeddings_table, records, batch_size=50) 
     if any(errors):
