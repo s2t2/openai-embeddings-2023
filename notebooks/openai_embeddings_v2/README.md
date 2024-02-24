@@ -17,3 +17,5 @@ This supercedes earlier approach to fetch embeddings. In this second attempt we 
   3. The "Analysis Template" notebook provides an example of how to load the files from drive for further analysis.
 
   4. The "User vs Tweet Level Embeddings" notebook performs dimensionality reduction on user embeddings vs tweet embeddings averaged for each user. The results are saved to drive, and then copied to the "results/openai_embeddings_v2" folder in this repo.
+
+  5. The "Embeddings Drift - Fetching Cumulative Embeddings" notebook compiles many iterations of a user's timeline as it grows cumulatively one tweet at a time. We fetch embeddings for each iterative timeline in its entirety (one set of embeddings for the first tweet, one set for the first and second tweet, one set for the first second and third, etc. until max 20). There are max 50 tweets in the sample, but the assumption is that 20 max will be sufficient to demonstrate drift.

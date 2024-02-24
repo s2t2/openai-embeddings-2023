@@ -6,7 +6,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from google.cloud import bigquery
 #from google.cloud.bigquery import QueryJobConfig, ScalarQueryParameter
-from pandas import DataFrame
+from pandas import DataFrame, read_gbq
 
 from app.google_apis import GOOGLE_APPLICATION_CREDENTIALS # implicit check by google.cloud
 
@@ -36,6 +36,11 @@ class BigQueryService():
         records = [dict(row) for row in list(results)]
         df = DataFrame(records)
         return df
+
+    #def query_to_df(self, sql, verbose=True):
+    #    """high-level wrapper to return a DataFrame"""
+    #    # https://pandas.pydata.org/docs/reference/api/pandas.read_gbq.html#pandas-read-gbq
+    #    return read_gbq(sql, project_id=self.project_id) # progress_bar_type="tqdm_notebook"
 
     @staticmethod
     def split_into_batches(my_list, batch_size=10_000):
