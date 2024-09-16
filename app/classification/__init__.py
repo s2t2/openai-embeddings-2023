@@ -17,8 +17,9 @@ Y_COLS_BINARY = [
 Y_COLS_MULTICLASS = [
     # multiclass classification with categorical classes:
     "fourway_label", #"bom_overall_fourway_label", "bom_astroturf_fourway_label"
+    "sixway_fact_label" #, sixway_q_label
 ]
-Y_COLS = Y_COLS_BINARY + Y_COLS_MULTICLASS
+Y_COLS = ["sixway_fact_label"] #= Y_COLS_BINARY + Y_COLS_MULTICLASS
 
 BOT_CLASSES_MAP = {True:"Bot", False:"Human"}
 CLASSES_MAP = {
@@ -27,7 +28,7 @@ CLASSES_MAP = {
     "is_bom_astroturf": BOT_CLASSES_MAP,
     "opinion_community": {0:"Anti-Trump", 1:"Pro-Trump"},
     "is_toxic": {0: "Normal", 1: "Toxic"},
-    "is_factual": {0: "Low Quality", 1: "High Quality"},
+    "is_factual": {0: "Low-Quality", 1: "High-Quality"},
 }
 
 
